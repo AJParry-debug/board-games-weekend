@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Board Games Weekend 2026</title>
+<meta name="description" content="A private schedule for a board games weekend among friends. Pick a game and claim a seat. No accounts, passwords or personal details.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
@@ -283,6 +284,7 @@ button.cell:hover{outline:1px solid var(--accent)}
 .pick.dim{opacity:.6}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:999px;font-weight:700;z-index:30;max-width:calc(100% - 32px);text-align:center;transition:opacity .2s}
 .loading{color:var(--muted);padding:40px 0;text-align:center}
+.site-foot{color:var(--muted);font-size:.82rem;padding:0 16px 40px;max-width:1180px}
 @media (max-width:520px){
   .top{position:static}
   .col,.day-group{scroll-margin-top:12px}
@@ -309,6 +311,7 @@ button.cell:hover{outline:1px solid var(--accent)}
   </div>
 </header>
 <main class="wrap" id="app"><div class="loading">Connecting to the live schedule…</div></main>
+<footer class="wrap site-foot">About this page: a private schedule for a board games weekend among friends, made by Alan. It never asks for passwords, emails, payment or personal details. Pick your first name from the list and tap a seat, that's all.</footer>
 <div id="modal-root"></div>
 <div id="toast-root"></div>
 
@@ -1062,13 +1065,13 @@ function pinKey() {
 }
 function pinModal() {
   if (!pinKey()) { toast("Set an organiser PIN in config.js first (see the README)."); return; }
-  openModal('<h2>Organiser mode</h2><p class="sub">Enter the organiser PIN to edit the schedule.</p><form class="form" id="f"><div class="field"><label for="f-pin">PIN</label><input id="f-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="40" required></div>' +
-    '<div class="actions"><button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">Unlock</button></div></form>', m => {
+  openModal('<h2>Organiser mode</h2><p class="sub">This is only for Alan, who runs the schedule. Everyone else can close this.</p><form class="form" id="f"><div class="field"><label for="f-pin">Organiser code</label><input id="f-pin" type="text" inputmode="numeric" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40" required></div>' +
+    '<div class="actions"><button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">Open organiser mode</button></div></form>', m => {
     m.querySelector('[data-m="cancel"]').onclick = closeModal;
     m.querySelector("#f").onsubmit = e => {
       e.preventDefault();
       const v = m.querySelector("#f-pin").value.trim();
-      if (v !== String(window.BGW_CONFIG.organiserPin).trim()) { toast("That PIN isn't right."); m.querySelector("#f-pin").select(); return; }
+      if (v !== String(window.BGW_CONFIG.organiserPin).trim()) { toast("That code isn't right."); m.querySelector("#f-pin").select(); return; }
       S.isOwner = true; S.organiser = true;
       try { localStorage.setItem("bgw-org", pinKey()); } catch (e2) {}
       closeModal(); render(); toast("Organiser mode unlocked on this device.");
