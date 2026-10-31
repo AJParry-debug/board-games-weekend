@@ -32,11 +32,16 @@ Setup takes about 20 minutes. You only do it once.
    - For the location, choose **australia-southeast1 (Sydney)**.
    - Choose **Start in production mode**.
 4. Once it's created, open the **Rules** tab. Delete everything in the box, paste in the whole contents of `firestore.rules`, then click **Publish**.
-5. Click the **gear icon → Project settings**. Under **Your apps**, click the **web icon `</>`**.
+5. Register a web app. There are two ways in, so use whichever you can see:
+   - **From the home page:** click **Project Overview** at the very top of the left menu. Near the top of the page, under your project name, there's a row of round platform icons (iOS, Android, `</>`). It may sit behind an **+ Add app** button. Click the **`</>`** icon (it means "web").
+   - **From settings:** click the **gear icon** next to **Project Overview**, choose **Project settings**, stay on the **General** tab and **scroll right to the bottom** to the **Your apps** box. Click the **`</>`** icon there.
+
+   Then:
    - Give it a nickname (anything, e.g. `schedule`).
    - Leave **Firebase Hosting** unticked.
    - Click **Register app**.
-6. Firebase now shows a block of code containing `const firebaseConfig = { ... }`. Keep that page open, because you need those values in the next step.
+6. Firebase now shows a block of code containing `const firebaseConfig = { ... }`. If it offers a choice between **npm** and **CDN** (or **Config**), either is fine, since the values are the same. Keep that page open, because you need those values in the next step.
+   - Clicked past it by accident? Go back to **Project settings → General**, scroll to **Your apps**, click your app's nickname, then choose **Config** under **SDK setup and configuration**.
 
 ## Part B: Fill in config.js (2 minutes)
 
@@ -91,6 +96,7 @@ Edit the file on GitHub (open it, click the pencil icon, then **Commit changes**
 |---|---|
 | "The schedule isn't connected to its database yet" | `config.js` still has placeholder values. Check every line was filled in, then upload it again. |
 | "Can't reach the live schedule right now" | Check your internet connection. If it persists, check the `projectId` in `config.js` matches Firebase exactly. |
+| Food you add disappears, or saving food says the schedule is locked | Your Firebase rules are from before the Food tab existed. Paste the latest `firestore.rules` into Firebase's **Rules** tab and click **Publish**. |
 | "The schedule is locked for changes right now" | The Firestore rules are refusing writes. Check you published `firestore.rules` (Part A, step 4) and the date in it hasn't passed. |
 | The site shows a 404 page | GitHub Pages can take a few minutes the first time. Also check `index.html` is at the top level of the repository, not inside a folder. |
-| "That PIN isn't right" | It must match `organiserPin` in `config.js` exactly. |
+| "That code isn't right" | It must match `organiserPin` in `config.js` exactly. |

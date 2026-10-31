@@ -10,40 +10,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Layout: days stack top to bottom; each time block is a row of game tables; every seat is a meeple you tap to claim */
-  --bg:#ECEFF3; --surface:#FFFFFF; --ink:#1A2130; --muted:#5A6373; --line:#D3D9E1; --chip:#E3E8EF;
-  --accent:#2A4FD6; --accent-ink:#FFFFFF; --accent-soft:#E2E8FF;
-  --open:#B86A07; --open-bg:#FFF3DF; --warn:#B3242B; --warn-bg:#FDE8E8; --ok:#1C7448;
-  --seat-l:44%; --seat-s:58%;
+  /* Layout: days run left to right as a timetable; each time block stacks its game tables; every seat is a meeple you tap to claim.
+     Single dark world: deep obsidian with soft parallax glow halos behind the content. */
+  --bg:#0B0F19; --surface:#131A29; --ink:#E8ECF5; --muted:#9AA5BA; --line:#283249; --chip:#1E2639;
+  --header-bg:rgba(11,15,25,.72);
+  --accent:#8EA6FF; --accent-ink:#0B0F19; --accent-soft:#1E2A4D;
+  --open:#F4B860; --open-bg:#2C2416; --warn:#FF8589; --warn-bg:#3B1C22; --ok:#5DCB92;
+  --seat-l:62%; --seat-s:62%;
   --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
   --radius:12px;
-  --coop:#13745A; --comp:#B32F4E; --mode-ink:#FFFFFF;
-  --ph-s:42%; --ph-l:86%; --ph-ink-l:38%;
+  --coop:#4CC79A; --comp:#FF7E97; --team:#82A9FF; --mode-ink:#0B0F19;
+  --food-bg:#171E2E; --food-line:#7C6A4B; --food-ink:#D9B979;
+  --ph-s:32%; --ph-l:27%; --ph-ink-l:76%;
   /* Session tones: day sets the hue, time of day sets the shade (k = 0 morning ... 3 night) */
-  --tint-s:58%; --tint-l:95.5%; --tint-step:-1.7%; --bar-s:58%; --bar-l:58%; --bar-step:-6%;
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#10141B; --surface:#19202A; --ink:#E7EBF2; --muted:#99A3B3; --line:#2C3542; --chip:#242C38;
-    --accent:#7F9CFF; --accent-ink:#0D1323; --accent-soft:#222C47;
-    --open:#F2B558; --open-bg:#2B2316; --warn:#FF8085; --warn-bg:#3A1C1F; --ok:#5DCB92;
-    --seat-l:62%; --seat-s:62%;
-    --tint-s:26%; --tint-l:20%; --tint-step:-1.3%; --bar-s:62%; --bar-l:74%; --bar-step:-5%;
-    --coop:#4CC79A; --comp:#FF7E97; --mode-ink:#0E1424;
-    --ph-s:26%; --ph-l:24%; --ph-ink-l:72%;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#10141B; --surface:#19202A; --ink:#E7EBF2; --muted:#99A3B3; --line:#2C3542; --chip:#242C38;
-  --accent:#7F9CFF; --accent-ink:#0D1323; --accent-soft:#222C47;
-  --open:#F2B558; --open-bg:#2B2316; --warn:#FF8085; --warn-bg:#3A1C1F; --ok:#5DCB92;
-  --seat-l:62%; --seat-s:62%;
-  --tint-s:26%; --tint-l:20%; --tint-step:-1.3%; --bar-s:62%; --bar-l:74%; --bar-step:-5%;
-  --coop:#4CC79A; --comp:#FF7E97; --mode-ink:#0E1424;
-  --ph-s:26%; --ph-l:24%; --ph-ink-l:72%;
+  --tint-s:40%; --tint-l:27%; --tint-step:-3.2%; --bar-s:72%; --bar-l:74%; --bar-step:-6.5%;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -55,7 +36,7 @@ a{color:var(--accent)}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 
 /* Header */
-.top{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.top{background:var(--header-bg);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
 .top-in{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding:14px 0 0}
 .brand{flex:1 1 280px;min-width:0}
 .brand h1{font-family:var(--display);font-weight:800;font-size:clamp(1.35rem,2.4vw,1.8rem);line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
@@ -121,12 +102,20 @@ body{overflow-x:clip}
 .board-bar .label{color:var(--muted);font-size:.88rem;margin-right:2px}
 .board-bar .spacer{flex:1}
 .board-outer{--edge:max(16px, calc((100vw - 1180px) / 2 + 16px));width:100vw;margin-left:calc(50% - 50vw)}
-.board{display:flex;gap:28px;overflow-x:auto;padding:4px var(--edge) 18px;scroll-padding-inline:var(--edge);scroll-snap-type:x proximity;overscroll-behavior-x:contain}
+.board{display:flex;gap:28px;overflow-x:auto;padding:4px var(--edge) 18px;scroll-padding-inline:var(--edge);overscroll-behavior-x:contain}
+@media (pointer: coarse){.board{scroll-snap-type:x proximity}}
+@media (pointer: fine){.board{scrollbar-width:none}.board::-webkit-scrollbar{display:none}}
+/* Pinned sideways scroller: always at the bottom of the screen while the timetable is in view */
+.rail{position:sticky;bottom:0;z-index:4;display:flex;align-items:center;gap:10px;padding:10px var(--edge) 12px;background:var(--bg);background:color-mix(in srgb,var(--bg) 90%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-top:1px solid var(--line)}
+.rail[hidden]{display:none}
+.rail input[type=range]{flex:1;min-width:0;-webkit-appearance:none;appearance:none;height:10px;margin:0;border-radius:999px;background:var(--rail-bg,var(--chip));cursor:pointer}
+.rail input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:72px;height:20px;border-radius:999px;background:var(--ink);border:3px solid var(--surface);box-shadow:0 1px 5px rgba(0,0,0,.3);cursor:grab}
+.rail input[type=range]::-moz-range-thumb{width:66px;height:14px;border-radius:999px;background:var(--ink);border:3px solid var(--surface);box-shadow:0 1px 5px rgba(0,0,0,.3);cursor:grab}
+.rail input[type=range]:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
 .day-group{display:flex;flex-direction:column;gap:10px;flex:none;scroll-margin-top:130px}
-.day-label{position:sticky;left:0;align-self:flex-start;font-family:var(--display);font-weight:800;font-size:1.45rem;line-height:1.1;margin:0;letter-spacing:-.01em;padding-right:12px;background:var(--bg)}
+.day-label{position:sticky;left:0;align-self:flex-start;font-family:var(--display);font-weight:800;font-size:1.45rem;line-height:1.1;margin:0;letter-spacing:-.01em;padding-right:12px;background:transparent}
 .day-cols{display:flex;gap:12px;align-items:flex-start}
 .col{width:min(304px, calc(100vw - 64px));flex:none;display:flex;flex-direction:column;gap:10px;scroll-snap-align:start;scroll-margin-top:130px}
-.col.meal{width:158px}
 .col-head{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:var(--radius);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
 .col.meal .col-head{background:transparent;border-style:dashed;border-top:1px dashed var(--line)}
 .col-title{display:flex;align-items:center;gap:6px}
@@ -146,6 +135,7 @@ body{overflow-x:clip}
 .mode-coop{background:var(--coop)}
 .mode-comp{background:var(--comp)}
 .mode-either{background:linear-gradient(100deg,var(--coop) 0 50%,var(--comp) 50% 100%)}
+.mode-team{background:var(--team)}
 .mode.big{font-size:.8rem;padding:5px 11px 5px 9px}
 .t-kind{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .table-card.dim{opacity:.38;filter:saturate(.4)}
@@ -163,7 +153,35 @@ body{overflow-x:clip}
 .seg-btn.seg-comp[aria-pressed="true"]{background:var(--comp);color:var(--mode-ink)}
 .seg-btn.seg-coop:not([aria-pressed="true"]) svg{fill:var(--coop)}
 .seg-btn.seg-comp:not([aria-pressed="true"]) svg{fill:var(--comp)}
+.seg-btn.seg-team[aria-pressed="true"]{background:var(--team);color:var(--mode-ink)}
+.seg-btn.seg-team:not([aria-pressed="true"]) svg{fill:var(--team)}
 .filter-row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+/* Atmosphere: obsidian base, four glow halos on two parallax layers, 2% noise */
+.atmo{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#0B0F19}
+.atmo-layer{position:absolute;left:0;right:0;top:0;height:240vh;will-change:transform;transition:transform 900ms cubic-bezier(0.25,1,0.5,1)}
+.orb{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(var(--orb-scale,1));transition:transform 700ms cubic-bezier(0.25,1,0.5,1);will-change:transform}
+.atmo.fast .orb{--orb-scale:1.05}
+.o1{left:6%;top:4vh;width:min(1150px,190vw);height:min(1150px,190vw);background:radial-gradient(closest-side,rgba(30,58,138,.60),rgba(30,58,138,.30) 42%,rgba(30,58,138,.10) 72%,rgba(30,58,138,0))}
+.o2{left:94%;top:2vh;width:min(1000px,170vw);height:min(1000px,170vw);background:radial-gradient(closest-side,rgba(49,46,129,.50),rgba(49,46,129,.24) 42%,rgba(49,46,129,.08) 72%,rgba(49,46,129,0))}
+.o3{left:70%;top:58vh;width:min(860px,150vw);height:min(860px,150vw);background:radial-gradient(closest-side,rgba(91,33,182,.45),rgba(91,33,182,.20) 42%,rgba(91,33,182,.06) 72%,rgba(91,33,182,0))}
+.o4{left:4%;top:104vh;width:min(1000px,170vw);height:min(1000px,170vw);background:radial-gradient(closest-side,rgba(15,118,110,.30),rgba(15,118,110,.14) 42%,rgba(15,118,110,.05) 72%,rgba(15,118,110,0))}
+.atmo-noise{position:absolute;inset:0;opacity:.02;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+main,.site-foot{position:relative;z-index:1}
+
+/* Food */
+.food-card{border:1px dashed var(--food-line);border-radius:10px;padding:10px 12px;background:var(--food-bg);display:flex;flex-direction:column;gap:4px}
+.food-top{display:flex;align-items:center;gap:8px}
+.food-top svg{width:18px;height:18px;fill:var(--food-ink);flex:none}
+.food-name{font-family:var(--display);font-weight:600;font-size:1.02rem;line-height:1.2;flex:1;color:var(--ink)}
+.food-meta{font-size:.84rem;color:var(--muted)}
+.food-meta b{color:var(--ink)}
+.food-details{font-size:.88rem;margin:0;max-width:65ch}
+.food-tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--food-ink);margin-right:2px}
+.food-group{display:flex;flex-direction:column;gap:10px}
+.food-group h2{font-family:var(--display);font-size:1.2rem;margin:6px 0 0;display:flex;align-items:center;gap:10px}
+.food-group h2::before{content:"";width:12px;height:12px;border-radius:3px;background:var(--tone-bar,var(--line))}
+.food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.food-grid .food-card{padding:14px 16px;gap:6px}
 /* Cover banners */
 .cover{position:relative;overflow:hidden;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,hsl(var(--gh) var(--ph-s) var(--ph-l)),hsl(calc(var(--gh) + 35) var(--ph-s) calc(var(--ph-l) - 7%)))}
 .cover-sm{height:76px;margin:-12px -12px 0;border-radius:9px 9px 0 0}
@@ -173,8 +191,9 @@ body{overflow-x:clip}
 .cover-sm .cover-ph{font-size:1.5rem;justify-self:end;align-self:end;margin:0 12px 6px 0}
 .cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center var(--pos, center)}
 .cover-img.broken{display:none}
-.cover-badge{position:absolute;left:8px;top:8px;display:flex}
-.cover-badge .mode{box-shadow:0 1px 5px rgba(0,0,0,.28)}
+.cover-badge{position:absolute;left:8px;top:8px;display:flex;z-index:2}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(150deg,rgba(0,0,0,.42) 0,rgba(0,0,0,.12) 28%,rgba(0,0,0,0) 48%);pointer-events:none;z-index:1}
+.cover-badge .mode{box-shadow:0 4px 14px rgba(0,0,0,.55),0 1px 3px rgba(0,0,0,.45);text-shadow:0 1px 0 rgba(255,255,255,.18)}
 .cover-field{border:1px solid var(--line);border-radius:10px;padding:12px;margin:0;display:flex;flex-direction:column;gap:8px}
 .cover-field legend{font-weight:700;font-size:.9rem;padding:0 4px}
 .cover-up{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -195,9 +214,13 @@ body{overflow-x:clip}
 .avail .dayrow th[style*="--dh"]{border-bottom:3px solid var(--tone-bar);background:var(--surface)}
 
 .table-card{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
-.table-card.has-open{border-left:4px solid var(--open)}
-.table-card.is-full{border-left:4px solid var(--ok)}
-.table-card.over{border-left:4px solid var(--warn)}
+.table-card{position:relative}
+.table-card::before{content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:6px;border-radius:10px 0 0 10px;background:var(--type-col,var(--line));z-index:2;pointer-events:none}
+.table-card.type-coop{--type-col:var(--coop)}
+.table-card.type-comp{--type-col:var(--comp)}
+.table-card.type-team{--type-col:var(--team)}
+.table-card.type-either{--type-col:linear-gradient(var(--coop) 0 50%,var(--comp) 50% 100%)}
+.table-card.over{box-shadow:0 0 0 2px var(--warn)}
 .t-top{display:flex;gap:8px;align-items:flex-start}
 .game-name{appearance:none;background:none;border:0;padding:0;text-align:left;font-family:var(--display);font-weight:600;font-size:1.08rem;line-height:1.2;cursor:pointer;flex:1;color:var(--ink)}
 .game-name:hover{color:var(--accent);text-decoration:underline}
@@ -282,7 +305,7 @@ button.cell:hover{outline:1px solid var(--accent)}
 .pick small{color:var(--muted);font-size:.78rem}
 .pick.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
 .pick.dim{opacity:.6}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:999px;font-weight:700;z-index:30;max-width:calc(100% - 32px);text-align:center;transition:opacity .2s}
+.toast{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:999px;font-weight:700;z-index:30;max-width:calc(100% - 32px);text-align:center;transition:opacity .2s}
 .loading{color:var(--muted);padding:40px 0;text-align:center}
 .site-foot{color:var(--muted);font-size:.82rem;padding:0 16px 40px;max-width:1180px}
 @media (max-width:520px){
@@ -297,6 +320,11 @@ button.cell:hover{outline:1px solid var(--accent)}
 </style>
 </head>
 <body>
+<div class="atmo" aria-hidden="true">
+  <div class="atmo-layer atmo-far"><span class="orb o1"></span><span class="orb o2"></span></div>
+  <div class="atmo-layer atmo-mid"><span class="orb o3"></span><span class="orb o4"></span></div>
+  <div class="atmo-noise"></div>
+</div>
 <header class="top">
   <div class="wrap">
     <div class="top-in">
@@ -306,6 +334,7 @@ button.cell:hover{outline:1px solid var(--accent)}
     <nav class="tabs" aria-label="Views">
       <a class="tab" href="#schedule" data-view="schedule">Schedule</a>
       <a class="tab" href="#games" data-view="games">Games</a>
+      <a class="tab" href="#food" data-view="food">Food</a>
       <a class="tab" href="#people" data-view="people">Who's around</a>
     </nav>
   </div>
@@ -323,13 +352,13 @@ button.cell:hover{outline:1px solid var(--accent)}
 "use strict";
 
 /* ---------- State ---------- */
-const COLS = ["sessions", "players", "games", "tables", "claims", "covers"];
+const COLS = ["sessions", "players", "games", "tables", "claims", "covers", "food"];
 const S = {
   db: null, user: null, uid: null,
   isOwner: false, canWrite: null, readOnly: false,
   noDb: false, slow: false, revoked: false,
   got: {}, fresh: {},
-  sessions: [], players: [], games: [], tables: [], claims: [], covers: [], cfg: null,
+  sessions: [], players: [], games: [], tables: [], claims: [], covers: [], food: [], cfg: null,
   me: null, organiser: false, tagFilter: null, modeFilter: null,
   view: "schedule"
 };
@@ -379,17 +408,19 @@ function tones() {
 }
 let TONES = new Map();
 const tone = key => TONES.get(key) || "";
-const MODES = { comp: "Competitive", coop: "Co-op", either: "Co-op or competitive" };
+const MODES = { comp: "Competitive", coop: "Co-op", team: "Team game", either: "Co-op or competitive" };
 const MODE_ICON = {
   coop: '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="4.6" cy="4.4" r="2.4"/><circle cx="11.4" cy="4.4" r="2.4"/><path d="M.8 14.5c0-3.4 1.7-5.4 3.8-5.4 1.5 0 2.6.9 3.4 2 .8-1.1 1.9-2 3.4-2 2.1 0 3.8 2 3.8 5.4z"/></svg>',
   comp: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h8v1.8h2.6c0 2.9-1.5 4.6-3.6 4.9A4.2 4.2 0 0 1 9 10.6v1.7h2.4v2.2H4.6v-2.2H7v-1.7a4.2 4.2 0 0 1-2-2.4C2.9 7.9 1.4 6.2 1.4 3.3H4zm-1 3.3c.2 1 .7 1.7 1.3 2V4.8zm10 0h-1.3v2c.6-.3 1.1-1 1.3-2z"/></svg>'
 };
 MODE_ICON.either = MODE_ICON.coop;
+MODE_ICON.team = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.6 1.2h1.5v13.6H2.6z"/><path d="M5 1.8h9l-2.3 3.4L14 8.6H5z"/></svg>';
 const TYPE_TAG = /^(co-?operative|co-?op|competitive)$/i;
 const mechTags = g => (g && Array.isArray(g.tags) ? g.tags : []).filter(t => !TYPE_TAG.test(String(t).trim()));
 const modeOf = g => !g ? "" : MODES[g.mode] ? g.mode : (Array.isArray(g.tags) && g.tags.some(t => /^co-?op(erative)?$/i.test(String(t).trim())) ? "coop" : "comp");
 const modeBadge = (g, big) => { const m = modeOf(g); return m ? '<span class="mode mode-' + m + (big ? " big" : "") + '">' + MODE_ICON[m] + esc(MODES[m]) + "</span>" : ""; };
-const modeMatch = g => !S.modeFilter || modeOf(g) === S.modeFilter || modeOf(g) === "either";
+const fitsMode = (g, m) => !m || modeOf(g) === m || (modeOf(g) === "either" && (m === "coop" || m === "comp"));
+const modeMatch = g => fitsMode(g, S.modeFilter);
 const ON_CLAUDE = !!(window.claude && typeof window.claude.use === "function");
 const BROKEN = new Set();
 const coverData = gid => { const c = byId(S.covers, gid); return c && typeof c.data === "string" && c.data.startsWith("data:image/") ? c.data : ""; };
@@ -430,8 +461,8 @@ async function shrinkImage(file) {
   } finally { URL.revokeObjectURL(url); }
 }
 function modeFilterBar() {
-  const n = m => S.games.filter(g => !m || modeOf(g) === m || modeOf(g) === "either").length;
-  return '<div class="seg" role="group" aria-label="Game type">' + [["", "All games"], ["comp", "Competitive"], ["coop", "Co-op"]].map(([v, l]) =>
+  const n = m => S.games.filter(g => fitsMode(g, m)).length;
+  return '<div class="seg" role="group" aria-label="Game type">' + [["", "All games"], ["comp", "Competitive"], ["coop", "Co-op"], ["team", "Team game"]].map(([v, l]) =>
     '<button class="seg-btn' + (v ? " seg-" + v : "") + '" data-act="mode" data-mode="' + v + '" aria-pressed="' + ((S.modeFilter || "") === v) + '">' + (v ? MODE_ICON[v] : "") + l + ' <span class="n">' + n(v) + "</span></button>").join("") + "</div>";
 }
 const canAct = () => !!S.db && !S.readOnly && S.canWrite !== false;
@@ -672,7 +703,7 @@ function gameModal(gid) {
     '<div class="field"><label for="f-name">Name</label><input id="f-name" required maxlength="80" value="' + v("name") + '"></div>' +
     '<div class="row2"><div class="field"><label for="f-seats">Seats at our table</label><input id="f-seats" type="number" min="1" max="20" value="' + v("seats", 4) + '"><span class="hint">Default when you add it to a time block</span></div>' +
     '<div class="field"><label for="f-box">Box player count</label><input id="f-box" maxlength="30" placeholder="e.g. 2-5" value="' + v("box") + '"></div></div>' +
-    '<div class="field"><label for="f-mode">Type</label><select id="f-mode">' + ["comp", "coop", "either"].map(m => '<option value="' + m + '"' + ((g ? modeOf(g) : "comp") === m ? " selected" : "") + ">" + MODES[m] + "</option>").join("") + "</select></div>" +
+    '<div class="field"><label for="f-mode">Type</label><select id="f-mode">' + ["comp", "coop", "team", "either"].map(m => '<option value="' + m + '"' + ((g ? modeOf(g) : "comp") === m ? " selected" : "") + ">" + MODES[m] + "</option>").join("") + "</select></div>" +
     '<div class="row2"><div class="field"><label for="f-weight">Weight</label><select id="f-weight">' + ["Light", "Medium", "Heavy"].map(w => '<option' + (g && g.weight === w ? " selected" : "") + ">" + w + "</option>").join("") + "</select></div>" +
     '<div class="field"><label for="f-time">Play time</label><input id="f-time" maxlength="30" placeholder="e.g. 60-90 min" value="' + v("time") + '"></div></div>' +
     '<div class="field"><label for="f-blurb">Description</label><textarea id="f-blurb" maxlength="800">' + v("blurb") + "</textarea></div>" +
@@ -856,7 +887,7 @@ function renderTable(t) {
   const left = seats - cl.length;
   const status = cl.length > seats ? '<span class="pill warn">' + (cl.length - seats) + " over</span>" : left === 0 ? '<span class="pill full">Full</span>' : '<span class="pill open">' + plural(left, "seat") + " open</span>";
   const tags = mechTags(g).slice(0, 3);
-  return '<div class="table-card ' + state + (g && !modeMatch(g) ? " dim" : "") + '">' +
+  return '<div class="table-card ' + state + " type-" + (modeOf(g) || "none") + (g && !modeMatch(g) ? " dim" : "") + '">' +
     coverHtml(g, "sm") +
     '<div class="t-top"><button class="game-name" data-act="game-info" data-id="' + esc(t.gameId) + '">' + esc(gameName(g)) + "</button>" + status +
     (S.organiser ? '<button class="icon-btn" data-act="edit-table" data-id="' + esc(t.id) + '" aria-label="Edit table">✎</button>' : "") + "</div>" +
@@ -869,6 +900,58 @@ function renderTable(t) {
     "</div>";
 }
 
+/* ---------- Food ---------- */
+const FOOD_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1h1.1v4.4h.8V1H6v4.4h.8V1h1.1v5.3a2 2 0 0 1-1.3 1.9V15H4.3V8.2A2 2 0 0 1 3 6.3zM11.4 1c1.7 0 2.6 2 2.6 4.8 0 1.9-.7 3.1-1.7 3.4V15h-1.9V1z"/></svg>';
+const foodSorted = () => [...S.food].sort((a, b) => (a.order || 0) - (b.order || 0));
+const foodIn = sid => foodSorted().filter(f => f.sessionId === sid);
+function renderFoodCard(f, big) {
+  const p = f.by ? byId(S.players, f.by) : null;
+  return '<div class="food-card">' +
+    '<div class="food-top">' + FOOD_ICON + '<span class="food-name">' + esc(f.name || "Food") + "</span>" +
+    (S.organiser ? '<button class="icon-btn" data-act="edit-food" data-id="' + esc(f.id) + '" aria-label="Edit ' + esc(f.name || "food") + '">✎</button>' : "") + "</div>" +
+    (f.details ? '<p class="food-details">' + esc(f.details) + "</p>" : "") +
+    (p ? '<div class="food-meta">Sorted by <b>' + esc(p.name) + "</b></div>" : "") +
+    "</div>";
+}
+function foodModal(fid, presetSid) {
+  const f = fid ? byId(S.food, fid) : null;
+  const sid = f ? (f.sessionId || "") : (presetSid || "");
+  const opts = '<option value="">Any time (snacks, drinks)</option>' + sessionsSorted().map(s => '<option value="' + esc(s.id) + '"' + (s.id === sid ? " selected" : "") + ">" + esc(sessionName(s)) + (s.kind === "meal" ? " (meal)" : "") + "</option>").join("");
+  const people = '<option value="">Nobody yet</option>' + playersSorted().map(pl => '<option value="' + esc(pl.id) + '"' + (f && f.by === pl.id ? " selected" : "") + ">" + esc(pl.name) + "</option>").join("");
+  const html = "<h2>" + (f ? "Edit food" : "Add food") + '</h2><p class="sub">Food shows on the Food tab, and in its time block on the timetable. Nobody needs to sign up for it.</p><form class="form" id="f">' +
+    '<div class="field"><label for="f-name">Food</label><input id="f-name" required maxlength="60" placeholder="e.g. Pizza, McDonald\'s, Sausage sizzle" value="' + esc(f ? f.name : "") + '"></div>' +
+    '<div class="field"><label for="f-when">When</label><select id="f-when">' + opts + "</select></div>" +
+    '<div class="field"><label for="f-details">Details</label><textarea id="f-details" maxlength="400" placeholder="e.g. Ordering from Domino\'s at 6pm. One vegetarian, one gluten-free.">' + esc(f ? f.details : "") + "</textarea></div>" +
+    '<div class="field"><label for="f-by">Who\'s sorting it</label><select id="f-by">' + people + "</select></div>" +
+    '<div class="actions">' + (f ? '<button type="button" class="btn danger" data-m="del">Remove</button><span class="spacer"></span>' : "") +
+    '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (f ? "Save" : "Add food") + "</button></div></form>";
+  openModal(html, m => {
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    const del = m.querySelector('[data-m="del"]');
+    if (del) del.onclick = () => { closeModal(); confirmModal("Remove " + (f.name || "this food") + "?", "It will disappear from the Food tab and the timetable.", "Remove", async () => { await write(() => S.db.doc("food/" + f.id).delete()); toast("Removed."); }); };
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      const data = { name: m.querySelector("#f-name").value.trim(), sessionId: m.querySelector("#f-when").value, details: m.querySelector("#f-details").value.trim(), by: m.querySelector("#f-by").value, order: f ? (f.order || Date.now()) : Date.now() };
+      if (!data.name) return;
+      run(async () => {
+        await write(() => S.db.doc("food/" + (f ? f.id : slug("food-" + data.name))).set(data));
+        closeModal(); toast(f ? "Saved." : data.name + " added.");
+      });
+    };
+  });
+}
+function renderFood() {
+  let h = '<p class="empty-note" style="margin:0">What we\'re eating and when. No sign-up needed, just turn up hungry.</p>';
+  if (S.organiser) h += '<div><button class="btn primary" data-act="add-food">+ Add food</button></div>';
+  if (!S.food.length) return h + '<div class="banner">No food planned yet.' + (S.organiser ? " Add the first option with the button above." : " Check back closer to the weekend.") + "</div>";
+  const groups = [];
+  for (const s of sessionsSorted()) { const items = foodIn(s.id); if (items.length) groups.push({ title: sessionName(s), style: tone(s.id), items }); }
+  const loose = foodSorted().filter(f => !f.sessionId || !byId(S.sessions, f.sessionId));
+  if (loose.length) groups.push({ title: "Any time", style: "", items: loose });
+  for (const g of groups) h += '<section class="food-group" style="' + g.style + '"><h2>' + esc(g.title) + '</h2><div class="food-grid">' + g.items.map(f => renderFoodCard(f, true)).join("") + "</div></section>";
+  return h;
+}
+
 function renderSession(s) {
   const meal = s.kind === "meal";
   const tabs = tablesIn(s.id);
@@ -878,9 +961,11 @@ function renderSession(s) {
   if (tabs.length) stats += open ? '<span class="pill open">' + plural(open, "open seat") + "</span>" : '<span class="pill full">All full</span>';
   if (away.length) stats += '<span class="pill" title="' + esc(away.map(p => p.name + (noteFor(p, s.id) ? " (" + noteFor(p, s.id) + ")" : "")).join(", ")) + '">' + away.length + " away</span>";
   const tools = S.organiser ? '<button class="icon-btn" data-act="move-s" data-dir="-1" data-id="' + esc(s.id) + '" aria-label="Move earlier">←</button><button class="icon-btn" data-act="move-s" data-dir="1" data-id="' + esc(s.id) + '" aria-label="Move later">→</button><button class="icon-btn" data-act="edit-session" data-id="' + esc(s.id) + '" aria-label="Edit time block">✎</button>' : "";
-  let body = tabs.map(renderTable).join("");
-  if (S.organiser) body += '<button class="add-tile" data-act="add-table" data-id="' + esc(s.id) + '">+ Add a table</button>';
-  else if (!tabs.length) body += '<div class="col-note">' + (meal ? "Meal break" : "No games picked yet") + "</div>";
+  const food = foodIn(s.id);
+  let body = (meal ? food.map(f => renderFoodCard(f)).join("") : "") + tabs.map(renderTable).join("") + (!meal ? food.map(f => renderFoodCard(f)).join("") : "");
+  if (S.organiser) body += (meal ? '<button class="add-tile" data-act="add-food" data-id="' + esc(s.id) + '">+ Add food</button><button class="add-tile" data-act="add-table" data-id="' + esc(s.id) + '">+ Add a table</button>'
+                                 : '<button class="add-tile" data-act="add-table" data-id="' + esc(s.id) + '">+ Add a table</button>');
+  else if (!tabs.length && !food.length) body += '<div class="col-note">' + (meal ? "Meal break. Food to be decided." : "No games picked yet") + "</div>";
   if (!meal && tabs.length && free.length) body += '<p class="free">Still to pick a table: <b>' + free.map(p => esc(p.name)).join(", ") + "</b></p>";
   return '<section class="col' + (meal ? " meal" : "") + '" id="s-' + esc(s.id) + '" style="' + tone(s.id) + '" aria-label="' + esc(sessionName(s)) + '"><header class="col-head"><div class="col-title"><h3>' + esc(s.label) + "</h3>" + tools + "</div>" +
     '<div class="s-stats">' + stats + "</div></header>" + body + "</section>";
@@ -916,14 +1001,16 @@ function renderSchedule() {
   const groups = [...dayGroups().entries()];
   let h = renderMine() + renderSummary();
   h += '<div class="board-bar">' + modeFilterBar() + '<span class="spacer"></span><span class="label">Jump to</span>' + groups.map(([d], i) => '<button class="btn small" data-act="jump-day" data-i="' + i + '" style="' + tone("day:" + d) + '"><span class="dot"></span>' + esc(d) + "</button>").join("") +
-    '<button class="icon-btn" data-act="board-scroll" data-dir="-1" aria-label="Scroll to earlier blocks">←</button><button class="icon-btn" data-act="board-scroll" data-dir="1" aria-label="Scroll to later blocks">→</button></div>';
+    "</div>";
   h += '<div class="board-outer"><div class="board" id="board">';
   groups.forEach(([day, list], i) => {
     h += '<div class="day-group" id="d-' + i + '" style="' + tone("day:" + day) + '"><h2 class="day-label">' + esc(day) + '</h2><div class="day-cols">' + list.map(renderSession).join("") +
       (S.organiser ? '<button class="col-new" data-act="add-session" data-day="' + esc(day) + '">+ Add a time block to ' + esc(day) + "</button>" : "") + "</div></div>";
   });
   if (S.organiser) h += '<div class="day-group"><h2 class="day-label">&nbsp;</h2><button class="col-new" data-act="add-session">+ Add a new day</button></div>';
-  h += "</div></div>";
+  h += '</div><div class="rail" id="rail" hidden><button class="icon-btn" data-act="board-scroll" data-dir="-1" aria-label="Scroll to earlier blocks">←</button>' +
+    '<input type="range" id="rail-range" min="0" max="1000" step="1" value="0" aria-label="Scroll the timetable sideways">' +
+    '<button class="icon-btn" data-act="board-scroll" data-dir="1" aria-label="Scroll to later blocks">→</button></div></div>';
   return h;
 }
 
@@ -994,11 +1081,47 @@ function render() {
   const y = window.scrollY;
   const oldBoard = document.getElementById("board");
   const bx = oldBoard ? oldBoard.scrollLeft : null;
-  app.innerHTML = banners() + (S.view === "games" ? renderGames() : S.view === "people" ? renderPeople() : renderSchedule());
+  app.innerHTML = banners() + (S.view === "games" ? renderGames() : S.view === "food" ? renderFood() : S.view === "people" ? renderPeople() : renderSchedule());
   const nb = document.getElementById("board");
   if (nb && bx != null) nb.scrollLeft = bx;
+  setupRail();
   window.scrollTo(0, y);
 }
+
+/* ---------- Pinned sideways scroller ---------- */
+let railSync = null;
+function setupRail() {
+  const b = document.getElementById("board"), r = document.getElementById("rail-range"), rail = document.getElementById("rail");
+  railSync = null;
+  if (!b || !r || !rail) return;
+  const max = () => Math.max(0, b.scrollWidth - b.clientWidth);
+  let dragging = false;
+  const paint = () => {
+    const total = b.scrollWidth || 1, cs = getComputedStyle(b), pad = 0;
+    const stops = [];
+    let last = 0;
+    b.querySelectorAll(".day-group[id]").forEach(g => {
+      const col = getComputedStyle(g).getPropertyValue("--tone-bar").trim();
+      if (!col) return;
+      const s = (g.offsetLeft / total) * 100, e = ((g.offsetLeft + g.offsetWidth) / total) * 100;
+      stops.push("var(--chip) " + last.toFixed(2) + "%", "var(--chip) " + s.toFixed(2) + "%", col + " " + s.toFixed(2) + "%", col + " " + e.toFixed(2) + "%");
+      last = e;
+    });
+    stops.push("var(--chip) " + last.toFixed(2) + "%", "var(--chip) 100%");
+    r.style.setProperty("--rail-bg", "linear-gradient(90deg," + stops.join(",") + ")");
+  };
+  const sync = () => {
+    const m = max();
+    rail.hidden = m < 4;
+    if (!dragging) r.value = m ? String(Math.round((b.scrollLeft / m) * 1000)) : "0";
+  };
+  b.addEventListener("scroll", sync, { passive: true });
+  r.addEventListener("input", () => { dragging = true; b.scrollLeft = (Number(r.value) / 1000) * max(); });
+  ["change", "pointerup", "blur"].forEach(ev => r.addEventListener(ev, () => { dragging = false; sync(); }));
+  railSync = () => { sync(); paint(); };
+  railSync();
+}
+window.addEventListener("resize", () => { if (railSync) railSync(); });
 
 /* ---------- Events ---------- */
 const smooth = () => matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
@@ -1027,6 +1150,8 @@ document.addEventListener("click", e => {
     case "add-session": sessionModal(null, el.dataset.day); break;
     case "move-s": run(() => moveSession(id, Number(el.dataset.dir))); break;
     case "add-game": gameModal(); break;
+    case "add-food": foodModal(null, id); break;
+    case "edit-food": foodModal(id); break;
     case "edit-game": gameModal(id); break;
     case "add-player": playerModal(); break;
     case "edit-player": playerModal(id); break;
@@ -1042,7 +1167,7 @@ document.addEventListener("click", e => {
   }
 });
 
-const VIEWS = ["schedule", "games", "people"];
+const VIEWS = ["schedule", "games", "food", "people"];
 function setView(v, keepScroll) {
   S.view = VIEWS.includes(v) ? v : "schedule";
   if (location.hash !== "#" + S.view) { try { history.replaceState(null, "", "#" + S.view); } catch (e) {} }
@@ -1125,6 +1250,33 @@ async function boot() {
   }
 }
 boot();
+})();
+</script>
+<script>
+/* Parallax: far layer (base + blue halos) at 0.15x, mid layer (violet + teal) at 0.4x; halos swell 5% on fast scrolls */
+(() => {
+  const atmo = document.querySelector(".atmo"), far = document.querySelector(".atmo-far"), mid = document.querySelector(".atmo-mid");
+  if (!atmo || !far || !mid) return;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  let lastY = window.scrollY, lastT = performance.now(), fastTimer = 0, queued = false;
+  const apply = () => {
+    queued = false;
+    if (reduce.matches) { far.style.transform = ""; mid.style.transform = ""; return; }
+    const y = window.scrollY;
+    far.style.transform = "translate3d(0," + (-y * 0.15).toFixed(1) + "px,0)";
+    mid.style.transform = "translate3d(0," + (-y * 0.4).toFixed(1) + "px,0)";
+  };
+  window.addEventListener("scroll", () => {
+    const now = performance.now(), v = Math.abs(window.scrollY - lastY) / Math.max(1, now - lastT);
+    lastY = window.scrollY; lastT = now;
+    if (!reduce.matches && v > 1.6) {
+      atmo.classList.add("fast");
+      clearTimeout(fastTimer);
+      fastTimer = setTimeout(() => atmo.classList.remove("fast"), 180);
+    }
+    if (!queued) { queued = true; requestAnimationFrame(apply); }
+  }, { passive: true });
+  apply();
 })();
 </script>
 </body>
