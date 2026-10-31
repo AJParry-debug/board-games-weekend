@@ -1,0 +1,535 @@
+{
+ "config/event": {
+  "title": "Board Games Weekend 2026",
+  "subtitle": "Friday night to Sunday arvo"
+ },
+ "sessions": [
+  {
+   "id": "fri-night",
+   "day": "Friday",
+   "label": "Night",
+   "kind": "play",
+   "order": 1
+  },
+  {
+   "id": "sat-0800",
+   "day": "Saturday",
+   "label": "8am–11am",
+   "kind": "play",
+   "order": 2
+  },
+  {
+   "id": "sat-1100",
+   "day": "Saturday",
+   "label": "11am–2pm",
+   "kind": "play",
+   "order": 3
+  },
+  {
+   "id": "sat-1400",
+   "day": "Saturday",
+   "label": "2pm–5pm",
+   "kind": "play",
+   "order": 4
+  },
+  {
+   "id": "sat-dinner",
+   "day": "Saturday",
+   "label": "Dinner",
+   "kind": "meal",
+   "order": 5
+  },
+  {
+   "id": "sat-1900",
+   "day": "Saturday",
+   "label": "7pm–10pm",
+   "kind": "play",
+   "order": 6
+  },
+  {
+   "id": "sat-2200",
+   "day": "Saturday",
+   "label": "10pm–1am",
+   "kind": "play",
+   "order": 7
+  },
+  {
+   "id": "sun-0900",
+   "day": "Sunday",
+   "label": "9am–12pm",
+   "kind": "play",
+   "order": 8
+  },
+  {
+   "id": "sun-lunch",
+   "day": "Sunday",
+   "label": "Lunch",
+   "kind": "meal",
+   "order": 9
+  },
+  {
+   "id": "sun-1300",
+   "day": "Sunday",
+   "label": "1pm–4pm",
+   "kind": "play",
+   "order": 10
+  }
+ ],
+ "players": [
+  {
+   "id": "alan",
+   "name": "Alan",
+   "away": [],
+   "notes": {}
+  },
+  {
+   "id": "alistair",
+   "name": "Alistair",
+   "away": [
+    "fri-night",
+    "sat-0800"
+   ],
+   "notes": {}
+  },
+  {
+   "id": "allyn",
+   "name": "Allyn",
+   "away": [
+    "fri-night"
+   ],
+   "notes": {}
+  },
+  {
+   "id": "arlen",
+   "name": "Arlen",
+   "away": [],
+   "notes": {}
+  },
+  {
+   "id": "ben",
+   "name": "Ben",
+   "away": [
+    "fri-night",
+    "sat-0800"
+   ],
+   "notes": {}
+  },
+  {
+   "id": "james",
+   "name": "James",
+   "away": [],
+   "notes": {}
+  },
+  {
+   "id": "lukas",
+   "name": "Lukas",
+   "away": [],
+   "notes": {}
+  },
+  {
+   "id": "maria",
+   "name": "Maria",
+   "away": [],
+   "notes": {}
+  },
+  {
+   "id": "mitch",
+   "name": "Mitch",
+   "away": [],
+   "notes": {}
+  },
+  {
+   "id": "sam",
+   "name": "Sam",
+   "away": [
+    "sat-0800"
+   ],
+   "notes": {
+    "sat-0800": "Picking up Wils"
+   }
+  },
+  {
+   "id": "tyler",
+   "name": "Tyler",
+   "away": [],
+   "notes": {}
+  },
+  {
+   "id": "wilson",
+   "name": "Wilson",
+   "away": [
+    "fri-night",
+    "sat-0800"
+   ],
+   "notes": {}
+  }
+ ],
+ "games": [
+  {
+   "id": "console-couch",
+   "name": "Console Couch",
+   "seats": 4,
+   "box": "2+",
+   "weight": "Light",
+   "time": "Drop in",
+   "blurb": "Video games on the couch. A low-key option for anyone who wants a breather from cardboard, and easy to jump in and out of.",
+   "tags": [
+    "Video games",
+    "Drop in",
+    "Party"
+   ],
+   "video": "",
+   "mode": "either"
+  },
+  {
+   "id": "duel-middle-earth",
+   "name": "LotR: Duel for Middle-earth",
+   "seats": 2,
+   "box": "2",
+   "weight": "Light",
+   "time": "30 min",
+   "blurb": "A head-to-head card game from the designers of 7 Wonders Duel. Draft cards from a shared layout to push the Fellowship or Sauron toward victory, racing for the Ring, support of the races, or control of Middle-earth.",
+   "tags": [
+    "2-player",
+    "Card drafting",
+    "Set collection",
+    "Area majority",
+    "Tug of war"
+   ],
+   "video": "",
+   "mode": "comp"
+  },
+  {
+   "id": "earthborne-rangers",
+   "name": "Earthborne Rangers",
+   "seats": 4,
+   "box": "1-4",
+   "weight": "Medium",
+   "time": "60-120 min",
+   "blurb": "A co-operative card game where you play Rangers in a hopeful, far-future wilderness. Each player builds their own deck, then the group heads out on story-driven missions where every day plays like a chapter.",
+   "tags": [
+    "Cooperative",
+    "Campaign",
+    "Deck building",
+    "Narrative",
+    "Hand management"
+   ],
+   "video": "",
+   "mode": "coop"
+  },
+  {
+   "id": "fate-fellowship",
+   "name": "LotR: Fate of the Fellowship",
+   "seats": 5,
+   "box": "1-5",
+   "weight": "Medium",
+   "time": "60-150 min",
+   "blurb": "Matt Leacock's Pandemic-system take on The Lord of the Rings. Each player runs two characters, guiding Frodo toward Mount Doom while defending havens, completing changing objectives and dodging the Nazgûl.",
+   "tags": [
+    "Cooperative",
+    "Pandemic system",
+    "Hand management",
+    "Action points",
+    "Variable player powers"
+   ],
+   "video": "",
+   "mode": "coop"
+  },
+  {
+   "id": "bomb-busters",
+   "name": "Bomb Busters",
+   "seats": 4,
+   "box": "2-5",
+   "weight": "Light",
+   "time": "30 min",
+   "blurb": "A co-operative deduction game: everyone holds numbered wire tiles only they can see, and the team has to cut matching wires without hitting the red one. Played across 66 missions that add new twists. Spiel des Jahres 2025 winner.",
+   "tags": [
+    "Cooperative",
+    "Deduction",
+    "Communication limits",
+    "Campaign",
+    "Memory"
+   ],
+   "video": "",
+   "mode": "coop"
+  },
+  {
+   "id": "lotr-trick-taking",
+   "name": "LotR: Fellowship of the Ring Trick-Taking Game",
+   "seats": 4,
+   "box": "1-4",
+   "weight": "Light",
+   "time": "20-40 min",
+   "blurb": "A co-operative trick-taking game that follows the Fellowship's journey. Each chapter gives every character a goal (win the One Ring, avoid certain cards) and the table has to make it work with limited talking.",
+   "tags": [
+    "Cooperative",
+    "Trick-taking",
+    "Campaign",
+    "Communication limits"
+   ],
+   "video": "",
+   "mode": "coop"
+  },
+  {
+   "id": "jisogi",
+   "name": "Jisogi: Anime Studio Tycoon",
+   "seats": 4,
+   "box": "1-4",
+   "weight": "Medium",
+   "time": "60-120 min",
+   "blurb": "Run a struggling anime studio. Hire staff, place them to take actions, build scripts from setting, plot and twist cards, chase genre trends and try to release a hit before the debts pile up.",
+   "tags": [
+    "Worker placement",
+    "Economic",
+    "Market",
+    "Contracts",
+    "Set collection"
+   ],
+   "video": "",
+   "mode": "comp"
+  },
+  {
+   "id": "magical-athlete",
+   "name": "Magical Athlete",
+   "seats": 8,
+   "box": "2-6",
+   "weight": "Light",
+   "time": "30 min",
+   "blurb": "Richard Garfield's chaotic racing game. Roll and move, but every racer you draft has a rule-breaking power, so each race is pure mayhem. Four races, most points wins. Teaches in minutes.",
+   "tags": [
+    "Racing",
+    "Roll and move",
+    "Drafting",
+    "Variable player powers",
+    "Party"
+   ],
+   "video": "",
+   "mode": "comp"
+  },
+  {
+   "id": "arnak",
+   "name": "Lost Ruins of Arnak",
+   "seats": 4,
+   "box": "1-4",
+   "weight": "Medium",
+   "time": "60-120 min",
+   "blurb": "Explore an uncharted island. Mix deck building with worker placement: play cards to send explorers to dig sites, fight guardians, collect artefacts and race up the research track.",
+   "tags": [
+    "Deck building",
+    "Worker placement",
+    "Exploration",
+    "Resource management"
+   ],
+   "video": "",
+   "mode": "comp"
+  },
+  {
+   "id": "champions-midgard",
+   "name": "Champions of Midgard",
+   "seats": 4,
+   "box": "2-4",
+   "weight": "Medium",
+   "time": "60-90 min",
+   "blurb": "Viking clan leaders compete for glory. Place workers to recruit warriors, gather food and wood, then roll dice to fight trolls, draugr and monsters across the sea.",
+   "tags": [
+    "Worker placement",
+    "Dice rolling",
+    "Set collection"
+   ],
+   "video": "",
+   "mode": "comp"
+  },
+  {
+   "id": "andromedas-edge",
+   "name": "Andromeda's Edge",
+   "seats": 5,
+   "box": "2-4 (5 with Escalation)",
+   "weight": "Heavy",
+   "time": "80-160 min",
+   "blurb": "Lead a faction rebuilding civilisation at the edge of the Andromeda galaxy. Launch ships to gain resources and develop planets, upgrade your station, fight raiders and climb the progress tracks.",
+   "tags": [
+    "Worker placement",
+    "Engine building",
+    "Area majority",
+    "Dice rolling",
+    "Tech tracks"
+   ],
+   "video": "",
+   "mode": "comp"
+  },
+  {
+   "id": "unsettled",
+   "name": "Unsettled",
+   "seats": 4,
+   "box": "2-4",
+   "weight": "Medium",
+   "time": "60-90 min",
+   "blurb": "A co-operative survival puzzle on a strange alien planet. Your crew is stranded and has to explore, gather resources and complete survival tasks before time runs out. Each planet box changes the rules.",
+   "tags": [
+    "Cooperative",
+    "Survival",
+    "Action retrieval",
+    "Modular board",
+    "Scenario"
+   ],
+   "video": "",
+   "mode": "coop"
+  },
+  {
+   "id": "zombicide",
+   "name": "Zombicide",
+   "seats": 6,
+   "box": "1-6",
+   "weight": "Light",
+   "time": "60-180 min",
+   "blurb": "Team up as survivors fighting through zombie-infested streets. Move, search, kill and level up while the horde grows every turn. Scenario-based and very dice-chuckingly fun.",
+   "tags": [
+    "Cooperative",
+    "Dice rolling",
+    "Miniatures",
+    "Variable player powers",
+    "Scenario"
+   ],
+   "video": "",
+   "mode": "coop"
+  },
+  {
+   "id": "castles-burgundy",
+   "name": "The Castles of Burgundy",
+   "seats": 4,
+   "box": "2-4",
+   "weight": "Medium",
+   "time": "30-90 min",
+   "blurb": "Stefan Feld's classic. Roll two dice each turn and use them to take and place tiles in your estate: castles, mines, ships, animals and buildings that each trigger their own bonus.",
+   "tags": [
+    "Dice placement",
+    "Tile placement",
+    "Set collection"
+   ],
+   "video": "",
+   "mode": "comp"
+  }
+ ],
+ "tables": [
+  {
+   "id": "t-fri-1",
+   "sessionId": "fri-night",
+   "gameId": "bomb-busters",
+   "seats": 4,
+   "order": 1,
+   "note": ""
+  },
+  {
+   "id": "t-fri-2",
+   "sessionId": "fri-night",
+   "gameId": "lotr-trick-taking",
+   "seats": 4,
+   "order": 2,
+   "note": ""
+  },
+  {
+   "id": "t-sat8-1",
+   "sessionId": "sat-0800",
+   "gameId": "arnak",
+   "seats": 4,
+   "order": 1,
+   "note": ""
+  },
+  {
+   "id": "t-sat8-2",
+   "sessionId": "sat-0800",
+   "gameId": "castles-burgundy",
+   "seats": 4,
+   "order": 2,
+   "note": ""
+  },
+  {
+   "id": "t-sat11-1",
+   "sessionId": "sat-1100",
+   "gameId": "zombicide",
+   "seats": 6,
+   "order": 1,
+   "note": ""
+  },
+  {
+   "id": "t-sat11-2",
+   "sessionId": "sat-1100",
+   "gameId": "champions-midgard",
+   "seats": 4,
+   "order": 2,
+   "note": ""
+  },
+  {
+   "id": "t-sat11-3",
+   "sessionId": "sat-1100",
+   "gameId": "duel-middle-earth",
+   "seats": 2,
+   "order": 3,
+   "note": ""
+  },
+  {
+   "id": "t-sat14-1",
+   "sessionId": "sat-1400",
+   "gameId": "fate-fellowship",
+   "seats": 5,
+   "order": 1,
+   "note": ""
+  },
+  {
+   "id": "t-sat14-2",
+   "sessionId": "sat-1400",
+   "gameId": "andromedas-edge",
+   "seats": 5,
+   "order": 2,
+   "note": "Needs the Escalation expansion for 5"
+  },
+  {
+   "id": "t-sat14-3",
+   "sessionId": "sat-1400",
+   "gameId": "console-couch",
+   "seats": 2,
+   "order": 3,
+   "note": ""
+  },
+  {
+   "id": "t-sat19-1",
+   "sessionId": "sat-1900",
+   "gameId": "earthborne-rangers",
+   "seats": 4,
+   "order": 1,
+   "note": ""
+  },
+  {
+   "id": "t-sat19-2",
+   "sessionId": "sat-1900",
+   "gameId": "unsettled",
+   "seats": 4,
+   "order": 2,
+   "note": ""
+  },
+  {
+   "id": "t-sat19-3",
+   "sessionId": "sat-1900",
+   "gameId": "jisogi",
+   "seats": 4,
+   "order": 3,
+   "note": ""
+  },
+  {
+   "id": "t-sat22-1",
+   "sessionId": "sat-2200",
+   "gameId": "magical-athlete",
+   "seats": 8,
+   "order": 1,
+   "note": ""
+  },
+  {
+   "id": "t-sat22-2",
+   "sessionId": "sat-2200",
+   "gameId": "bomb-busters",
+   "seats": 4,
+   "order": 2,
+   "note": ""
+  }
+ ]
+}

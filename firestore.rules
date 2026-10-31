@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Anyone with the link can read the schedule.
+    // Anyone with the link can claim seats and make changes until 1 December 2026.
+    // After that the schedule becomes read-only. Change the date below to extend it.
+    match /{col}/{id} {
+      allow read: if col in ['config', 'sessions', 'players', 'games', 'tables', 'claims', 'covers'];
+      allow write: if col in ['config', 'sessions', 'players', 'games', 'tables', 'claims', 'covers']
+                   && request.time < timestamp.date(2026, 12, 1);
+    }
+  }
+}

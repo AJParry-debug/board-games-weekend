@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Board Games Weekend 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: days stack top to bottom; each time block is a row of game tables; every seat is a meeple you tap to claim */
+  --bg:#ECEFF3; --surface:#FFFFFF; --ink:#1A2130; --muted:#5A6373; --line:#D3D9E1; --chip:#E3E8EF;
+  --accent:#2A4FD6; --accent-ink:#FFFFFF; --accent-soft:#E2E8FF;
+  --open:#B86A07; --open-bg:#FFF3DF; --warn:#B3242B; --warn-bg:#FDE8E8; --ok:#1C7448;
+  --seat-l:44%; --seat-s:58%;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --radius:12px;
+  --coop:#13745A; --comp:#B32F4E; --mode-ink:#FFFFFF;
+  --ph-s:42%; --ph-l:86%; --ph-ink-l:38%;
+  /* Session tones: day sets the hue, time of day sets the shade (k = 0 morning ... 3 night) */
+  --tint-s:58%; --tint-l:95.5%; --tint-step:-1.7%; --bar-s:58%; --bar-l:58%; --bar-step:-6%;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10141B; --surface:#19202A; --ink:#E7EBF2; --muted:#99A3B3; --line:#2C3542; --chip:#242C38;
+    --accent:#7F9CFF; --accent-ink:#0D1323; --accent-soft:#222C47;
+    --open:#F2B558; --open-bg:#2B2316; --warn:#FF8085; --warn-bg:#3A1C1F; --ok:#5DCB92;
+    --seat-l:62%; --seat-s:62%;
+    --tint-s:26%; --tint-l:20%; --tint-step:-1.3%; --bar-s:62%; --bar-l:74%; --bar-step:-5%;
+    --coop:#4CC79A; --comp:#FF7E97; --mode-ink:#0E1424;
+    --ph-s:26%; --ph-l:24%; --ph-ink-l:72%;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10141B; --surface:#19202A; --ink:#E7EBF2; --muted:#99A3B3; --line:#2C3542; --chip:#242C38;
+  --accent:#7F9CFF; --accent-ink:#0D1323; --accent-soft:#222C47;
+  --open:#F2B558; --open-bg:#2B2316; --warn:#FF8085; --warn-bg:#3A1C1F; --ok:#5DCB92;
+  --seat-l:62%; --seat-s:62%;
+  --tint-s:26%; --tint-l:20%; --tint-step:-1.3%; --bar-s:62%; --bar-l:74%; --bar-step:-5%;
+  --coop:#4CC79A; --comp:#FF7E97; --mode-ink:#0E1424;
+  --ph-s:26%; --ph-l:24%; --ph-ink-l:72%;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+
+/* Header */
+.top{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.top-in{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding:14px 0 0}
+.brand{flex:1 1 280px;min-width:0}
+.brand h1{font-family:var(--display);font-weight:800;font-size:clamp(1.35rem,2.4vw,1.8rem);line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.brand p{margin:2px 0 0;color:var(--muted);font-size:.92rem}
+.who{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tabs{display:flex;gap:4px;margin-top:10px;overflow-x:auto}
+.tab{appearance:none;border:0;background:none;padding:10px 14px;border-bottom:3px solid transparent;color:var(--muted);font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none}
+.tab[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:hover{color:var(--ink)}
+
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;line-height:1.2}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent;border-style:dashed;color:var(--muted)}
+.btn.ghost:hover{color:var(--ink)}
+.btn.danger{color:var(--warn);border-color:var(--warn)}
+.btn.small{padding:4px 10px;font-size:.85rem}
+.btn.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.icon-btn{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:8px;width:30px;height:30px;display:inline-grid;place-items:center;cursor:pointer;color:var(--muted);font-size:.9rem;flex:none}
+.icon-btn:hover{color:var(--ink);border-color:var(--accent)}
+
+main{padding:20px 0 60px;display:flex;flex-direction:column;gap:22px}
+.banner{border-radius:var(--radius);padding:12px 16px;background:var(--chip);border:1px solid var(--line)}
+.banner.warn{background:var(--warn-bg);border-color:transparent;color:var(--warn)}
+.banner.org{background:var(--accent-soft);border-color:transparent;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.banner.org strong{color:var(--accent)}
+
+/* Summary */
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px}
+.stat b{display:block;font-family:var(--display);font-size:1.6rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:.88rem}
+.stat.open b{color:var(--open)}
+
+.mine{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.mine h2{font-family:var(--display);font-size:1.05rem;margin:0 0 10px}
+.mine-list{display:flex;flex-wrap:wrap;gap:8px}
+.mine-item{display:flex;flex-direction:column;gap:1px;padding:7px 11px;border-radius:10px;background:var(--chip);text-decoration:none;color:var(--ink);min-width:118px;border:1px solid transparent}
+.mine-item small{color:var(--muted);font-size:.78rem}
+.mine-item.todo{background:var(--open-bg);border-color:var(--open)}
+.mine-item.todo span{color:var(--open);font-weight:700}
+.mine-item.away{opacity:.6}
+
+/* Schedule */
+.day{display:flex;flex-direction:column;gap:12px}
+.day-h{font-family:var(--display);font-weight:800;font-size:1.5rem;margin:6px 0 0;letter-spacing:-.01em}
+.session{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px 16px;scroll-margin-top:130px}
+.session.meal{background:transparent;border-style:dashed}
+.s-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:12px}
+.s-head h3{font-family:var(--display);font-size:1.15rem;margin:0}
+.s-day{color:var(--muted);font-weight:400;font-family:var(--body);font-size:.9rem}
+.s-stats{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+.s-tools{display:flex;gap:6px;margin-left:auto}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;background:var(--chip);font-size:.84rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill.open{background:var(--open-bg);color:var(--open);font-weight:700}
+.pill.full{color:var(--ok);font-weight:700}
+.pill.warn{background:var(--warn-bg);color:var(--warn);font-weight:700}
+.tables{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+
+/* Timetable board: time blocks run left to right, games stack top to bottom */
+body{overflow-x:clip}
+.board-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.board-bar .label{color:var(--muted);font-size:.88rem;margin-right:2px}
+.board-bar .spacer{flex:1}
+.board-outer{--edge:max(16px, calc((100vw - 1180px) / 2 + 16px));width:100vw;margin-left:calc(50% - 50vw)}
+.board{display:flex;gap:28px;overflow-x:auto;padding:4px var(--edge) 18px;scroll-padding-inline:var(--edge);scroll-snap-type:x proximity;overscroll-behavior-x:contain}
+.day-group{display:flex;flex-direction:column;gap:10px;flex:none;scroll-margin-top:130px}
+.day-label{position:sticky;left:0;align-self:flex-start;font-family:var(--display);font-weight:800;font-size:1.45rem;line-height:1.1;margin:0;letter-spacing:-.01em;padding-right:12px;background:var(--bg)}
+.day-cols{display:flex;gap:12px;align-items:flex-start}
+.col{width:min(304px, calc(100vw - 64px));flex:none;display:flex;flex-direction:column;gap:10px;scroll-snap-align:start;scroll-margin-top:130px}
+.col.meal{width:158px}
+.col-head{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:var(--radius);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.col.meal .col-head{background:transparent;border-style:dashed;border-top:1px dashed var(--line)}
+.col-title{display:flex;align-items:center;gap:6px}
+.col-title h3{font-family:var(--display);font-size:1.12rem;margin:0;flex:1;line-height:1.15}
+.col-title .s-day{display:block;font-size:.8rem}
+.col .s-stats{flex:none}
+.col .pill{font-size:.78rem;padding:2px 8px}
+.col-note{border:1px dashed var(--line);border-radius:10px;padding:12px;color:var(--muted);font-size:.9rem;text-align:center}
+.col .add-tile{min-height:64px}
+.col .free{margin:0;padding:10px 12px;border-radius:10px;background:var(--warn-bg);color:var(--warn);font-size:.85rem}
+.col .free b{color:inherit}
+.col-new{width:150px;flex:none;align-self:stretch;border:1px dashed var(--line);border-radius:var(--radius);background:transparent;color:var(--muted);font-weight:700;cursor:pointer;min-height:120px}
+.col-new:hover{border-color:var(--accent);color:var(--accent)}
+/* Game type: competitive or co-op */
+.mode{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px 3px 7px;border-radius:6px;color:var(--mode-ink);line-height:1.25;white-space:nowrap}
+.mode svg{width:14px;height:14px;fill:currentColor;flex:none}
+.mode-coop{background:var(--coop)}
+.mode-comp{background:var(--comp)}
+.mode-either{background:linear-gradient(100deg,var(--coop) 0 50%,var(--comp) 50% 100%)}
+.mode.big{font-size:.8rem;padding:5px 11px 5px 9px}
+.t-kind{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.table-card.dim{opacity:.38;filter:saturate(.4)}
+.table-card.dim:hover,.table-card.dim:focus-within{opacity:1;filter:none}
+.game-card.mode-line-coop{border-top:4px solid var(--coop)}
+.game-card.mode-line-comp{border-top:4px solid var(--comp)}
+.game-card.mode-line-either{border-top:4px solid var(--line)}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.seg-btn{appearance:none;border:0;background:transparent;border-radius:999px;padding:6px 14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:var(--muted)}
+.seg-btn svg{width:15px;height:15px;fill:currentColor}
+.seg-btn .n{font-weight:400;font-variant-numeric:tabular-nums;opacity:.8}
+.seg-btn:hover{color:var(--ink)}
+.seg-btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.seg-btn.seg-coop[aria-pressed="true"]{background:var(--coop);color:var(--mode-ink)}
+.seg-btn.seg-comp[aria-pressed="true"]{background:var(--comp);color:var(--mode-ink)}
+.seg-btn.seg-coop:not([aria-pressed="true"]) svg{fill:var(--coop)}
+.seg-btn.seg-comp:not([aria-pressed="true"]) svg{fill:var(--comp)}
+.filter-row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+/* Cover banners */
+.cover{position:relative;overflow:hidden;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,hsl(var(--gh) var(--ph-s) var(--ph-l)),hsl(calc(var(--gh) + 35) var(--ph-s) calc(var(--ph-l) - 7%)))}
+.cover-sm{height:76px;margin:-12px -12px 0;border-radius:9px 9px 0 0}
+.cover-md{height:128px;margin:-16px -16px 0;border-radius:8px 8px 0 0}
+.cover-lg{height:180px;border-radius:10px;margin-bottom:14px}
+.cover-ph{font-family:var(--display);font-weight:800;font-size:2.1rem;letter-spacing:.08em;color:hsl(var(--gh) 30% var(--ph-ink-l));opacity:.5;user-select:none}
+.cover-sm .cover-ph{font-size:1.5rem;justify-self:end;align-self:end;margin:0 12px 6px 0}
+.cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center var(--pos, center)}
+.cover-img.broken{display:none}
+.cover-badge{position:absolute;left:8px;top:8px;display:flex}
+.cover-badge .mode{box-shadow:0 1px 5px rgba(0,0,0,.28)}
+.cover-field{border:1px solid var(--line);border-radius:10px;padding:12px;margin:0;display:flex;flex-direction:column;gap:8px}
+.cover-field legend{font-weight:700;font-size:.9rem;padding:0 4px}
+.cover-up{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cover-up input[type=file]{font-size:.85rem;max-width:100%}
+
+
+/* Day and session colours */
+[style*="--dh"]{--tone:hsl(var(--dh) var(--tint-s) calc(var(--tint-l) + var(--k) * var(--tint-step)));--tone-bar:hsl(var(--dh) var(--bar-s) calc(var(--bar-l) + var(--k) * var(--bar-step)))}
+.col{background:var(--tone);padding:8px;border-radius:14px}
+.col .col-head{border-top-color:var(--tone-bar)}
+.col.meal .col-head{border-color:var(--tone-bar);border-top:1px dashed var(--tone-bar)}
+.day-label{display:flex;align-items:center;gap:10px}
+.day-label::before{content:"";width:14px;height:14px;border-radius:4px;background:var(--tone-bar);flex:none}
+.dot{width:10px;height:10px;border-radius:3px;background:var(--tone-bar);display:inline-block;flex:none}
+.mine-item[style*="--dh"]{border-left:4px solid var(--tone-bar)}
+.mine-item.away[style*="--dh"]{border-left-color:var(--line)}
+.avail thead th[style*="--dh"]{background:var(--tone)}
+.avail .dayrow th[style*="--dh"]{border-bottom:3px solid var(--tone-bar);background:var(--surface)}
+
+.table-card{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.table-card.has-open{border-left:4px solid var(--open)}
+.table-card.is-full{border-left:4px solid var(--ok)}
+.table-card.over{border-left:4px solid var(--warn)}
+.t-top{display:flex;gap:8px;align-items:flex-start}
+.game-name{appearance:none;background:none;border:0;padding:0;text-align:left;font-family:var(--display);font-weight:600;font-size:1.08rem;line-height:1.2;cursor:pointer;flex:1;color:var(--ink)}
+.game-name:hover{color:var(--accent);text-decoration:underline}
+.t-meta{color:var(--muted);font-size:.84rem}
+.t-note{font-size:.84rem;color:var(--muted);font-style:italic}
+.seats{display:flex;flex-wrap:wrap;gap:6px}
+.seat{appearance:none;border:1px solid transparent;background:var(--chip);border-radius:10px;padding:5px 3px 4px;width:57px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;font-size:.74rem;line-height:1.15}
+.seat svg{width:26px;height:26px}
+.seat span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seat.empty{background:var(--open-bg);border:1px dashed var(--open);color:var(--open);font-weight:700}
+.seat.empty svg path{fill:none;stroke:var(--open);stroke-width:1.6}
+.seat.taken svg path{fill:hsl(var(--h) var(--seat-s) var(--seat-l))}
+.seat.me{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset;font-weight:700}
+.seat.overflow{background:var(--warn-bg);border-color:var(--warn)}
+.seat:hover{border-color:var(--accent)}
+.seat[disabled]{cursor:default}
+.seat[disabled]:hover{border-color:transparent}
+.seat.empty[disabled]:hover{border-color:var(--open)}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:.76rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:transparent}
+button.tag{cursor:pointer}
+button.tag[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.t-links{display:flex;flex-wrap:wrap;gap:12px;font-size:.88rem;align-items:center}
+.add-tile{border:1px dashed var(--line);border-radius:10px;min-height:120px;display:grid;place-items:center;background:transparent;color:var(--muted);font-weight:700;cursor:pointer}
+.add-tile:hover{border-color:var(--accent);color:var(--accent)}
+.free{margin:12px 0 0;font-size:.9rem;color:var(--muted)}
+.free b{color:var(--ink)}
+.empty-note{color:var(--muted);margin:0;font-size:.92rem}
+
+/* Games */
+.filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.filters .label{color:var(--muted);font-size:.88rem;margin-right:4px}
+.game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.game-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px}
+.game-card h3{font-family:var(--display);font-size:1.15rem;margin:0;line-height:1.2;flex:1}
+.game-card p{margin:0;max-width:65ch}
+.facts{display:flex;flex-wrap:wrap;gap:6px}
+.when{font-size:.86rem;color:var(--muted)}
+.when b{color:var(--ink)}
+.weight-Light{color:var(--ok)}
+.weight-Heavy{color:var(--warn)}
+
+/* People grid */
+.grid-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+table.avail{border-collapse:collapse;width:100%;min-width:900px;font-size:.86rem}
+.avail th,.avail td{border-bottom:1px solid var(--line);padding:6px 6px;text-align:center;vertical-align:middle}
+.avail thead th{position:sticky;top:0;background:var(--surface);font-weight:700}
+.avail th.p-name{text-align:left;padding-left:14px;white-space:nowrap;position:sticky;left:0;background:var(--surface);z-index:1}
+.avail .dayrow th{font-family:var(--display);font-size:.95rem;border-bottom:0;padding-top:10px}
+.avail .dayrow th+th{border-left:1px solid var(--line)}
+.avail td.day-start,.avail th.day-start{border-left:1px solid var(--line)}
+.cell{display:block;width:100%;min-height:30px;border-radius:6px;padding:4px 4px;border:0;background:transparent;font-size:.8rem;line-height:1.2}
+button.cell{cursor:pointer}
+button.cell:hover{outline:1px solid var(--accent)}
+.cell.seated{background:var(--accent-soft);color:var(--ink)}
+.cell.free{background:var(--open-bg);color:var(--open);font-weight:700}
+.cell.away{color:var(--muted);background:repeating-linear-gradient(135deg,transparent 0 5px,var(--chip) 5px 10px)}
+.cell.here{color:var(--muted)}
+.avail tfoot td{font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.p-btn{appearance:none;border:0;background:none;padding:0;font-weight:700;cursor:pointer;text-align:left}
+.p-btn:hover{color:var(--accent);text-decoration:underline}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.84rem;color:var(--muted);align-items:center}
+.legend i{display:inline-block;width:16px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(10,14,22,.55);display:grid;place-items:center;padding:16px;z-index:20}
+.modal{background:var(--surface);color:var(--ink);border-radius:14px;width:min(520px,100%);max-height:calc(100% - 32px);overflow:auto;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal h2{font-family:var(--display);margin:0 0 4px;font-size:1.3rem;line-height:1.2}
+.modal .sub{color:var(--muted);margin:0 0 14px;font-size:.92rem}
+.form{display:flex;flex-direction:column;gap:12px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-weight:700;font-size:.9rem}
+.field .hint{color:var(--muted);font-size:.8rem}
+.field input,.field select,.field textarea{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg)}
+.field textarea{min-height:90px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:6px}
+.actions .spacer{flex:1}
+.pick-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.pick{appearance:none;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.pick:hover{border-color:var(--accent)}
+.pick small{color:var(--muted);font-size:.78rem}
+.pick.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.pick.dim{opacity:.6}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:999px;font-weight:700;z-index:30;max-width:calc(100% - 32px);text-align:center;transition:opacity .2s}
+.loading{color:var(--muted);padding:40px 0;text-align:center}
+@media (max-width:520px){
+  .top{position:static}
+  .col,.day-group{scroll-margin-top:12px}
+  .board{gap:20px}
+  .day-label{font-size:1.25rem}
+  .row2{grid-template-columns:1fr}
+  .tables{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;scroll-behavior:auto!important} }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="top-in">
+      <div class="brand"><h1 id="title">Board Games Weekend 2026</h1><p id="subtitle">Loading the line-up…</p></div>
+      <div class="who" id="who"></div>
+    </div>
+    <nav class="tabs" aria-label="Views">
+      <a class="tab" href="#schedule" data-view="schedule">Schedule</a>
+      <a class="tab" href="#games" data-view="games">Games</a>
+      <a class="tab" href="#people" data-view="people">Who's around</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="app"><div class="loading">Connecting to the live schedule…</div></main>
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+
+<script src="config.js"></script>
+<script>window.__bgwReady = new Promise(r => { window.__bgwResolve = r; });</script>
+<script type="module" src="firebase-backend.js"></script>
+<script>
+(() => {
+"use strict";
+
+/* ---------- State ---------- */
+const COLS = ["sessions", "players", "games", "tables", "claims", "covers"];
+const S = {
+  db: null, user: null, uid: null,
+  isOwner: false, canWrite: null, readOnly: false,
+  noDb: false, slow: false, revoked: false,
+  got: {}, fresh: {},
+  sessions: [], players: [], games: [], tables: [], claims: [], covers: [], cfg: null,
+  me: null, organiser: false, tagFilter: null, modeFilter: null,
+  view: "schedule"
+};
+
+const MEEPLE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4a3.3 3.3 0 0 1 3.3 3.3c0 1.05-.45 1.9-1.15 2.5 2.75.4 6.2 1.3 7.4 2.65.7.8.2 1.95-.85 2.05l-3.9.45 3.3 6.4c.42.82-.18 1.75-1.1 1.75h-3.4L12 17.2l-3.6 4.3H5c-.92 0-1.52-.93-1.1-1.75l3.3-6.4-3.9-.45c-1.05-.1-1.55-1.25-.85-2.05C3.65 9.5 7.1 8.6 9.85 8.2 9.15 7.6 8.7 6.75 8.7 5.7A3.3 3.3 0 0 1 12 2.4z"/></svg>';
+
+/* ---------- Helpers ---------- */
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const byId = (arr, id) => arr.find(x => x.id === id);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const slug = s => (String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "x") + "-" + Math.random().toString(36).slice(2, 6);
+const safeUrl = u => /^https?:\/\//i.test(String(u || "").trim()) ? String(u).trim() : "";
+const videoFor = g => safeUrl(g && g.video) || ("https://www.youtube.com/results?search_query=" + encodeURIComponent((g ? g.name : "") + " how to play"));
+const hue = name => { let h = 7; for (const ch of String(name)) h = (h * 31 + ch.charCodeAt(0)) % 360; return h; };
+const plural = (n, one, many) => n + " " + (n === 1 ? one : (many || one + "s"));
+
+const sessionsSorted = () => [...S.sessions].sort((a, b) => (a.order || 0) - (b.order || 0));
+const playersSorted = () => [...S.players].sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+const gamesSorted = () => [...S.games].sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+function dayGroups() {
+  const m = new Map();
+  for (const s of sessionsSorted()) { const d = s.day || "Other"; if (!m.has(d)) m.set(d, []); m.get(d).push(s); }
+  return m;
+}
+const tablesIn = sid => S.tables.filter(t => t.sessionId === sid).sort((a, b) => (a.order || 0) - (b.order || 0));
+const claimsAt = tid => S.claims.filter(c => c.tableId === tid && byId(S.players, c.playerId)).sort((a, b) => (a.at || 0) - (b.at || 0));
+const claimOf = (sid, pid) => S.claims.find(c => c.sessionId === sid && c.playerId === pid && byId(S.tables, c.tableId));
+const isAway = (p, sid) => Array.isArray(p.away) && p.away.includes(sid);
+const noteFor = (p, sid) => (p.notes && p.notes[sid]) || "";
+const hereIn = sid => playersSorted().filter(p => !isAway(p, sid));
+const freeIn = sid => hereIn(sid).filter(p => !claimOf(sid, p.id));
+const seatsOf = t => Math.max(0, Number(t.seats) || 0);
+const openAt = t => Math.max(0, seatsOf(t) - claimsAt(t.id).length);
+const openIn = sid => tablesIn(sid).reduce((n, t) => n + openAt(t), 0);
+const gameName = g => g ? g.name : "Game removed";
+const sessionName = s => s ? (s.day ? s.day + " " : "") + s.label : "";
+const DAY_HUES = [258, 174, 28, 330, 104, 205, 0];
+function tones() {
+  const m = new Map(); let i = 0;
+  for (const [day, list] of dayGroups()) {
+    const dh = DAY_HUES[i % DAY_HUES.length];
+    m.set("day:" + day, "--dh:" + dh + ";--k:1.5");
+    list.forEach((s, j) => m.set(s.id, "--dh:" + dh + ";--k:" + (list.length > 1 ? (j * 3 / (list.length - 1)).toFixed(2) : "0")));
+    i++;
+  }
+  return m;
+}
+let TONES = new Map();
+const tone = key => TONES.get(key) || "";
+const MODES = { comp: "Competitive", coop: "Co-op", either: "Co-op or competitive" };
+const MODE_ICON = {
+  coop: '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="4.6" cy="4.4" r="2.4"/><circle cx="11.4" cy="4.4" r="2.4"/><path d="M.8 14.5c0-3.4 1.7-5.4 3.8-5.4 1.5 0 2.6.9 3.4 2 .8-1.1 1.9-2 3.4-2 2.1 0 3.8 2 3.8 5.4z"/></svg>',
+  comp: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h8v1.8h2.6c0 2.9-1.5 4.6-3.6 4.9A4.2 4.2 0 0 1 9 10.6v1.7h2.4v2.2H4.6v-2.2H7v-1.7a4.2 4.2 0 0 1-2-2.4C2.9 7.9 1.4 6.2 1.4 3.3H4zm-1 3.3c.2 1 .7 1.7 1.3 2V4.8zm10 0h-1.3v2c.6-.3 1.1-1 1.3-2z"/></svg>'
+};
+MODE_ICON.either = MODE_ICON.coop;
+const TYPE_TAG = /^(co-?operative|co-?op|competitive)$/i;
+const mechTags = g => (g && Array.isArray(g.tags) ? g.tags : []).filter(t => !TYPE_TAG.test(String(t).trim()));
+const modeOf = g => !g ? "" : MODES[g.mode] ? g.mode : (Array.isArray(g.tags) && g.tags.some(t => /^co-?op(erative)?$/i.test(String(t).trim())) ? "coop" : "comp");
+const modeBadge = (g, big) => { const m = modeOf(g); return m ? '<span class="mode mode-' + m + (big ? " big" : "") + '">' + MODE_ICON[m] + esc(MODES[m]) + "</span>" : ""; };
+const modeMatch = g => !S.modeFilter || modeOf(g) === S.modeFilter || modeOf(g) === "either";
+const ON_CLAUDE = !!(window.claude && typeof window.claude.use === "function");
+const BROKEN = new Set();
+const coverData = gid => { const c = byId(S.covers, gid); return c && typeof c.data === "string" && c.data.startsWith("data:image/") ? c.data : ""; };
+const initialsOf = name => String(name || "").replace(/^LotR:?\s*/i, "").split(/[\s:\-]+/).filter(w => w && !/^(the|of|for|and|a|an)$/i.test(w)).slice(0, 3).map(w => w[0].toUpperCase()).join("");
+const POS = { top: "top", middle: "center", bottom: "bottom" };
+function coverHtml(g, size, opts) {
+  if (!g) return "";
+  opts = opts || {};
+  const up = opts.data !== undefined ? (opts.data || "") : coverData(g.id);
+  const link = safeUrl(opts.cover !== undefined ? opts.cover : g.cover);
+  const src = up || (link && !BROKEN.has(link) ? link : "");
+  const pos = POS[opts.pos !== undefined ? opts.pos : g.coverPos] || "center";
+  return '<div class="cover cover-' + size + '" style="--gh:' + hue(g.name) + ";--pos:" + pos + '">' +
+    '<span class="cover-ph" aria-hidden="true">' + esc(initialsOf(g.name)) + "</span>" +
+    (src ? '<img class="cover-img" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" src="' + esc(src) + '">' : "") +
+    '<span class="cover-badge">' + modeBadge(g, size !== "sm") + "</span></div>";
+}
+document.addEventListener("error", e => {
+  const t = e.target;
+  if (t && t.classList && t.classList.contains("cover-img")) { t.classList.add("broken"); const s = t.getAttribute("src"); if (s && !s.startsWith("data:")) BROKEN.add(s); }
+}, true);
+async function shrinkImage(file) {
+  if (!file || !/^image\//.test(file.type)) throw new Error("type");
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    let max = 640, q = 0.8, out = "";
+    for (let a = 0; a < 6; a++) {
+      const sc = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(img.naturalWidth * sc)); c.height = Math.max(1, Math.round(img.naturalHeight * sc));
+      const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height);
+      out = c.toDataURL("image/jpeg", q);
+      if (out.length < 140000) return out;
+      max = Math.round(max * 0.82); q = Math.max(0.5, q - 0.08);
+    }
+    return out;
+  } finally { URL.revokeObjectURL(url); }
+}
+function modeFilterBar() {
+  const n = m => S.games.filter(g => !m || modeOf(g) === m || modeOf(g) === "either").length;
+  return '<div class="seg" role="group" aria-label="Game type">' + [["", "All games"], ["comp", "Competitive"], ["coop", "Co-op"]].map(([v, l]) =>
+    '<button class="seg-btn' + (v ? " seg-" + v : "") + '" data-act="mode" data-mode="' + v + '" aria-pressed="' + ((S.modeFilter || "") === v) + '">' + (v ? MODE_ICON[v] : "") + l + ' <span class="n">' + n(v) + "</span></button>").join("") + "</div>";
+}
+const canAct = () => !!S.db && !S.readOnly && S.canWrite !== false;
+const meP = () => S.me && byId(S.players, S.me);
+
+/* ---------- Toast + modal ---------- */
+let toastTimer;
+function toast(msg) {
+  const r = document.getElementById("toast-root");
+  r.innerHTML = '<div class="toast" role="status">' + esc(msg) + "</div>";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { r.innerHTML = ""; }, 3200);
+}
+let modalOpen = false, lastFocus = null;
+function openModal(html, mount) {
+  lastFocus = document.activeElement;
+  const root = document.getElementById("modal-root");
+  root.innerHTML = '<div class="overlay" data-close-overlay><div class="modal" role="dialog" aria-modal="true">' + html + "</div></div>";
+  modalOpen = true;
+  const m = root.querySelector(".modal");
+  if (mount) mount(m);
+  const f = m.querySelector("input,select,textarea,button.pick,button.btn.primary");
+  if (f) f.focus();
+}
+function closeModal() {
+  document.getElementById("modal-root").innerHTML = "";
+  modalOpen = false;
+  if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
+}
+document.addEventListener("keydown", e => { if (e.key === "Escape" && modalOpen) closeModal(); });
+document.getElementById("modal-root").addEventListener("mousedown", e => { if (e.target.hasAttribute("data-close-overlay")) closeModal(); });
+
+function confirmModal(title, body, yesLabel, onYes) {
+  openModal('<h2>' + esc(title) + '</h2><p class="sub">' + esc(body) + '</p><div class="actions"><button class="btn" data-m="no">Cancel</button><button class="btn primary" data-m="yes">' + esc(yesLabel) + "</button></div>", m => {
+    m.querySelector('[data-m="no"]').onclick = closeModal;
+    m.querySelector('[data-m="yes"]').onclick = async () => { closeModal(); await run(onYes); };
+  });
+}
+
+/* ---------- Writes ---------- */
+async function write(fn) {
+  if (!S.db) { toast("Can't save: the live schedule isn't connected."); throw { quiet: true }; }
+  try { return await fn(); }
+  catch (e) {
+    const code = e && e.code;
+    if (code === "unavailable") {
+      await sleep(400 + Math.random() * 600);
+      try { return await fn(); } catch (e2) { toast("That didn't save. Check your connection and try again."); throw { quiet: true }; }
+    }
+    if (code === "invalid_argument" && !S.isOwner) {
+      S.readOnly = true; render();
+      toast("The schedule is locked for changes right now.");
+    } else if (code === "quota_exceeded") {
+      toast("The schedule's storage is full. Remove some old tables or games and try again.");
+    } else if (code === "resource_exhausted") {
+      toast("Lots of changes at once. Give it a few seconds and try again.");
+    } else if (code === "revoked") {
+      S.revoked = true; render();
+    } else {
+      toast("That didn't save. Try again in a moment.");
+    }
+    throw { quiet: true };
+  }
+}
+async function run(fn) {
+  try { await fn(); } catch (e) { if (!(e && e.quiet)) { console.error(e); toast("Something went wrong. Try again."); } }
+}
+
+/* ---------- Identity ---------- */
+async function setMe(pid) {
+  S.me = pid; render();
+  try { localStorage.setItem("bgw-me", pid || ""); } catch (e) {}
+  if (S.db && S.uid) {
+    try { await S.db.doc("data/users/" + S.uid + "/profile").set({ playerId: pid || "" }); } catch (e) { /* local fallback is fine */ }
+  }
+}
+function askWho(then) {
+  const list = playersSorted();
+  const html = '<h2>Who are you?</h2><p class="sub">Pick your name so you can claim seats. You only need to do this once on this device.</p>' +
+    (list.length ? '<div class="pick-list">' + list.map(p => '<button class="pick' + (p.id === S.me ? " sel" : "") + '" data-pid="' + esc(p.id) + '">' + esc(p.name) + "</button>").join("") + "</div>"
+      : '<p class="empty-note">No players have been added yet.</p>') +
+    '<p class="sub" style="margin-top:14px">Not on the list? Ask the organiser to add you.</p>' +
+    '<div class="actions">' + (S.me ? '<button class="btn" data-m="clear">I\'m not on this list</button><span class="spacer"></span>' : "") + '<button class="btn" data-m="cancel">Cancel</button></div>';
+  openModal(html, m => {
+    m.querySelectorAll("[data-pid]").forEach(b => b.onclick = async () => { closeModal(); await setMe(b.dataset.pid); toast("Hi " + (byId(S.players, b.dataset.pid) || {}).name + "!"); if (then) run(then); });
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    const c = m.querySelector('[data-m="clear"]'); if (c) c.onclick = () => { closeModal(); setMe(null); };
+  });
+}
+
+/* ---------- Claiming ---------- */
+async function claimSeat(tid, pid) {
+  const t = byId(S.tables, tid); if (!t) return;
+  const p = byId(S.players, pid); if (!p) return;
+  const cl = claimsAt(tid);
+  if (cl.some(c => c.playerId === pid)) return;
+  if (cl.length >= seatsOf(t)) { toast("That table's full. Try another one."); return; }
+  const prev = claimOf(t.sessionId, pid);
+  const g = byId(S.games, t.gameId);
+  await write(() => S.db.doc("claims/" + t.sessionId + "__" + pid).set({ sessionId: t.sessionId, playerId: pid, tableId: tid, at: Date.now() }));
+  const away = isAway(p, t.sessionId) ? " (heads up: marked as away for this block)" : "";
+  toast(prev ? "Moved " + p.name + " to " + gameName(g) + away : p.name + " is in for " + gameName(g) + away);
+}
+async function leaveSeat(sid, pid) {
+  await write(() => S.db.doc("claims/" + sid + "__" + pid).delete());
+}
+async function onSeat(tid, pid) {
+  const t = byId(S.tables, tid); if (!t) return;
+  if (S.organiser) { assignModal(tid); return; }
+  if (!canAct()) { toast(S.db ? "You can view the schedule but not change it." : "The live schedule isn't connected here."); return; }
+  if (pid) {
+    if (pid === S.me) { await leaveSeat(t.sessionId, pid); toast("Seat freed up."); }
+    else toast("That seat's taken by " + ((byId(S.players, pid) || {}).name || "someone") + ".");
+    return;
+  }
+  if (!meP()) { askWho(() => claimSeat(tid, S.me)); return; }
+  await claimSeat(tid, S.me);
+}
+
+/* ---------- Organiser modals ---------- */
+function assignModal(tid) {
+  const t = byId(S.tables, tid); if (!t) return;
+  const s = byId(S.sessions, t.sessionId); const g = byId(S.games, t.gameId);
+  const draw = m => {
+    const tt = byId(S.tables, tid); if (!tt) { closeModal(); return; }
+    const cl = claimsAt(tid);
+    const rows = playersSorted().map(p => {
+      const c = claimOf(t.sessionId, p.id);
+      const here = c && c.tableId === tid;
+      const where = here ? "At this table" : c ? "At " + gameName(byId(S.games, (byId(S.tables, c.tableId) || {}).gameId)) : isAway(p, t.sessionId) ? "Away" + (noteFor(p, t.sessionId) ? ": " + noteFor(p, t.sessionId) : "") : "Free";
+      return '<button class="pick' + (here ? " sel" : "") + (isAway(p, t.sessionId) && !here ? " dim" : "") + '" data-pid="' + esc(p.id) + '">' + esc(p.name) + "<small>" + esc(where) + "</small></button>";
+    }).join("");
+    m.innerHTML = "<h2>Seats at " + esc(gameName(g)) + '</h2><p class="sub">' + esc(sessionName(s)) + " · " + cl.length + " of " + seatsOf(tt) + " seats filled. Tap a name to seat them here, or tap a highlighted name to remove them.</p>" +
+      '<div class="pick-list">' + rows + '</div><div class="actions"><button class="btn primary" data-m="done">Done</button></div>';
+    m.querySelector('[data-m="done"]').onclick = closeModal;
+    m.querySelectorAll("[data-pid]").forEach(b => b.onclick = () => run(async () => {
+      const pid = b.dataset.pid; const c = claimOf(t.sessionId, pid);
+      if (c && c.tableId === tid) await leaveSeat(t.sessionId, pid);
+      else await claimSeat(tid, pid);
+      setTimeout(() => { if (modalOpen) draw(m); }, 60);
+    }));
+  };
+  openModal("", draw);
+}
+
+function tableModal(sid, tid) {
+  const t = tid ? byId(S.tables, tid) : null;
+  const s = byId(S.sessions, sid || (t && t.sessionId));
+  const games = gamesSorted();
+  if (!games.length) { toast("Add a game on the Games tab first."); return; }
+  const gid = t ? t.gameId : games[0].id;
+  const html = "<h2>" + (t ? "Edit table" : "Add a table") + '</h2><p class="sub">' + esc(sessionName(s)) + '</p><form class="form" id="f">' +
+    '<div class="field"><label for="f-game">Game</label><select id="f-game">' + games.map(g => '<option value="' + esc(g.id) + '"' + (g.id === gid ? " selected" : "") + ">" + esc(g.name) + " (" + esc(g.seats) + "P)</option>").join("") + "</select></div>" +
+    '<div class="row2"><div class="field"><label for="f-seats">Seats</label><input id="f-seats" type="number" min="1" max="20" value="' + esc(t ? t.seats : (games.find(g => g.id === gid) || {}).seats || 4) + '"></div>' +
+    '<div class="field"><label for="f-note">Note</label><input id="f-note" type="text" maxlength="120" placeholder="e.g. Teaching first game" value="' + esc(t ? t.note : "") + '"></div></div>' +
+    '<div class="actions">' + (t ? '<button type="button" class="btn danger" data-m="del">Remove table</button><span class="spacer"></span>' : "") +
+    '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (t ? "Save" : "Add table") + "</button></div></form>";
+  openModal(html, m => {
+    const sel = m.querySelector("#f-game"), seats = m.querySelector("#f-seats");
+    if (!t) sel.onchange = () => { const g = byId(S.games, sel.value); if (g) seats.value = g.seats || 4; };
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    const del = m.querySelector('[data-m="del"]');
+    if (del) del.onclick = () => { closeModal(); confirmModal("Remove this table?", "Anyone seated at " + gameName(byId(S.games, t.gameId)) + " will be unseated.", "Remove table", () => deleteTable(t.id)); };
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      const data = { sessionId: s.id, gameId: sel.value, seats: Math.max(1, Math.min(20, parseInt(seats.value, 10) || 1)), note: m.querySelector("#f-note").value.trim() };
+      run(async () => {
+        if (t) await write(() => S.db.doc("tables/" + t.id).update(data));
+        else { data.order = Date.now(); await write(() => S.db.doc("tables/" + slug("t-" + s.id)).set(data)); }
+        closeModal(); toast(t ? "Table updated." : "Table added.");
+      });
+    };
+  });
+}
+async function deleteTable(tid) {
+  for (const c of S.claims.filter(c => c.tableId === tid)) await write(() => S.db.doc("claims/" + c.id).delete());
+  await write(() => S.db.doc("tables/" + tid).delete());
+  toast("Table removed.");
+}
+
+function sessionModal(sid, presetDay) {
+  const s = sid ? byId(S.sessions, sid) : null;
+  const days = [...dayGroups().keys()];
+  const html = "<h2>" + (s ? "Edit time block" : "Add a time block") + '</h2><form class="form" id="f">' +
+    '<div class="row2"><div class="field"><label for="f-day">Day</label><input id="f-day" list="f-days" required maxlength="20" value="' + esc(s ? s.day : presetDay || "") + '"><datalist id="f-days">' + days.map(d => '<option value="' + esc(d) + '">').join("") + "</datalist></div>" +
+    '<div class="field"><label for="f-label">Time</label><input id="f-label" required maxlength="30" placeholder="e.g. 2pm–5pm" value="' + esc(s ? s.label : "") + '"></div></div>' +
+    '<div class="field"><label for="f-kind">Type</label><select id="f-kind"><option value="play"' + (!s || s.kind !== "meal" ? " selected" : "") + '>Games</option><option value="meal"' + (s && s.kind === "meal" ? " selected" : "") + ">Meal break</option></select></div>" +
+    '<div class="actions">' + (s ? '<button type="button" class="btn danger" data-m="del">Delete block</button><span class="spacer"></span>' : "") +
+    '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (s ? "Save" : "Add block") + "</button></div></form>";
+  openModal(html, m => {
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    const del = m.querySelector('[data-m="del"]');
+    if (del) del.onclick = () => { closeModal(); confirmModal("Delete " + sessionName(s) + "?", "Its " + plural(tablesIn(s.id).length, "table") + " and everyone's seats in them will be removed.", "Delete block", () => deleteSession(s.id)); };
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      const day = m.querySelector("#f-day").value.trim(), label = m.querySelector("#f-label").value.trim(), kind = m.querySelector("#f-kind").value;
+      if (!day || !label) return;
+      run(async () => {
+        if (s) {
+          const data = { day, label, kind };
+          if (day !== s.day) data.order = orderForNewInDay(day, s.id);
+          await write(() => S.db.doc("sessions/" + s.id).update(data));
+        } else {
+          await write(() => S.db.doc("sessions/" + slug(day + "-" + label)).set({ day, label, kind, order: orderForNewInDay(day) }));
+        }
+        closeModal(); toast(s ? "Time block updated." : "Time block added.");
+      });
+    };
+  });
+}
+function orderForNewInDay(day, exceptId) {
+  const all = sessionsSorted().filter(x => x.id !== exceptId);
+  const inDay = all.filter(x => x.day === day);
+  if (!inDay.length) return (all.length ? (all[all.length - 1].order || 0) : 0) + 1;
+  const last = inDay[inDay.length - 1];
+  const next = all[all.indexOf(last) + 1];
+  return next ? ((last.order || 0) + (next.order || 0)) / 2 : (last.order || 0) + 1;
+}
+async function moveSession(sid, dir) {
+  const list = sessionsSorted(); const i = list.findIndex(x => x.id === sid); const j = i + dir;
+  if (i < 0 || j < 0 || j >= list.length) return;
+  const a = list[i], b = list[j];
+  if (a.day !== b.day) { toast("Already at the " + (dir < 0 ? "start" : "end") + " of " + a.day + ". Edit it to change the day."); return; }
+  const oa = a.order || 0, ob = b.order || 0;
+  await write(() => S.db.doc("sessions/" + a.id).update({ order: ob }));
+  await write(() => S.db.doc("sessions/" + b.id).update({ order: oa === ob ? ob + (dir) * 0.001 : oa }));
+}
+async function deleteSession(sid) {
+  for (const t of tablesIn(sid)) await deleteTable(t.id);
+  await write(() => S.db.doc("sessions/" + sid).delete());
+  toast("Time block deleted.");
+}
+
+function gameModal(gid) {
+  const g = gid ? byId(S.games, gid) : null;
+  const v = (k, d) => esc(g ? (g[k] == null ? d || "" : g[k]) : d || "");
+  const html = "<h2>" + (g ? "Edit game" : "Add a game") + '</h2><form class="form" id="f">' +
+    '<div class="field"><label for="f-name">Name</label><input id="f-name" required maxlength="80" value="' + v("name") + '"></div>' +
+    '<div class="row2"><div class="field"><label for="f-seats">Seats at our table</label><input id="f-seats" type="number" min="1" max="20" value="' + v("seats", 4) + '"><span class="hint">Default when you add it to a time block</span></div>' +
+    '<div class="field"><label for="f-box">Box player count</label><input id="f-box" maxlength="30" placeholder="e.g. 2-5" value="' + v("box") + '"></div></div>' +
+    '<div class="field"><label for="f-mode">Type</label><select id="f-mode">' + ["comp", "coop", "either"].map(m => '<option value="' + m + '"' + ((g ? modeOf(g) : "comp") === m ? " selected" : "") + ">" + MODES[m] + "</option>").join("") + "</select></div>" +
+    '<div class="row2"><div class="field"><label for="f-weight">Weight</label><select id="f-weight">' + ["Light", "Medium", "Heavy"].map(w => '<option' + (g && g.weight === w ? " selected" : "") + ">" + w + "</option>").join("") + "</select></div>" +
+    '<div class="field"><label for="f-time">Play time</label><input id="f-time" maxlength="30" placeholder="e.g. 60-90 min" value="' + v("time") + '"></div></div>' +
+    '<div class="field"><label for="f-blurb">Description</label><textarea id="f-blurb" maxlength="800">' + v("blurb") + "</textarea></div>" +
+    '<div class="field"><label for="f-tags">Mechanics tags</label><input id="f-tags" maxlength="200" placeholder="Deck building, Worker placement" value="' + esc(mechTags(g).join(", ")) + '"><span class="hint">Separate with commas</span></div>' +
+    '<fieldset class="cover-field"><legend>Cover image</legend><div id="f-prev"></div>' +
+    '<div class="field"><label for="f-cover">Image link</label><input id="f-cover" type="url" maxlength="800" placeholder="https://cf.geekdo-images.com/…" value="' + v("cover") + '">' +
+    '<span class="hint">On BoardGameGeek, right-click the box art and choose Copy image address.' + (ON_CLAUDE ? " Links won't show while the app is hosted on Claude; they'll appear once it moves to GitHub." : "") + "</span></div>" +
+    '<div class="field"><label for="f-file">Or upload a photo</label><div class="cover-up"><input id="f-file" type="file" accept="image/*"><button type="button" class="btn small ghost" data-m="rmup"' + (g && coverData(g.id) ? "" : " hidden") + '>Remove uploaded photo</button></div><span class="hint">Uploads show everywhere and win over the link.</span></div>' +
+    '<div class="field"><label for="f-pos">Banner shows the</label><select id="f-pos">' + [["top", "Top of the image"], ["middle", "Middle of the image"], ["bottom", "Bottom of the image"]].map(([k, l]) => '<option value="' + k + '"' + (((g && g.coverPos) || "middle") === k ? " selected" : "") + ">" + l + "</option>").join("") + "</select></div></fieldset>" +
+    '<div class="field"><label for="f-video">How-to-play video link</label><input id="f-video" type="url" maxlength="300" placeholder="https://www.youtube.com/watch?v=…" value="' + v("video") + '"><span class="hint">Leave blank to show a YouTube search instead</span></div>' +
+    '<div class="actions">' + (g ? '<button type="button" class="btn danger" data-m="del">Delete game</button><span class="spacer"></span>' : "") +
+    '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (g ? "Save" : "Add game") + "</button></div></form>";
+  openModal(html, m => {
+    let pending; // undefined = no change, string = new upload, null = remove upload
+    const prev = m.querySelector("#f-prev"), rm = m.querySelector('[data-m="rmup"]'), file = m.querySelector("#f-file");
+    const preview = () => {
+      const tmp = { id: g ? g.id : "_new", name: m.querySelector("#f-name").value || "New game", mode: m.querySelector("#f-mode").value };
+      prev.innerHTML = coverHtml(tmp, "lg", { data: pending === undefined ? (g ? coverData(g.id) : "") : (pending || ""), cover: m.querySelector("#f-cover").value.trim(), pos: m.querySelector("#f-pos").value });
+    };
+    ["#f-name", "#f-cover", "#f-pos", "#f-mode"].forEach(id => m.querySelector(id).addEventListener("input", preview));
+    m.querySelector("#f-pos").addEventListener("change", preview); m.querySelector("#f-mode").addEventListener("change", preview);
+    file.addEventListener("change", async () => {
+      const f = file.files && file.files[0]; if (!f) return;
+      try { pending = await shrinkImage(f); rm.hidden = false; preview(); }
+      catch (e) { toast("Couldn't read that image. Try a JPG or PNG."); }
+      file.value = "";
+    });
+    rm.onclick = () => { pending = null; rm.hidden = true; preview(); };
+    preview();
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    const del = m.querySelector('[data-m="del"]');
+    if (del) del.onclick = () => {
+      const used = S.tables.filter(t => t.gameId === g.id).length;
+      closeModal();
+      confirmModal("Delete " + g.name + "?", used ? "It's on the schedule at " + plural(used, "table") + ". Those tables and their seats will be removed too." : "It isn't on the schedule yet.", "Delete game", async () => {
+        for (const t of S.tables.filter(t => t.gameId === g.id)) await deleteTable(t.id);
+        if (coverData(g.id)) await write(() => S.db.doc("covers/" + g.id).delete());
+        await write(() => S.db.doc("games/" + g.id).delete()); toast("Game deleted.");
+      });
+    };
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      const q = id => m.querySelector(id).value.trim();
+      const video = q("#f-video");
+      if (video && !safeUrl(video)) { toast("The video link needs to start with https://"); return; }
+      const cover = q("#f-cover");
+      if (cover && !safeUrl(cover)) { toast("The image link needs to start with https://"); return; }
+      const data = {
+        name: q("#f-name"), seats: Math.max(1, Math.min(20, parseInt(q("#f-seats"), 10) || 1)), box: q("#f-box"),
+        weight: q("#f-weight"), time: q("#f-time"), blurb: q("#f-blurb"), video,
+        mode: q("#f-mode"), cover, coverPos: q("#f-pos"),
+        tags: q("#f-tags").split(",").map(x => x.trim()).filter(x => x && !TYPE_TAG.test(x)).slice(0, 12)
+      };
+      if (!data.name) return;
+      run(async () => {
+        const id = g ? g.id : slug(data.name);
+        await write(() => S.db.doc("games/" + id).set(data));
+        if (typeof pending === "string") await write(() => S.db.doc("covers/" + id).set({ data: pending, at: Date.now() }));
+        else if (pending === null) await write(() => S.db.doc("covers/" + id).delete());
+        closeModal(); toast(g ? "Game saved." : "Game added.");
+      });
+    };
+  });
+}
+
+function gameInfo(gid) {
+  const g = byId(S.games, gid); if (!g) return;
+  const when = S.tables.filter(t => t.gameId === g.id).map(t => byId(S.sessions, t.sessionId)).filter(Boolean).sort((a, b) => (a.order || 0) - (b.order || 0));
+  const html = coverHtml(g, "lg") + "<h2>" + esc(g.name) + '</h2><p class="sub">' + [g.box ? "Box says " + g.box + " players" : "", g.weight, g.time].filter(Boolean).map(esc).join(" · ") + "</p>" +
+    '<div class="form"><p style="margin:0">' + esc(g.blurb || "No description yet.") + "</p>" +
+    (mechTags(g).length ? '<div class="tags">' + mechTags(g).map(t => '<span class="tag">' + esc(t) + "</span>").join("") + "</div>" : "") +
+    (when.length ? '<p class="when" style="margin:0">On the schedule: <b>' + when.map(s => esc(sessionName(s))).join(", ") + "</b></p>" : "") +
+    '<div class="actions"><a class="btn" href="' + esc(videoFor(g)) + '" target="_blank" rel="noopener">' + (safeUrl(g.video) ? "Watch how to play" : "Find a how-to-play video") + ' ↗</a>' +
+    (S.organiser ? '<button class="btn" data-m="edit">Edit game</button>' : "") + '<button class="btn primary" data-m="close">Close</button></div></div>';
+  openModal(html, m => {
+    m.querySelector('[data-m="close"]').onclick = closeModal;
+    const ed = m.querySelector('[data-m="edit"]'); if (ed) ed.onclick = () => { closeModal(); gameModal(g.id); };
+  });
+}
+
+function playerModal(pid) {
+  const p = pid ? byId(S.players, pid) : null;
+  const html = "<h2>" + (p ? "Edit player" : "Add a player") + '</h2><form class="form" id="f"><div class="field"><label for="f-name">Name</label><input id="f-name" required maxlength="40" value="' + esc(p ? p.name : "") + '"></div>' +
+    (p ? '<p class="sub" style="margin:0">To change when ' + esc(p.name) + " is around, tap their cells in the grid.</p>" : '<p class="sub" style="margin:0">They\'ll start as here for every block. Tap cells in the grid to mark them away.</p>') +
+    '<div class="actions">' + (p ? '<button type="button" class="btn danger" data-m="del">Remove player</button><span class="spacer"></span>' : "") +
+    '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (p ? "Save" : "Add player") + "</button></div></form>";
+  openModal(html, m => {
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    const del = m.querySelector('[data-m="del"]');
+    if (del) del.onclick = () => { closeModal(); confirmModal("Remove " + p.name + "?", "Their seats across the weekend will be freed up.", "Remove player", async () => {
+      for (const c of S.claims.filter(c => c.playerId === p.id)) await write(() => S.db.doc("claims/" + c.id).delete());
+      await write(() => S.db.doc("players/" + p.id).delete()); toast(p.name + " removed.");
+    }); };
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      const name = m.querySelector("#f-name").value.trim(); if (!name) return;
+      run(async () => {
+        if (p) await write(() => S.db.doc("players/" + p.id).update({ name }));
+        else await write(() => S.db.doc("players/" + slug(name)).set({ name, away: [], notes: {} }));
+        closeModal(); toast(p ? "Saved." : name + " added.");
+      });
+    };
+  });
+}
+async function toggleAway(pid, sid) {
+  const p = byId(S.players, pid); if (!p) return;
+  const away = new Set(Array.isArray(p.away) ? p.away : []);
+  const nowAway = !away.has(sid);
+  if (nowAway) away.add(sid); else away.delete(sid);
+  await write(() => S.db.doc("players/" + pid).update({ away: [...away] }));
+  const c = claimOf(sid, pid);
+  if (nowAway && c) toast(p.name + " is marked away but still has a seat. Remove it from the schedule if needed.");
+}
+
+function eventModal() {
+  const c = S.cfg || {};
+  const html = '<h2>Weekend details</h2><form class="form" id="f"><div class="field"><label for="f-t">Title</label><input id="f-t" maxlength="60" required value="' + esc(c.title || "Board Games Weekend") + '"></div>' +
+    '<div class="field"><label for="f-s">Subtitle</label><input id="f-s" maxlength="100" value="' + esc(c.subtitle || "") + '"><span class="hint">Dates, address, what to bring</span></div>' +
+    '<div class="actions"><button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">Save</button></div></form>';
+  openModal(html, m => {
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      run(async () => {
+        await write(() => S.db.doc("config/event").set({ title: m.querySelector("#f-t").value.trim(), subtitle: m.querySelector("#f-s").value.trim() }));
+        closeModal(); toast("Saved.");
+      });
+    };
+  });
+}
+
+/* ---------- Rendering ---------- */
+function renderHeader() {
+  const c = S.cfg || {};
+  document.getElementById("title").textContent = c.title || "Board Games Weekend 2026";
+  const tables = S.tables.filter(t => byId(S.sessions, t.sessionId));
+  const open = tables.reduce((n, t) => n + openAt(t), 0);
+  document.getElementById("subtitle").textContent = S.got.sessions
+    ? [c.subtitle, plural(tables.length, "table"), plural(open, "open seat")].filter(Boolean).join(" · ")
+    : "Loading the line-up…";
+  document.title = c.title || "Board Games Weekend 2026";
+  const me = meP();
+  let who = "";
+  if (S.db && S.got.players) who += '<button class="btn' + (me ? "" : " primary") + '" data-act="who">' + (me ? "You're " + esc(me.name) + " ▾" : "Who are you?") + "</button>";
+  if (S.db) who += S.isOwner
+    ? '<button class="btn' + (S.organiser ? " on" : "") + '" data-act="org" aria-pressed="' + S.organiser + '">' + (S.organiser ? "Organiser mode on" : "Organiser mode") + "</button>"
+    : '<button class="btn ghost" data-act="org">Organiser</button>';
+  document.getElementById("who").innerHTML = who;
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-current", t.dataset.view === S.view ? "page" : "false"));
+}
+
+function banners() {
+  let h = "";
+  if (S.noDb) h += '<div class="banner warn">' + (S.setupError === "config" ? "The schedule isn\'t connected to its database yet. Organiser: add your Firebase settings to config.js (see the README)." : "Can\'t reach the live schedule right now. Check your internet connection and reload the page.") + "</div>";
+  if (S.revoked) h += '<div class="banner warn">Your access to this schedule has changed. Reload the page to see what you can do now.</div>';
+  else if (S.slow) h += '<div class="banner warn">Can\'t reach the live schedule yet. What you see may be out of date.</div>';
+  if (S.db && !S.revoked && (S.readOnly || S.canWrite === false)) h += '<div class="banner">The schedule is locked for changes right now. You can still see everything.</div>';
+  if (S.organiser) h += '<div class="banner org"><span><strong>Organiser mode.</strong> Tap a seat to seat or remove anyone, use ✎ to edit tables and time blocks, or add games and players on the other tabs.</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn small" data-act="event">Edit title</button><button class="btn small" data-act="lock">Lock</button><button class="btn small danger" data-act="clear-tables">Clear all tables</button></span></div>';
+  return h;
+}
+
+function renderSeat(t, c, i) {
+  const seats = seatsOf(t);
+  if (c) {
+    const p = byId(S.players, c.playerId);
+    const mine = c.playerId === S.me;
+    return '<button class="seat taken' + (mine ? " me" : "") + (i >= seats ? " overflow" : "") + '" style="--h:' + hue(p.name) + '" data-act="seat" data-table="' + esc(t.id) + '" data-player="' + esc(p.id) + '" aria-label="' + esc(p.name + (mine ? " (you), tap to leave" : "")) + '"' + (!S.organiser && !mine ? "" : "") + ">" + MEEPLE + "<span>" + esc(mine ? "You" : p.name) + "</span></button>";
+  }
+  const dis = !S.organiser && !canAct();
+  return '<button class="seat empty" data-act="seat" data-table="' + esc(t.id) + '" aria-label="Open seat, tap to claim"' + (dis ? " disabled" : "") + ">" + MEEPLE + "<span>Open</span></button>";
+}
+
+function renderTable(t) {
+  const g = byId(S.games, t.gameId);
+  const cl = claimsAt(t.id);
+  const seats = seatsOf(t);
+  const total = Math.max(seats, cl.length);
+  let seatHtml = "";
+  for (let i = 0; i < total; i++) seatHtml += renderSeat(t, cl[i], i);
+  const state = cl.length > seats ? "over" : cl.length === seats ? "is-full" : "has-open";
+  const left = seats - cl.length;
+  const status = cl.length > seats ? '<span class="pill warn">' + (cl.length - seats) + " over</span>" : left === 0 ? '<span class="pill full">Full</span>' : '<span class="pill open">' + plural(left, "seat") + " open</span>";
+  const tags = mechTags(g).slice(0, 3);
+  return '<div class="table-card ' + state + (g && !modeMatch(g) ? " dim" : "") + '">' +
+    coverHtml(g, "sm") +
+    '<div class="t-top"><button class="game-name" data-act="game-info" data-id="' + esc(t.gameId) + '">' + esc(gameName(g)) + "</button>" + status +
+    (S.organiser ? '<button class="icon-btn" data-act="edit-table" data-id="' + esc(t.id) + '" aria-label="Edit table">✎</button>' : "") + "</div>" +
+    '<div class="t-meta">' + [plural(seats, "seat"), g && g.weight, g && g.time].filter(Boolean).map(esc).join(" · ") + "</div>" +
+    '<div class="seats">' + seatHtml + "</div>" +
+    (tags.length ? '<div class="tags">' + tags.map(x => '<span class="tag">' + esc(x) + "</span>").join("") + "</div>" : "") +
+    (t.note ? '<div class="t-note">' + esc(t.note) + "</div>" : "") +
+    '<div class="t-links"><a href="' + esc(videoFor(g)) + '" target="_blank" rel="noopener">' + (g && safeUrl(g.video) ? "Watch how to play" : "Find a how-to video") + " ↗</a>" +
+    '<button class="tag" data-act="game-info" data-id="' + esc(t.gameId) + '">About the game</button></div>' +
+    "</div>";
+}
+
+function renderSession(s) {
+  const meal = s.kind === "meal";
+  const tabs = tablesIn(s.id);
+  const here = hereIn(s.id), free = freeIn(s.id), open = openIn(s.id);
+  const away = playersSorted().filter(p => isAway(p, s.id));
+  let stats = '<span class="pill">' + here.length + " here</span>";
+  if (tabs.length) stats += open ? '<span class="pill open">' + plural(open, "open seat") + "</span>" : '<span class="pill full">All full</span>';
+  if (away.length) stats += '<span class="pill" title="' + esc(away.map(p => p.name + (noteFor(p, s.id) ? " (" + noteFor(p, s.id) + ")" : "")).join(", ")) + '">' + away.length + " away</span>";
+  const tools = S.organiser ? '<button class="icon-btn" data-act="move-s" data-dir="-1" data-id="' + esc(s.id) + '" aria-label="Move earlier">←</button><button class="icon-btn" data-act="move-s" data-dir="1" data-id="' + esc(s.id) + '" aria-label="Move later">→</button><button class="icon-btn" data-act="edit-session" data-id="' + esc(s.id) + '" aria-label="Edit time block">✎</button>' : "";
+  let body = tabs.map(renderTable).join("");
+  if (S.organiser) body += '<button class="add-tile" data-act="add-table" data-id="' + esc(s.id) + '">+ Add a table</button>';
+  else if (!tabs.length) body += '<div class="col-note">' + (meal ? "Meal break" : "No games picked yet") + "</div>";
+  if (!meal && tabs.length && free.length) body += '<p class="free">Still to pick a table: <b>' + free.map(p => esc(p.name)).join(", ") + "</b></p>";
+  return '<section class="col' + (meal ? " meal" : "") + '" id="s-' + esc(s.id) + '" style="' + tone(s.id) + '" aria-label="' + esc(sessionName(s)) + '"><header class="col-head"><div class="col-title"><h3>' + esc(s.label) + "</h3>" + tools + "</div>" +
+    '<div class="s-stats">' + stats + "</div></header>" + body + "</section>";
+}
+
+function renderMine() {
+  const me = meP(); if (!me) return "";
+  const items = sessionsSorted().filter(s => s.kind !== "meal").map(s => {
+    const c = claimOf(s.id, me.id);
+    if (c) { const t = byId(S.tables, c.tableId); return '<a class="mine-item" style="' + tone(s.id) + '" href="#s-' + esc(s.id) + '" data-jump="' + esc(s.id) + '"><small>' + esc(sessionName(s)) + "</small><span>" + esc(gameName(byId(S.games, t.gameId))) + "</span></a>"; }
+    if (isAway(me, s.id)) return '<div class="mine-item away" style="' + tone(s.id) + '"><small>' + esc(sessionName(s)) + "</small><span>Away</span></div>";
+    return '<a class="mine-item todo" style="' + tone(s.id) + '" href="#s-' + esc(s.id) + '" data-jump="' + esc(s.id) + '"><small>' + esc(sessionName(s)) + "</small><span>" + (tablesIn(s.id).length ? "Pick a table" : "Nothing on yet") + "</span></a>";
+  }).join("");
+  return '<section class="mine" aria-label="Your weekend"><h2>Your weekend, ' + esc(me.name) + '</h2><div class="mine-list">' + items + "</div></section>";
+}
+
+function renderSummary() {
+  const live = S.tables.filter(t => byId(S.sessions, t.sessionId));
+  const open = live.reduce((n, t) => n + openAt(t), 0);
+  const filled = live.reduce((n, t) => n + Math.min(seatsOf(t), claimsAt(t.id).length), 0);
+  const playS = sessionsSorted().filter(s => s.kind !== "meal");
+  const emptyBlocks = playS.filter(s => !tablesIn(s.id).length).length;
+  return '<div class="summary"><div class="stat open"><b>' + open + "</b><span>open seats across the weekend</span></div>" +
+    '<div class="stat"><b>' + filled + "</b><span>seats claimed</span></div>" +
+    '<div class="stat"><b>' + live.length + "</b><span>tables over " + plural(playS.length, "game block") + "</span></div>" +
+    '<div class="stat"><b>' + S.players.length + "</b><span>players" + (emptyBlocks ? ", " + plural(emptyBlocks, "block") + " still empty" : "") + "</span></div></div>";
+}
+
+function renderSchedule() {
+  if (!S.sessions.length) {
+    return '<div class="banner">No time blocks yet.' + (S.organiser ? ' <button class="btn small primary" data-act="import-seed">Load the starting line-up</button> <button class="btn small" data-act="add-session">+ Add a time block</button>' : S.isOwner ? " Turn on organiser mode to load the starting line-up." : " The organiser hasn't set up the schedule yet.") + "</div>";
+  }
+  const groups = [...dayGroups().entries()];
+  let h = renderMine() + renderSummary();
+  h += '<div class="board-bar">' + modeFilterBar() + '<span class="spacer"></span><span class="label">Jump to</span>' + groups.map(([d], i) => '<button class="btn small" data-act="jump-day" data-i="' + i + '" style="' + tone("day:" + d) + '"><span class="dot"></span>' + esc(d) + "</button>").join("") +
+    '<button class="icon-btn" data-act="board-scroll" data-dir="-1" aria-label="Scroll to earlier blocks">←</button><button class="icon-btn" data-act="board-scroll" data-dir="1" aria-label="Scroll to later blocks">→</button></div>';
+  h += '<div class="board-outer"><div class="board" id="board">';
+  groups.forEach(([day, list], i) => {
+    h += '<div class="day-group" id="d-' + i + '" style="' + tone("day:" + day) + '"><h2 class="day-label">' + esc(day) + '</h2><div class="day-cols">' + list.map(renderSession).join("") +
+      (S.organiser ? '<button class="col-new" data-act="add-session" data-day="' + esc(day) + '">+ Add a time block to ' + esc(day) + "</button>" : "") + "</div></div>";
+  });
+  if (S.organiser) h += '<div class="day-group"><h2 class="day-label">&nbsp;</h2><button class="col-new" data-act="add-session">+ Add a new day</button></div>';
+  h += "</div></div>";
+  return h;
+}
+
+function renderGames() {
+  const counts = new Map();
+  S.games.filter(modeMatch).forEach(g => mechTags(g).forEach(t => counts.set(t, (counts.get(t) || 0) + 1)));
+  const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(e => e[0]);
+  if (S.tagFilter && !counts.has(S.tagFilter)) S.tagFilter = null;
+  const list = gamesSorted().filter(g => modeMatch(g) && (!S.tagFilter || (g.tags || []).includes(S.tagFilter)));
+  let h = '<div class="filter-row">' + modeFilterBar() + "</div>";
+  h += '<div class="filters"><span class="label">Filter by mechanic:</span><button class="tag" data-act="tag" data-tag="" aria-pressed="' + !S.tagFilter + '">All</button>' +
+    tags.map(t => '<button class="tag" data-act="tag" data-tag="' + esc(t) + '" aria-pressed="' + (S.tagFilter === t) + '">' + esc(t) + " " + counts.get(t) + "</button>").join("") + "</div>";
+  if (S.organiser) h += '<div><button class="btn primary" data-act="add-game">+ Add a game</button></div>';
+  if (!S.games.length) return h + '<div class="banner">No games added yet.</div>';
+  if (!list.length) return h + '<div class="banner">No games match those filters. Try All games or a different mechanic.</div>';
+  h += '<div class="game-grid">' + list.map(g => {
+    const when = S.tables.filter(t => t.gameId === g.id).map(t => byId(S.sessions, t.sessionId)).filter(Boolean).sort((a, b) => (a.order || 0) - (b.order || 0));
+    const open = S.tables.filter(t => t.gameId === g.id && byId(S.sessions, t.sessionId)).reduce((n, t) => n + openAt(t), 0);
+    return '<article class="game-card">' + coverHtml(g, "md") + "<div class=\"t-top\"><h3>" + esc(g.name) + "</h3>" + (S.organiser ? '<button class="icon-btn" data-act="edit-game" data-id="' + esc(g.id) + '" aria-label="Edit ' + esc(g.name) + '">✎</button>' : "") + "</div>" +
+      '<div class="facts"><span class="pill">' + esc(g.seats) + " at our table</span>" + (g.box ? '<span class="pill">Box: ' + esc(g.box) + "</span>" : "") +
+      (g.weight ? '<span class="pill weight-' + esc(g.weight) + '">' + esc(g.weight) + "</span>" : "") + (g.time ? '<span class="pill">' + esc(g.time) + "</span>" : "") + "</div>" +
+      "<p>" + esc(g.blurb || "No description yet.") + "</p>" +
+      (mechTags(g).length ? '<div class="tags">' + mechTags(g).map(t => '<button class="tag" data-act="tag" data-tag="' + esc(t) + '" aria-pressed="' + (S.tagFilter === t) + '">' + esc(t) + "</button>").join("") + "</div>" : "") +
+      '<p class="when">' + (when.length ? "On the schedule: <b>" + when.map(s => '<a href="#s-' + esc(s.id) + '" data-jump="' + esc(s.id) + '">' + esc(sessionName(s)) + "</a>").join(", ") + "</b>" + (open ? " · " + plural(open, "open seat") : "") : "Not on the schedule yet") + "</p>" +
+      '<div class="t-links"><a class="btn small" href="' + esc(videoFor(g)) + '" target="_blank" rel="noopener">' + (safeUrl(g.video) ? "Watch how to play" : "Find a how-to-play video") + " ↗</a></div></article>";
+  }).join("") + "</div>";
+  return h;
+}
+
+function renderPeople() {
+  const sess = sessionsSorted(); const people = playersSorted();
+  if (!sess.length) return '<div class="banner">No time blocks yet.</div>';
+  const groups = [...dayGroups().entries()];
+  const firstOfDay = new Set(groups.map(g => g[1][0].id));
+  let h = '<div class="legend"><span><i style="background:var(--accent-soft)"></i>Seated at a game</span><span><i style="background:var(--open-bg)"></i>Here, no table yet</span><span><i style="background:repeating-linear-gradient(135deg,transparent 0 3px,var(--chip) 3px 6px);border:1px solid var(--line)"></i>Away</span>' +
+    (S.organiser ? "<span>Tap a cell to switch here/away. Tap a name to rename or remove.</span>" : "") + "</div>";
+  if (S.organiser) h += '<div><button class="btn primary" data-act="add-player">+ Add a player</button></div>';
+  h += '<div class="grid-wrap"><table class="avail"><thead><tr class="dayrow"><th class="p-name"></th>' + groups.map(([d, l]) => '<th colspan="' + l.length + '" style="' + tone("day:" + d) + '">' + esc(d) + "</th>").join("") + "</tr><tr><th class=\"p-name\">Player</th>" +
+    sess.map(s => '<th class="' + (firstOfDay.has(s.id) ? "day-start" : "") + '" style="' + tone(s.id) + '">' + esc(s.label) + "</th>").join("") + "</tr></thead><tbody>";
+  for (const p of people) {
+    h += '<tr><th class="p-name">' + (S.organiser ? '<button class="p-btn" data-act="edit-player" data-id="' + esc(p.id) + '">' + esc(p.name) + "</button>" : esc(p.name)) + "</th>";
+    for (const s of sess) {
+      const away = isAway(p, s.id), c = claimOf(s.id, p.id), note = noteFor(p, s.id);
+      let cls, txt;
+      if (away) { cls = "away"; txt = note || "Away"; }
+      else if (c) { cls = "seated"; txt = gameName(byId(S.games, (byId(S.tables, c.tableId) || {}).gameId)); }
+      else if (s.kind === "meal") { cls = "here"; txt = "Here"; }
+      else { cls = tablesIn(s.id).length ? "free" : "here"; txt = tablesIn(s.id).length ? "No table" : "Here"; }
+      if (away && c) txt += " (has a seat)";
+      const inner = esc(txt);
+      h += '<td class="' + (firstOfDay.has(s.id) ? "day-start" : "") + '">' + (S.organiser
+        ? '<button class="cell ' + cls + '" data-act="toggle-away" data-p="' + esc(p.id) + '" data-s="' + esc(s.id) + '" aria-label="' + esc(p.name + ", " + sessionName(s) + ": " + txt + ". Tap to mark " + (away ? "here" : "away")) + '">' + inner + "</button>"
+        : '<span class="cell ' + cls + '">' + inner + "</span>") + "</td>";
+    }
+    h += "</tr>";
+  }
+  h += '</tbody><tfoot><tr><th class="p-name">Here</th>' + sess.map(s => '<td class="' + (firstOfDay.has(s.id) ? "day-start" : "") + '">' + hereIn(s.id).length + "</td>").join("") + "</tr>" +
+    '<tr><th class="p-name">Open seats</th>' + sess.map(s => '<td class="' + (firstOfDay.has(s.id) ? "day-start" : "") + '">' + (tablesIn(s.id).length ? openIn(s.id) : "") + "</td>").join("") + "</tr></tfoot></table></div>";
+  return h;
+}
+
+function render() {
+  TONES = tones();
+  renderHeader();
+  const app = document.getElementById("app");
+  const ready = S.noDb || S.revoked || (COLS.every(c => S.got[c]));
+  if (!ready && !S.slow) { app.innerHTML = banners() + '<div class="loading">Connecting to the live schedule…</div>'; return; }
+  const y = window.scrollY;
+  const oldBoard = document.getElementById("board");
+  const bx = oldBoard ? oldBoard.scrollLeft : null;
+  app.innerHTML = banners() + (S.view === "games" ? renderGames() : S.view === "people" ? renderPeople() : renderSchedule());
+  const nb = document.getElementById("board");
+  if (nb && bx != null) nb.scrollLeft = bx;
+  window.scrollTo(0, y);
+}
+
+/* ---------- Events ---------- */
+const smooth = () => matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+document.addEventListener("click", e => {
+  const j = e.target.closest("[data-jump]");
+  if (j) {
+    e.preventDefault();
+    const go = () => { const el = document.getElementById("s-" + j.dataset.jump); if (el) el.scrollIntoView({ behavior: smooth(), block: "start", inline: "start" }); };
+    if (S.view !== "schedule") { setView("schedule", true); requestAnimationFrame(go); } else go();
+    return;
+  }
+  const el = e.target.closest("[data-act]"); if (!el) return;
+  const a = el.dataset.act, id = el.dataset.id;
+  switch (a) {
+    case "seat": run(() => onSeat(el.dataset.table, el.dataset.player)); break;
+    case "who": askWho(); break;
+    case "jump-day": { const d = document.getElementById("d-" + el.dataset.i); if (d) d.scrollIntoView({ behavior: smooth(), block: "nearest", inline: "start" }); break; }
+    case "board-scroll": { const b = document.getElementById("board"); if (b) b.scrollBy({ left: Number(el.dataset.dir) * Math.max(300, b.clientWidth * 0.75), behavior: smooth() }); break; }
+    case "org": if (!S.isOwner) pinModal(); else { S.organiser = !S.organiser; render(); } break;
+    case "lock": S.isOwner = false; S.organiser = false; try { localStorage.removeItem("bgw-org"); } catch (e) {} render(); toast("Organiser mode locked on this device."); break;
+    case "import-seed": run(importSeed); break;
+    case "game-info": gameInfo(id); break;
+    case "edit-table": tableModal(null, id); break;
+    case "add-table": tableModal(id); break;
+    case "edit-session": sessionModal(id); break;
+    case "add-session": sessionModal(null, el.dataset.day); break;
+    case "move-s": run(() => moveSession(id, Number(el.dataset.dir))); break;
+    case "add-game": gameModal(); break;
+    case "edit-game": gameModal(id); break;
+    case "add-player": playerModal(); break;
+    case "edit-player": playerModal(id); break;
+    case "toggle-away": run(() => toggleAway(el.dataset.p, el.dataset.s)); break;
+    case "mode": S.modeFilter = el.dataset.mode || null; try { localStorage.setItem("bgw-mode", S.modeFilter || ""); } catch (e) {} render(); break;
+    case "tag": S.tagFilter = el.dataset.tag || null; if (S.view !== "games") setView("games"); else render(); break;
+    case "event": eventModal(); break;
+    case "clear-tables": confirmModal("Clear every table?", "This removes all " + plural(S.tables.length, "table") + " and every claimed seat. Time blocks, games and players stay.", "Clear all tables", async () => {
+      for (const c of [...S.claims]) await write(() => S.db.doc("claims/" + c.id).delete());
+      for (const t of [...S.tables]) await write(() => S.db.doc("tables/" + t.id).delete());
+      toast("All tables cleared.");
+    }); break;
+  }
+});
+
+const VIEWS = ["schedule", "games", "people"];
+function setView(v, keepScroll) {
+  S.view = VIEWS.includes(v) ? v : "schedule";
+  if (location.hash !== "#" + S.view) { try { history.replaceState(null, "", "#" + S.view); } catch (e) {} }
+  if (modalOpen) closeModal();
+  render();
+  if (!keepScroll) window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", () => {
+  const h = location.hash.slice(1);
+  if (VIEWS.includes(h)) setView(h);
+});
+
+/* ---------- Boot ---------- */
+/* ---------- Organiser PIN ---------- */
+function pinKey() {
+  const p = String((window.BGW_CONFIG || {}).organiserPin || "").trim();
+  if (!p || /^change-?me$/i.test(p)) return "";
+  let x = 5381; for (const ch of p) x = ((x * 33) ^ ch.charCodeAt(0)) >>> 0;
+  return "k" + x.toString(36);
+}
+function pinModal() {
+  if (!pinKey()) { toast("Set an organiser PIN in config.js first (see the README)."); return; }
+  openModal('<h2>Organiser mode</h2><p class="sub">Enter the organiser PIN to edit the schedule.</p><form class="form" id="f"><div class="field"><label for="f-pin">PIN</label><input id="f-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="40" required></div>' +
+    '<div class="actions"><button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">Unlock</button></div></form>', m => {
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      const v = m.querySelector("#f-pin").value.trim();
+      if (v !== String(window.BGW_CONFIG.organiserPin).trim()) { toast("That PIN isn't right."); m.querySelector("#f-pin").select(); return; }
+      S.isOwner = true; S.organiser = true;
+      try { localStorage.setItem("bgw-org", pinKey()); } catch (e2) {}
+      closeModal(); render(); toast("Organiser mode unlocked on this device.");
+    };
+  });
+}
+async function importSeed() {
+  const res = await fetch("seed.json", { cache: "no-store" });
+  if (!res.ok) { toast("Couldn't find seed.json next to index.html."); return; }
+  const seed = await res.json();
+  toast("Loading the starting line-up…");
+  if (seed["config/event"]) await write(() => S.db.doc("config/event").set(seed["config/event"]));
+  for (const c of ["sessions", "players", "games", "tables"]) {
+    for (const d of seed[c] || []) { const { id, ...rest } = d; await write(() => S.db.doc(c + "/" + id).set(rest)); }
+  }
+  toast("Starting line-up loaded.");
+}
+
+async function boot() {
+  const h = location.hash.slice(1);
+  if (VIEWS.includes(h)) S.view = h;
+  try { const m = localStorage.getItem("bgw-me"); if (m) S.me = m; const f = localStorage.getItem("bgw-mode"); if (MODES[f] && f !== "either") S.modeFilter = f; } catch (e) {}
+  render();
+  let db = null;
+  try {
+    const r = await Promise.race([window.__bgwReady, sleep(15000).then(() => ({ error: "timeout" }))]);
+    db = r && r.db; S.setupError = r && r.error;
+  } catch (e) { S.setupError = "init"; }
+  if (!db) { S.noDb = true; render(); return; }
+  S.db = db; S.canWrite = true;
+  try { S.isOwner = !!pinKey() && localStorage.getItem("bgw-org") === pinKey(); } catch (e) {}
+
+  const timer = setTimeout(() => { if (!COLS.every(c => S.fresh[c])) { S.slow = true; render(); } }, 10000);
+  const check = () => { if (COLS.every(c => S.fresh[c])) { clearTimeout(timer); if (S.slow) { S.slow = false; } } };
+  const onErr = e => { clearTimeout(timer); if (e && e.code === "revoked") S.revoked = true; else S.slow = true; COLS.forEach(c => S.got[c] = true); render(); };
+  let raf = 0;
+  const schedule = () => { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; render(); }); };
+  for (const c of COLS) {
+    db.collection(c).onSnapshot(snap => {
+      S[c] = snap.docs.map(d => Object.assign({}, d.data(), { id: d.id }));
+      S.got[c] = true; if (!snap.metadata.fromCache) S.fresh[c] = true;
+      check(); schedule();
+    }, onErr);
+  }
+  db.doc("config/event").onSnapshot(snap => { S.cfg = snap.exists ? snap.data() : null; schedule(); }, () => {});
+  if (S.uid) {
+    db.doc("data/users/" + S.uid + "/profile").onSnapshot(snap => {
+      const d = snap.exists ? snap.data() : null;
+      if (d && typeof d.playerId === "string" && d.playerId !== S.me) { S.me = d.playerId || null; try { localStorage.setItem("bgw-me", S.me || ""); } catch (e) {} schedule(); }
+    }, () => {});
+  }
+}
+boot();
+})();
+</script>
+</body>
+</html>
