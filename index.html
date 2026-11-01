@@ -21,6 +21,7 @@
   --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
   --radius:12px;
   --coop:#4CC79A; --comp:#FF7E97; --team:#82A9FF; --mode-ink:#0B0F19;
+  --host:#E0287D; --host-ink:#FF9ACB;
   --food-bg:#171E2E; --food-line:#7C6A4B; --food-ink:#D9B979;
   --ph-s:32%; --ph-l:27%; --ph-ink-l:76%;
   /* Session tones: day sets the hue, time of day sets the shade (k = 0 morning ... 3 night) */
@@ -182,6 +183,58 @@ main,.site-foot{position:relative;z-index:1}
 .food-group h2::before{content:"";width:12px;height:12px;border-radius:3px;background:var(--tone-bar,var(--line))}
 .food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
 .food-grid .food-card{padding:14px 16px;gap:6px}
+/* Host / teacher seat: deep pink meeple with a soft glow and twinkling sparkles */
+.seat{position:relative}
+.seat.host{background:rgba(224,40,125,.16);border:1px solid var(--host);box-shadow:none;color:var(--host-ink);font-weight:700}
+.seat.host svg{overflow:visible;animation:hostGlow 2.4s ease-in-out infinite}
+.seat.taken.host svg path{fill:var(--host)}
+@keyframes hostGlow{0%,100%{filter:drop-shadow(0 0 2px rgba(255,70,160,.5))}50%{filter:drop-shadow(0 0 8px rgba(255,105,180,.95))}}
+.sparkles{position:absolute;inset:0;pointer-events:none}
+.sparkles i{position:absolute;display:block;width:9px;height:9px;background:#FFE4F2;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);opacity:0;animation:twinkle 1.9s ease-in-out infinite}
+.sparkles i:nth-child(1){top:1px;left:5px;animation-delay:0s}
+.sparkles i:nth-child(2){top:7px;right:4px;width:7px;height:7px;animation-delay:.65s}
+.sparkles i:nth-child(3){top:24px;left:8px;width:6px;height:6px;animation-delay:1.3s;background:#FF9FCF}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.3) rotate(0deg)}35%{opacity:1;transform:scale(1) rotate(45deg)}65%{opacity:.25;transform:scale(.6) rotate(90deg)}}
+.t-host{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:var(--host-ink);background:rgba(224,40,125,.14);border:1px solid rgba(224,40,125,.5);border-radius:999px;padding:3px 10px}
+.t-host::before{content:"";width:9px;height:9px;background:var(--host-ink);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+@media (prefers-reduced-motion: reduce){.seat.host svg{animation:none;filter:drop-shadow(0 0 5px rgba(255,105,180,.8))}.sparkles i{animation:none;opacity:.85}}
+/* Metallic seat with a top hat and a sweeping shine */
+.seat.metal{background:linear-gradient(140deg,#2C3443,#1A1F2B);border:1px solid #A9B2C1;color:#E6EBF3;font-weight:700}
+.seat.metal svg{overflow:visible;width:26px;height:32px;margin-top:-6px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.seat.taken.metal svg path.m-body{fill:url(#bgw-metal)}
+.seat.metal svg .hat{fill:url(#bgw-hat)}
+.seat.metal svg .band{fill:#C0264E}
+.seat.metal svg .hat-hi{fill:#FFFFFF;opacity:.28}
+.seat.metal svg .shine{transform-box:view-box;animation:metalShine 3.4s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes metalShine{0%{transform:translateX(0) skewX(-18deg)}45%,100%{transform:translateX(40px) skewX(-18deg)}}
+@media (prefers-reduced-motion: reduce){.seat.metal svg .shine{animation:none;opacity:0}}
+/* Floating d20: marks the block happening now (or up next) */
+.day-cols{padding-top:56px}
+.col{position:relative}
+.d20-hover{position:absolute;top:-56px;left:50%;width:46px;height:46px;margin-left:-23px;pointer-events:none;z-index:3;color:#EEF1FF}
+.d20{display:block;width:46px;height:46px;overflow:visible;filter:drop-shadow(0 0 6px rgba(142,166,255,.65));animation:d20Float 3.2s ease-in-out infinite}
+.d20-hover::after{content:"";position:absolute;left:50%;bottom:-7px;width:26px;height:5px;margin-left:-13px;border-radius:50%;background:rgba(0,0,0,.55);filter:blur(2px);animation:d20Shadow 3.2s ease-in-out infinite}
+.d20-cap{position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);white-space:nowrap;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:rgba(142,166,255,.18);border:1px solid rgba(142,166,255,.5);border-radius:999px;padding:2px 9px}
+.next-tag{position:absolute;top:-42px;left:50%;transform:translateX(-50%);z-index:3;white-space:nowrap;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:rgba(142,166,255,.12);border:1px dashed rgba(142,166,255,.6);border-radius:999px;padding:3px 11px;pointer-events:none}
+.next-tag::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-4px;border:4px solid transparent;border-top-color:rgba(142,166,255,.6)}
+.col.is-now .col-head{box-shadow:0 0 0 2px rgba(142,166,255,.55),0 0 22px rgba(142,166,255,.18)}
+@keyframes d20Float{0%,100%{transform:translateY(2px) rotate(-7deg)}50%{transform:translateY(-6px) rotate(7deg)}}
+@keyframes d20Shadow{0%,100%{transform:scaleX(1);opacity:.9}50%{transform:scaleX(.7);opacity:.5}}
+@media (prefers-reduced-motion: reduce){.d20,.d20-hover::after{animation:none}}
+@media (max-width:520px){.day-cols{padding-top:52px}.d20-hover{top:-52px}}
+.check-solo{display:flex;gap:10px;align-items:center;font-size:.9rem;cursor:pointer}
+.check-solo input{accent-color:var(--host);width:18px;height:18px}
+/* Food banners */
+.food-card .cover{margin:-10px -12px 4px;border-radius:9px 9px 0 0;height:84px}
+.food-grid .food-card .cover{margin:-14px -16px 6px;height:120px}
+
+.check-field{border:0;padding:0;margin:0}
+.check-field legend{font-weight:700;font-size:.9rem;padding:0;margin-bottom:6px}
+.check-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px}
+.check{display:flex;gap:8px;align-items:center;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-size:.86rem;cursor:pointer}
+.check.meal{border-color:var(--food-line)}
+.check input{accent-color:var(--accent);width:16px;height:16px;flex:none}
+.check:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
 /* Cover banners */
 .cover{position:relative;overflow:hidden;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,hsl(var(--gh) var(--ph-s) var(--ph-l)),hsl(calc(var(--gh) + 35) var(--ph-s) calc(var(--ph-l) - 7%)))}
 .cover-sm{height:76px;margin:-12px -12px 0;border-radius:9px 9px 0 0}
@@ -320,6 +373,7 @@ button.cell:hover{outline:1px solid var(--accent)}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="bgw-metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6F8FC"/><stop offset=".24" stop-color="#B3BBC8"/><stop offset=".47" stop-color="#6A7383"/><stop offset=".62" stop-color="#E8ECF2"/><stop offset=".82" stop-color="#8B94A3"/><stop offset="1" stop-color="#D7DCE4"/></linearGradient><linearGradient id="bgw-shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient><linearGradient id="bgw-hat" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2B2F38"/><stop offset=".35" stop-color="#0E1015"/><stop offset="1" stop-color="#1C1F27"/></linearGradient><clipPath id="bgw-meeple-clip"><path d="M12 2.4a3.3 3.3 0 0 1 3.3 3.3c0 1.05-.45 1.9-1.15 2.5 2.75.4 6.2 1.3 7.4 2.65.7.8.2 1.95-.85 2.05l-3.9.45 3.3 6.4c.42.82-.18 1.75-1.1 1.75h-3.4L12 17.2l-3.6 4.3H5c-.92 0-1.52-.93-1.1-1.75l3.3-6.4-3.9-.45c-1.05-.1-1.55-1.25-.85-2.05C3.65 9.5 7.1 8.6 9.85 8.2 9.15 7.6 8.7 6.75 8.7 5.7A3.3 3.3 0 0 1 12 2.4z"/></clipPath></defs></svg>
 <div class="atmo" aria-hidden="true">
   <div class="atmo-layer atmo-far"><span class="orb o1"></span><span class="orb o2"></span></div>
   <div class="atmo-layer atmo-mid"><span class="orb o3"></span><span class="orb o4"></span></div>
@@ -429,14 +483,14 @@ const POS = { top: "top", middle: "center", bottom: "bottom" };
 function coverHtml(g, size, opts) {
   if (!g) return "";
   opts = opts || {};
-  const up = opts.data !== undefined ? (opts.data || "") : coverData(g.id);
+  const up = opts.data !== undefined ? (opts.data || "") : coverData(opts.key || g.id);
   const link = safeUrl(opts.cover !== undefined ? opts.cover : g.cover);
   const src = up || (link && !BROKEN.has(link) ? link : "");
   const pos = POS[opts.pos !== undefined ? opts.pos : g.coverPos] || "center";
   return '<div class="cover cover-' + size + '" style="--gh:' + hue(g.name) + ";--pos:" + pos + '">' +
     '<span class="cover-ph" aria-hidden="true">' + esc(initialsOf(g.name)) + "</span>" +
     (src ? '<img class="cover-img" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" src="' + esc(src) + '">' : "") +
-    '<span class="cover-badge">' + modeBadge(g, size !== "sm") + "</span></div>";
+    (opts.badge === false ? "" : '<span class="cover-badge">' + modeBadge(g, size !== "sm") + "</span>") + "</div>";
 }
 document.addEventListener("error", e => {
   const t = e.target;
@@ -467,6 +521,13 @@ function modeFilterBar() {
 }
 const canAct = () => !!S.db && !S.readOnly && S.canWrite !== false;
 const meP = () => S.me && byId(S.players, S.me);
+const isHost = p => !!(p && p.host === true);
+const SEAT_STYLES = { "": "Standard", tophat: "Metallic with a top hat" };
+const METAL_MEEPLE = '<svg viewBox="0 -5.5 24 29.5" aria-hidden="true"><path class="m-body" d="M12 2.4a3.3 3.3 0 0 1 3.3 3.3c0 1.05-.45 1.9-1.15 2.5 2.75.4 6.2 1.3 7.4 2.65.7.8.2 1.95-.85 2.05l-3.9.45 3.3 6.4c.42.82-.18 1.75-1.1 1.75h-3.4L12 17.2l-3.6 4.3H5c-.92 0-1.52-.93-1.1-1.75l3.3-6.4-3.9-.45c-1.05-.1-1.55-1.25-.85-2.05C3.65 9.5 7.1 8.6 9.85 8.2 9.15 7.6 8.7 6.75 8.7 5.7A3.3 3.3 0 0 1 12 2.4z"/>' +
+  '<g clip-path="url(#bgw-meeple-clip)"><rect class="shine" x="-9" y="-6" width="5" height="34" fill="url(#bgw-shine)"/></g>' +
+  '<g transform="rotate(-9 12 3)"><rect class="hat" x="9.2" y="-4.8" width="5.6" height="7.8" rx="0.7"/><rect class="band" x="9.2" y="1.1" width="5.6" height="1.3"/>' +
+  '<rect class="hat" x="6.7" y="2.7" width="10.6" height="1.5" rx="0.75"/><rect class="hat-hi" x="10" y="-4.1" width="1" height="5" rx="0.5"/></g></svg>';
+const SPARKLES = '<span class="sparkles" aria-hidden="true"><i></i><i></i><i></i></span>';
 
 /* ---------- Toast + modal ---------- */
 let toastTimer;
@@ -649,6 +710,8 @@ function sessionModal(sid, presetDay) {
   const html = "<h2>" + (s ? "Edit time block" : "Add a time block") + '</h2><form class="form" id="f">' +
     '<div class="row2"><div class="field"><label for="f-day">Day</label><input id="f-day" list="f-days" required maxlength="20" value="' + esc(s ? s.day : presetDay || "") + '"><datalist id="f-days">' + days.map(d => '<option value="' + esc(d) + '">').join("") + "</datalist></div>" +
     '<div class="field"><label for="f-label">Time</label><input id="f-label" required maxlength="30" placeholder="e.g. 2pm–5pm" value="' + esc(s ? s.label : "") + '"></div></div>' +
+    '<div class="row2"><div class="field"><label for="f-start">Starts</label><input id="f-start" type="time" value="' + esc(s && sessionTimes().get(s.id) ? fromMin(sessionTimes().get(s.id).start) : "") + '"></div>' +
+    '<div class="field"><label for="f-end">Ends</label><input id="f-end" type="time" value="' + esc(s && sessionTimes().get(s.id) ? fromMin(sessionTimes().get(s.id).end) : "") + '"><span class="hint">Past midnight is fine, e.g. 01:00</span></div></div>' +
     '<div class="field"><label for="f-kind">Type</label><select id="f-kind"><option value="play"' + (!s || s.kind !== "meal" ? " selected" : "") + '>Games</option><option value="meal"' + (s && s.kind === "meal" ? " selected" : "") + ">Meal break</option></select></div>" +
     '<div class="actions">' + (s ? '<button type="button" class="btn danger" data-m="del">Delete block</button><span class="spacer"></span>' : "") +
     '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (s ? "Save" : "Add block") + "</button></div></form>";
@@ -659,14 +722,15 @@ function sessionModal(sid, presetDay) {
     m.querySelector("#f").onsubmit = e => {
       e.preventDefault();
       const day = m.querySelector("#f-day").value.trim(), label = m.querySelector("#f-label").value.trim(), kind = m.querySelector("#f-kind").value;
+      const start = m.querySelector("#f-start").value, end = m.querySelector("#f-end").value;
       if (!day || !label) return;
       run(async () => {
         if (s) {
-          const data = { day, label, kind };
+          const data = { day, label, kind, start, end };
           if (day !== s.day) data.order = orderForNewInDay(day, s.id);
           await write(() => S.db.doc("sessions/" + s.id).update(data));
         } else {
-          await write(() => S.db.doc("sessions/" + slug(day + "-" + label)).set({ day, label, kind, order: orderForNewInDay(day) }));
+          await write(() => S.db.doc("sessions/" + slug(day + "-" + label)).set({ day, label, kind, start, end, order: orderForNewInDay(day) }));
         }
         closeModal(); toast(s ? "Time block updated." : "Time block added.");
       });
@@ -787,6 +851,8 @@ function gameInfo(gid) {
 function playerModal(pid) {
   const p = pid ? byId(S.players, pid) : null;
   const html = "<h2>" + (p ? "Edit player" : "Add a player") + '</h2><form class="form" id="f"><div class="field"><label for="f-name">Name</label><input id="f-name" required maxlength="40" value="' + esc(p ? p.name : "") + '"></div>' +
+    '<label class="check-solo"><input type="checkbox" id="f-host"' + (isHost(p) ? " checked" : "") + "> Teaching games: sparkly pink seat and an \"is teaching\" tag on their tables</label>" +
+    '<div class="field"><label for="f-style">Seat style</label><select id="f-style">' + Object.entries(SEAT_STYLES).map(([k, l]) => '<option value="' + k + '"' + (((p && p.style) || "") === k ? " selected" : "") + ">" + l + "</option>").join("") + "</select></div>" +
     (p ? '<p class="sub" style="margin:0">To change when ' + esc(p.name) + " is around, tap their cells in the grid.</p>" : '<p class="sub" style="margin:0">They\'ll start as here for every block. Tap cells in the grid to mark them away.</p>') +
     '<div class="actions">' + (p ? '<button type="button" class="btn danger" data-m="del">Remove player</button><span class="spacer"></span>' : "") +
     '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (p ? "Save" : "Add player") + "</button></div></form>";
@@ -801,8 +867,9 @@ function playerModal(pid) {
       e.preventDefault();
       const name = m.querySelector("#f-name").value.trim(); if (!name) return;
       run(async () => {
-        if (p) await write(() => S.db.doc("players/" + p.id).update({ name }));
-        else await write(() => S.db.doc("players/" + slug(name)).set({ name, away: [], notes: {} }));
+        const host = m.querySelector("#f-host").checked, style = m.querySelector("#f-style").value;
+        if (p) await write(() => S.db.doc("players/" + p.id).update({ name, host, style }));
+        else await write(() => S.db.doc("players/" + slug(name)).set({ name, host, style, away: [], notes: {} }));
         closeModal(); toast(p ? "Saved." : name + " added.");
       });
     };
@@ -822,13 +889,14 @@ function eventModal() {
   const c = S.cfg || {};
   const html = '<h2>Weekend details</h2><form class="form" id="f"><div class="field"><label for="f-t">Title</label><input id="f-t" maxlength="60" required value="' + esc(c.title || "Board Games Weekend") + '"></div>' +
     '<div class="field"><label for="f-s">Subtitle</label><input id="f-s" maxlength="100" value="' + esc(c.subtitle || "") + '"><span class="hint">Dates, address, what to bring</span></div>' +
+    '<div class="field"><label for="f-d">First day\'s date</label><input id="f-d" type="date" required value="' + esc(c.start || DEFAULT_START) + '"><span class="hint">The date of the first day on the timetable. The floating d20 uses this to find the block that\'s on now.</span></div>' +
     '<div class="actions"><button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">Save</button></div></form>';
   openModal(html, m => {
     m.querySelector('[data-m="cancel"]').onclick = closeModal;
     m.querySelector("#f").onsubmit = e => {
       e.preventDefault();
       run(async () => {
-        await write(() => S.db.doc("config/event").set({ title: m.querySelector("#f-t").value.trim(), subtitle: m.querySelector("#f-s").value.trim() }));
+        await write(() => S.db.doc("config/event").set({ title: m.querySelector("#f-t").value.trim(), subtitle: m.querySelector("#f-s").value.trim(), start: m.querySelector("#f-d").value || DEFAULT_START }));
         closeModal(); toast("Saved.");
       });
     };
@@ -861,7 +929,7 @@ function banners() {
   if (S.revoked) h += '<div class="banner warn">Your access to this schedule has changed. Reload the page to see what you can do now.</div>';
   else if (S.slow) h += '<div class="banner warn">Can\'t reach the live schedule yet. What you see may be out of date.</div>';
   if (S.db && !S.revoked && (S.readOnly || S.canWrite === false)) h += '<div class="banner">The schedule is locked for changes right now. You can still see everything.</div>';
-  if (S.organiser) h += '<div class="banner org"><span><strong>Organiser mode.</strong> Tap a seat to seat or remove anyone, use ✎ to edit tables and time blocks, or add games and players on the other tabs.</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn small" data-act="event">Edit title</button><button class="btn small" data-act="lock">Lock</button><button class="btn small danger" data-act="clear-tables">Clear all tables</button></span></div>';
+  if (S.organiser) h += '<div class="banner org"><span><strong>Organiser mode.</strong> Tap a seat to seat or remove anyone, use ✎ to edit tables and time blocks, or add games and players on the other tabs.</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn small" data-act="event">Edit details</button><button class="btn small" data-act="lock">Lock</button><button class="btn small danger" data-act="clear-tables">Clear all tables</button></span></div>';
   return h;
 }
 
@@ -870,7 +938,8 @@ function renderSeat(t, c, i) {
   if (c) {
     const p = byId(S.players, c.playerId);
     const mine = c.playerId === S.me;
-    return '<button class="seat taken' + (mine ? " me" : "") + (i >= seats ? " overflow" : "") + '" style="--h:' + hue(p.name) + '" data-act="seat" data-table="' + esc(t.id) + '" data-player="' + esc(p.id) + '" aria-label="' + esc(p.name + (mine ? " (you), tap to leave" : "")) + '"' + (!S.organiser && !mine ? "" : "") + ">" + MEEPLE + "<span>" + esc(mine ? "You" : p.name) + "</span></button>";
+    const host = isHost(p), metal = p.style === "tophat";
+    return '<button class="seat taken' + (mine ? " me" : "") + (metal ? " metal" : host ? " host" : "") + (i >= seats ? " overflow" : "") + '" style="--h:' + hue(p.name) + '" data-act="seat" data-table="' + esc(t.id) + '" data-player="' + esc(p.id) + '" aria-label="' + esc(p.name + (host ? ", teaching" : "") + (mine ? " (you), tap to leave" : "")) + '">' + (metal ? METAL_MEEPLE : MEEPLE) + (host && !metal ? SPARKLES : "") + "<span>" + esc(mine ? "You" : p.name) + "</span></button>";
   }
   const dis = !S.organiser && !canAct();
   return '<button class="seat empty" data-act="seat" data-table="' + esc(t.id) + '" aria-label="Open seat, tap to claim"' + (dis ? " disabled" : "") + ">" + MEEPLE + "<span>Open</span></button>";
@@ -893,6 +962,7 @@ function renderTable(t) {
     (S.organiser ? '<button class="icon-btn" data-act="edit-table" data-id="' + esc(t.id) + '" aria-label="Edit table">✎</button>' : "") + "</div>" +
     '<div class="t-meta">' + [plural(seats, "seat"), g && g.weight, g && g.time].filter(Boolean).map(esc).join(" · ") + "</div>" +
     '<div class="seats">' + seatHtml + "</div>" +
+    cl.map(c => byId(S.players, c.playerId)).filter(isHost).map(hp => '<div class="t-host">' + esc(hp.name) + " is teaching</div>").join("") +
     (tags.length ? '<div class="tags">' + tags.map(x => '<span class="tag">' + esc(x) + "</span>").join("") + "</div>" : "") +
     (t.note ? '<div class="t-note">' + esc(t.note) + "</div>" : "") +
     '<div class="t-links"><a href="' + esc(videoFor(g)) + '" target="_blank" rel="noopener">' + (g && safeUrl(g.video) ? "Watch how to play" : "Find a how-to video") + " ↗</a>" +
@@ -900,55 +970,171 @@ function renderTable(t) {
     "</div>";
 }
 
+/* ---------- Clock: which block is on now, or up next ---------- */
+const DEFAULT_START = "2026-11-06"; // Friday of the weekend; organiser can change it under Edit details
+const D20 = '<svg class="d20" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round">' +
+  '<polygon points="50,4 90,27 90,73 50,96 10,73 10,27"/><polygon points="50,28 77,71 23,71"/>' +
+  '<path d="M50 4 50 28M10 27 50 28M90 27 50 28M10 27 23 71M90 27 77 71M10 73 23 71M90 73 77 71M50 96 23 71M50 96 77 71"/></g></svg>';
+const toMin = t => { const m = /^(\d{1,2}):(\d{2})$/.exec(String(t || "").trim()); return m ? (+m[1]) * 60 + (+m[2]) : null; };
+const fromMin = n => String(Math.floor(n / 60) % 24).padStart(2, "0") + ":" + String(n % 60).padStart(2, "0");
+function parseLabel(label) {
+  const m = /(\d{1,2})(?::(\d{2}))?\s*(am|pm)\s*[–—-]\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i.exec(label || "");
+  if (!m) return null;
+  const conv = (h, mi, ap) => (+h % 12 + (/pm/i.test(ap) ? 12 : 0)) * 60 + (+(mi || 0));
+  return { start: conv(m[1], m[2], m[3]), end: conv(m[4], m[5], m[6]) };
+}
+function sessionTimes() {
+  const out = new Map(); let di = 0;
+  for (const [, list] of dayGroups()) {
+    const xs = list.map(s => { const p = parseLabel(s.label); return { s, di, start: toMin(s.start) ?? (p ? p.start : null), end: toMin(s.end) ?? (p ? p.end : null) }; });
+    xs.forEach((x, i) => { if (x.start == null) x.start = i > 0 && xs[i - 1].end != null ? xs[i - 1].end : (/night|evening/i.test(x.s.label) ? 18 * 60 : null); });
+    xs.forEach((x, i) => {
+      if (x.end == null) x.end = i < xs.length - 1 && xs[i + 1].start != null ? xs[i + 1].start : (x.start == null ? null : /night|evening/i.test(x.s.label) ? 24 * 60 : x.start + 180);
+      if (x.start != null && x.end != null && x.end <= x.start) x.end += 1440;
+      if (x.start != null && x.end != null) out.set(x.s.id, x);
+    });
+    di++;
+  }
+  return out;
+}
+function nowState() {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec((S.cfg && S.cfg.start) || DEFAULT_START);
+  if (!m) return null;
+  const now = Date.now();
+  const list = [...sessionTimes()].map(([id, t]) => ({ id, a: new Date(+m[1], +m[2] - 1, +m[3] + t.di, 0, t.start).getTime(), b: new Date(+m[1], +m[2] - 1, +m[3] + t.di, 0, t.end).getTime() })).sort((x, y) => x.a - y.a);
+  let i = list.findIndex(x => now >= x.a && now < x.b), mode = "now";
+  if (i < 0) { i = list.findIndex(x => x.a > now); mode = "soon"; }
+  if (i < 0) return null;
+  return { id: list[i].id, mode, at: list[i].a, nextId: list[i + 1] ? list[i + 1].id : null };
+}
+function startsLabel(at) {
+  const d = new Date(at), today = new Date();
+  const t = d.toLocaleTimeString("en-AU", { hour: "numeric", minute: d.getMinutes() ? "2-digit" : undefined, hour12: true }).replace(/\s/g, "").toLowerCase();
+  return "Starts " + (d.toDateString() === today.toDateString() ? "" : d.toLocaleDateString("en-AU", { weekday: "short" }) + " ") + t;
+}
+let NOW = null, autoScrolled = false;
+const nowKey = n => n ? n.id + ":" + n.mode + ":" + n.nextId : "";
+setInterval(() => { const n = nowState(); if (nowKey(n) !== nowKey(NOW)) render(); }, 30000);
+
 /* ---------- Food ---------- */
+// One food option can sit in several slots (like a game on several tables).
+// sessionIds holds block ids, plus "any" for snacks and drinks that are around all weekend.
 const FOOD_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1h1.1v4.4h.8V1H6v4.4h.8V1h1.1v5.3a2 2 0 0 1-1.3 1.9V15H4.3V8.2A2 2 0 0 1 3 6.3zM11.4 1c1.7 0 2.6 2 2.6 4.8 0 1.9-.7 3.1-1.7 3.4V15h-1.9V1z"/></svg>';
+const ANY = "any";
 const foodSorted = () => [...S.food].sort((a, b) => (a.order || 0) - (b.order || 0));
-const foodIn = sid => foodSorted().filter(f => f.sessionId === sid);
-function renderFoodCard(f, big) {
+function foodSlots(f) {
+  const raw = Array.isArray(f.sessionIds) ? f.sessionIds : (f.sessionId ? [f.sessionId] : [ANY]);
+  return raw.filter(id => id === ANY || byId(S.sessions, id));
+}
+const foodIn = sid => foodSorted().filter(f => foodSlots(f).includes(sid));
+const slotLabel = id => id === ANY ? "Any time" : sessionName(byId(S.sessions, id));
+const slotOrder = ids => [...sessionsSorted().map(s => s.id).filter(id => ids.includes(id)), ...(ids.includes(ANY) ? [ANY] : [])];
+const foodDoc = (f, slots) => ({ name: f.name || "", details: f.details || "", by: f.by || "", order: f.order || Date.now(), cover: f.cover || "", coverPos: f.coverPos || "middle", sessionIds: slots });
+const foodKey = f => "f__" + f.id;
+const foodHasCover = f => !!(coverData(foodKey(f)) || safeUrl(f.cover));
+async function setFoodSlots(f, slots) { await write(() => S.db.doc("food/" + f.id).set(foodDoc(f, slots))); }
+
+function renderFoodCard(f, ctx) {
   const p = f.by ? byId(S.players, f.by) : null;
-  return '<div class="food-card">' +
-    '<div class="food-top">' + FOOD_ICON + '<span class="food-name">' + esc(f.name || "Food") + "</span>" +
-    (S.organiser ? '<button class="icon-btn" data-act="edit-food" data-id="' + esc(f.id) + '" aria-label="Edit ' + esc(f.name || "food") + '">✎</button>' : "") + "</div>" +
+  const slots = foodSlots(f);
+  const others = slotOrder(slots.filter(x => x !== ctx)).map(slotLabel);
+  let tools = "";
+  if (S.organiser) {
+    if (ctx) tools += '<button class="icon-btn" data-act="unslot-food" data-id="' + esc(f.id) + '" data-s="' + esc(ctx) + '" aria-label="Take ' + esc(f.name || "this food") + " off " + esc(slotLabel(ctx)) + '" title="Take off ' + esc(slotLabel(ctx)) + '">×</button>';
+    tools += '<button class="icon-btn" data-act="edit-food" data-id="' + esc(f.id) + '" aria-label="Edit ' + esc(f.name || "food") + '">✎</button>';
+  }
+  return '<div class="food-card">' + (foodHasCover(f) ? coverHtml(f, "sm", { key: foodKey(f), badge: false }) : "") +
+    '<div class="food-top">' + FOOD_ICON + '<span class="food-name">' + esc(f.name || "Food") + "</span>" + tools + "</div>" +
     (f.details ? '<p class="food-details">' + esc(f.details) + "</p>" : "") +
     (p ? '<div class="food-meta">Sorted by <b>' + esc(p.name) + "</b></div>" : "") +
+    (others.length ? '<div class="food-meta">' + (ctx ? "Also on: " : "On the menu: ") + esc(others.join(", ")) + "</div>" : "") +
     "</div>";
 }
+
 function foodModal(fid, presetSid) {
   const f = fid ? byId(S.food, fid) : null;
-  const sid = f ? (f.sessionId || "") : (presetSid || "");
-  const opts = '<option value="">Any time (snacks, drinks)</option>' + sessionsSorted().map(s => '<option value="' + esc(s.id) + '"' + (s.id === sid ? " selected" : "") + ">" + esc(sessionName(s)) + (s.kind === "meal" ? " (meal)" : "") + "</option>").join("");
+  const preset = presetSid && byId(S.sessions, presetSid) ? presetSid : "";
+  const ticked = new Set(f ? foodSlots(f) : (preset ? [preset] : []));
+  const picks = !f && preset ? foodSorted().filter(x => !foodSlots(x).includes(preset)) : [];
+  const box = (id, label, meal) => '<label class="check' + (meal ? " meal" : "") + '"><input type="checkbox" name="slot" value="' + esc(id) + '"' + (ticked.has(id) ? " checked" : "") + "> " + esc(label) + "</label>";
+  const boxes = sessionsSorted().map(s => box(s.id, sessionName(s), s.kind === "meal")).join("") + box(ANY, "Any time (snacks, drinks)", false);
   const people = '<option value="">Nobody yet</option>' + playersSorted().map(pl => '<option value="' + esc(pl.id) + '"' + (f && f.by === pl.id ? " selected" : "") + ">" + esc(pl.name) + "</option>").join("");
-  const html = "<h2>" + (f ? "Edit food" : "Add food") + '</h2><p class="sub">Food shows on the Food tab, and in its time block on the timetable. Nobody needs to sign up for it.</p><form class="form" id="f">' +
+  let html = "<h2>" + (f ? "Edit food" : preset ? "Add food to " + esc(sessionName(byId(S.sessions, preset))) : "Add food") + "</h2>";
+  if (picks.length) {
+    html += '<p class="sub">Pick something already on your food list…</p><div class="pick-list">' + picks.map(x => {
+      const on = slotOrder(foodSlots(x)).map(slotLabel);
+      return '<button type="button" class="pick" data-pick="' + esc(x.id) + '">' + esc(x.name) + "<small>" + esc(on.length ? "On: " + on.join(", ") : "Not on the menu yet") + "</small></button>";
+    }).join("") + '</div><p class="sub" style="margin-top:16px">…or add something new.</p>';
+  } else if (!f) {
+    html += '<p class="sub">Food shows on the Food tab and in each slot you tick. Nobody needs to sign up for it.</p>';
+  }
+  html += '<form class="form" id="f">' +
     '<div class="field"><label for="f-name">Food</label><input id="f-name" required maxlength="60" placeholder="e.g. Pizza, McDonald\'s, Sausage sizzle" value="' + esc(f ? f.name : "") + '"></div>' +
-    '<div class="field"><label for="f-when">When</label><select id="f-when">' + opts + "</select></div>" +
+    '<fieldset class="field check-field"><legend>When</legend><div class="check-list">' + boxes + '</div><span class="hint">Tick every slot it\'s for. Leave them all unticked to keep it on your list without a slot yet.</span></fieldset>' +
     '<div class="field"><label for="f-details">Details</label><textarea id="f-details" maxlength="400" placeholder="e.g. Ordering from Domino\'s at 6pm. One vegetarian, one gluten-free.">' + esc(f ? f.details : "") + "</textarea></div>" +
     '<div class="field"><label for="f-by">Who\'s sorting it</label><select id="f-by">' + people + "</select></div>" +
-    '<div class="actions">' + (f ? '<button type="button" class="btn danger" data-m="del">Remove</button><span class="spacer"></span>' : "") +
+    '<fieldset class="cover-field"><legend>Banner image (optional)</legend><div id="f-prev"></div>' +
+    '<div class="field"><label for="f-cover">Image link</label><input id="f-cover" type="url" maxlength="800" placeholder="https://…" value="' + esc(f ? f.cover : "") + '">' +
+    '<span class="hint">Right-click a picture online and choose Copy image address.' + (ON_CLAUDE ? " Links won\'t show while the app is hosted on Claude; uploads always do." : "") + "</span></div>" +
+    '<div class="field"><label for="f-file">Or upload a photo</label><div class="cover-up"><input id="f-file" type="file" accept="image/*"><button type="button" class="btn small ghost" data-m="rmup"' + (f && coverData(foodKey(f)) ? "" : " hidden") + '>Remove uploaded photo</button></div></div>' +
+    '<div class="field"><label for="f-pos">Banner shows the</label><select id="f-pos">' + [["top", "Top of the image"], ["middle", "Middle of the image"], ["bottom", "Bottom of the image"]].map(([k, l]) => '<option value="' + k + '"' + (((f && f.coverPos) || "middle") === k ? " selected" : "") + ">" + l + "</option>").join("") + "</select></div></fieldset>" +
+    '<div class="actions">' + (f ? '<button type="button" class="btn danger" data-m="del">Delete food</button><span class="spacer"></span>' : "") +
     '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (f ? "Save" : "Add food") + "</button></div></form>";
   openModal(html, m => {
+    let pending; // undefined = unchanged, string = new upload, null = remove upload
+    const prev = m.querySelector("#f-prev"), rmb = m.querySelector('[data-m="rmup"]'), file = m.querySelector("#f-file");
+    const preview = () => {
+      const up = pending === undefined ? (f ? coverData(foodKey(f)) : "") : (pending || "");
+      const link = m.querySelector("#f-cover").value.trim();
+      prev.innerHTML = (up || safeUrl(link)) ? coverHtml({ id: "_", name: m.querySelector("#f-name").value || "Food" }, "lg", { data: up, cover: link, pos: m.querySelector("#f-pos").value, badge: false }) : "";
+    };
+    ["#f-name", "#f-cover"].forEach(id => m.querySelector(id).addEventListener("input", preview));
+    m.querySelector("#f-pos").addEventListener("change", preview);
+    file.addEventListener("change", async () => {
+      const fl = file.files && file.files[0]; if (!fl) return;
+      try { pending = await shrinkImage(fl); rmb.hidden = false; preview(); }
+      catch (e) { toast("Couldn't read that image. Try a JPG or PNG."); }
+      file.value = "";
+    });
+    rmb.onclick = () => { pending = null; rmb.hidden = true; preview(); };
+    preview();
     m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    m.querySelectorAll("[data-pick]").forEach(b => b.onclick = () => run(async () => {
+      const x = byId(S.food, b.dataset.pick); if (!x) return;
+      await setFoodSlots(x, slotOrder([...foodSlots(x), preset]));
+      closeModal(); toast(x.name + " added to " + slotLabel(preset) + ".");
+    }));
     const del = m.querySelector('[data-m="del"]');
-    if (del) del.onclick = () => { closeModal(); confirmModal("Remove " + (f.name || "this food") + "?", "It will disappear from the Food tab and the timetable.", "Remove", async () => { await write(() => S.db.doc("food/" + f.id).delete()); toast("Removed."); }); };
+    if (del) del.onclick = () => { closeModal(); confirmModal("Delete " + (f.name || "this food") + "?", "It comes off every slot and off the Food tab.", "Delete", async () => { if (coverData(foodKey(f))) await write(() => S.db.doc("covers/" + foodKey(f)).delete()); await write(() => S.db.doc("food/" + f.id).delete()); toast("Deleted."); }); };
     m.querySelector("#f").onsubmit = e => {
       e.preventDefault();
-      const data = { name: m.querySelector("#f-name").value.trim(), sessionId: m.querySelector("#f-when").value, details: m.querySelector("#f-details").value.trim(), by: m.querySelector("#f-by").value, order: f ? (f.order || Date.now()) : Date.now() };
-      if (!data.name) return;
+      const name = m.querySelector("#f-name").value.trim(); if (!name) return;
+      const slots = slotOrder([...m.querySelectorAll('input[name="slot"]:checked')].map(c => c.value));
+      const cover = m.querySelector("#f-cover").value.trim();
+      if (cover && !safeUrl(cover)) { toast("The image link needs to start with https://"); return; }
+      const data = foodDoc({ name, details: m.querySelector("#f-details").value.trim(), by: m.querySelector("#f-by").value, order: f ? f.order : Date.now(), cover, coverPos: m.querySelector("#f-pos").value }, slots);
       run(async () => {
-        await write(() => S.db.doc("food/" + (f ? f.id : slug("food-" + data.name))).set(data));
-        closeModal(); toast(f ? "Saved." : data.name + " added.");
+        const id = f ? f.id : slug("food-" + name);
+        await write(() => S.db.doc("food/" + id).set(data));
+        if (typeof pending === "string") await write(() => S.db.doc("covers/f__" + id).set({ data: pending, at: Date.now() }));
+        else if (pending === null) await write(() => S.db.doc("covers/f__" + id).delete());
+        closeModal(); toast(f ? "Saved." : name + " added.");
       });
     };
   });
 }
+
 function renderFood() {
   let h = '<p class="empty-note" style="margin:0">What we\'re eating and when. No sign-up needed, just turn up hungry.</p>';
   if (S.organiser) h += '<div><button class="btn primary" data-act="add-food">+ Add food</button></div>';
   if (!S.food.length) return h + '<div class="banner">No food planned yet.' + (S.organiser ? " Add the first option with the button above." : " Check back closer to the weekend.") + "</div>";
   const groups = [];
-  for (const s of sessionsSorted()) { const items = foodIn(s.id); if (items.length) groups.push({ title: sessionName(s), style: tone(s.id), items }); }
-  const loose = foodSorted().filter(f => !f.sessionId || !byId(S.sessions, f.sessionId));
-  if (loose.length) groups.push({ title: "Any time", style: "", items: loose });
-  for (const g of groups) h += '<section class="food-group" style="' + g.style + '"><h2>' + esc(g.title) + '</h2><div class="food-grid">' + g.items.map(f => renderFoodCard(f, true)).join("") + "</div></section>";
+  for (const s of sessionsSorted()) { const items = foodIn(s.id); if (items.length) groups.push({ title: sessionName(s), style: tone(s.id), ctx: s.id, items }); }
+  const any = foodIn(ANY);
+  if (any.length) groups.push({ title: "Any time", style: "", ctx: ANY, items: any });
+  const idle = foodSorted().filter(f => !foodSlots(f).length);
+  if (idle.length && S.organiser) groups.push({ title: "On your list, not in a slot yet", style: "", ctx: "", items: idle });
+  for (const g of groups) h += '<section class="food-group" style="' + g.style + '"><h2>' + esc(g.title) + '</h2><div class="food-grid">' + g.items.map(f => renderFoodCard(f, g.ctx)).join("") + "</div></section>";
   return h;
 }
 
@@ -962,12 +1148,15 @@ function renderSession(s) {
   if (away.length) stats += '<span class="pill" title="' + esc(away.map(p => p.name + (noteFor(p, s.id) ? " (" + noteFor(p, s.id) + ")" : "")).join(", ")) + '">' + away.length + " away</span>";
   const tools = S.organiser ? '<button class="icon-btn" data-act="move-s" data-dir="-1" data-id="' + esc(s.id) + '" aria-label="Move earlier">←</button><button class="icon-btn" data-act="move-s" data-dir="1" data-id="' + esc(s.id) + '" aria-label="Move later">→</button><button class="icon-btn" data-act="edit-session" data-id="' + esc(s.id) + '" aria-label="Edit time block">✎</button>' : "";
   const food = foodIn(s.id);
-  let body = (meal ? food.map(f => renderFoodCard(f)).join("") : "") + tabs.map(renderTable).join("") + (!meal ? food.map(f => renderFoodCard(f)).join("") : "");
+  let body = (meal ? food.map(f => renderFoodCard(f, s.id)).join("") : "") + tabs.map(renderTable).join("") + (!meal ? food.map(f => renderFoodCard(f, s.id)).join("") : "");
   if (S.organiser) body += (meal ? '<button class="add-tile" data-act="add-food" data-id="' + esc(s.id) + '">+ Add food</button><button class="add-tile" data-act="add-table" data-id="' + esc(s.id) + '">+ Add a table</button>'
                                  : '<button class="add-tile" data-act="add-table" data-id="' + esc(s.id) + '">+ Add a table</button>');
   else if (!tabs.length && !food.length) body += '<div class="col-note">' + (meal ? "Meal break. Food to be decided." : "No games picked yet") + "</div>";
   if (!meal && tabs.length && free.length) body += '<p class="free">Still to pick a table: <b>' + free.map(p => esc(p.name)).join(", ") + "</b></p>";
-  return '<section class="col' + (meal ? " meal" : "") + '" id="s-' + esc(s.id) + '" style="' + tone(s.id) + '" aria-label="' + esc(sessionName(s)) + '"><header class="col-head"><div class="col-title"><h3>' + esc(s.label) + "</h3>" + tools + "</div>" +
+  const isNow = NOW && NOW.id === s.id, isNext = NOW && NOW.nextId === s.id;
+  const d20 = isNow ? '<div class="d20-hover" title="' + esc((NOW.mode === "now" ? "On now: " : "First up: ") + sessionName(s)) + '">' + D20 + "</div>"
+    : isNext ? '<div class="next-tag">Up next</div>' : "";
+  return '<section class="col' + (meal ? " meal" : "") + (isNow ? " is-now" : "") + '" id="s-' + esc(s.id) + '" style="' + tone(s.id) + '" aria-label="' + esc(sessionName(s)) + (isNow ? (NOW.mode === "now" ? ", on now" : ", first up") : isNext ? ", up next" : "") + '">' + d20 + '<header class="col-head"><div class="col-title"><h3>' + esc(s.label) + "</h3>" + tools + "</div>" +
     '<div class="s-stats">' + stats + "</div></header>" + body + "</section>";
 }
 
@@ -1074,6 +1263,7 @@ function renderPeople() {
 
 function render() {
   TONES = tones();
+  NOW = nowState();
   renderHeader();
   const app = document.getElementById("app");
   const ready = S.noDb || S.revoked || (COLS.every(c => S.got[c]));
@@ -1084,6 +1274,11 @@ function render() {
   app.innerHTML = banners() + (S.view === "games" ? renderGames() : S.view === "food" ? renderFood() : S.view === "people" ? renderPeople() : renderSchedule());
   const nb = document.getElementById("board");
   if (nb && bx != null) nb.scrollLeft = bx;
+  if (nb && !autoScrolled && COLS.every(c => S.got[c])) {
+    autoScrolled = true;
+    const el = NOW && NOW.mode === "now" && document.getElementById("s-" + NOW.id);
+    if (el) nb.scrollLeft = Math.max(0, el.offsetLeft - nb.clientWidth / 2 + el.offsetWidth / 2);
+  }
   setupRail();
   window.scrollTo(0, y);
 }
@@ -1152,6 +1347,7 @@ document.addEventListener("click", e => {
     case "add-game": gameModal(); break;
     case "add-food": foodModal(null, id); break;
     case "edit-food": foodModal(id); break;
+    case "unslot-food": run(async () => { const f = byId(S.food, id); if (!f) return; const left = foodSlots(f).filter(x => x !== el.dataset.s); await setFoodSlots(f, left); toast(f.name + " taken off " + slotLabel(el.dataset.s) + (left.length ? "." : ". It's still on your food list.")); }); break;
     case "edit-game": gameModal(id); break;
     case "add-player": playerModal(); break;
     case "edit-player": playerModal(id); break;
