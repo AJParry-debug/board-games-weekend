@@ -222,6 +222,133 @@ main,.site-foot{position:relative;z-index:1}
 @keyframes d20Shadow{0%,100%{transform:scaleX(1);opacity:.9}50%{transform:scaleX(.7);opacity:.5}}
 @media (prefers-reduced-motion: reduce){.d20,.d20-hover::after{animation:none}}
 @media (max-width:520px){.day-cols{padding-top:52px}.d20-hover{top:-52px}}
+/* ---- Seat styles: owl, comms-screen frog, magnolia ---- */
+.seat.styled svg{width:30px;height:30px;margin:-2px 0 0}
+.seat.styled{overflow:hidden}
+.seat.taken.styled svg path{fill:none}
+.seat.taken.magnolia svg path.pf{fill:rgba(255,199,218,.16)}
+/* Owl: line drawing, head swivels left and right with a blink */
+.seat.owl{background:linear-gradient(160deg,#2B2418,#17130D);border:1px solid #C9A86A;color:#F2DDB0;font-weight:700}
+.seat.owl svg{color:#F2DDB0;overflow:visible}
+.seat.owl .owl-head{transform-box:fill-box;transform-origin:50% 70%;animation:owlTurn 6s ease-in-out infinite}
+.seat.owl .owl-face{animation:owlFace 6s ease-in-out infinite}
+.seat.owl .owl-pupils{transform-box:fill-box;transform-origin:center;animation:owlBlink 6s linear infinite}
+@keyframes owlTurn{0%,18%{transform:rotate(0)}24%,42%{transform:rotate(-14deg)}48%,54%{transform:rotate(0)}60%,80%{transform:rotate(14deg)}86%,100%{transform:rotate(0)}}
+@keyframes owlFace{0%,18%{transform:translateX(0)}24%,42%{transform:translateX(-2.4px)}48%,54%{transform:translateX(0)}60%,80%{transform:translateX(2.4px)}86%,100%{transform:translateX(0)}}
+@keyframes owlBlink{0%,49%,53%,100%{transform:scaleY(1)}51%{transform:scaleY(.1)}}
+/* Frog on a retro comms screen: scanlines, corner brackets, flicker, chattering mouth */
+.seat.hud{background:radial-gradient(circle at 50% 40%,#123724,#07140D 75%);border:1px solid rgba(92,255,159,.55);color:#86FFBA;font-weight:700;font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;letter-spacing:.02em}
+.seat.hud::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.32) 0 1px,transparent 1px 3px);animation:hudScan 4s linear infinite;z-index:1}
+.seat.hud::after{content:"";position:absolute;inset:3px;pointer-events:none;z-index:1;
+  background:linear-gradient(#5CFF9F,#5CFF9F) 0 0/7px 1.5px no-repeat,linear-gradient(#5CFF9F,#5CFF9F) 0 0/1.5px 7px no-repeat,
+  linear-gradient(#5CFF9F,#5CFF9F) 100% 0/7px 1.5px no-repeat,linear-gradient(#5CFF9F,#5CFF9F) 100% 0/1.5px 7px no-repeat,
+  linear-gradient(#5CFF9F,#5CFF9F) 0 100%/7px 1.5px no-repeat,linear-gradient(#5CFF9F,#5CFF9F) 0 100%/1.5px 7px no-repeat,
+  linear-gradient(#5CFF9F,#5CFF9F) 100% 100%/7px 1.5px no-repeat,linear-gradient(#5CFF9F,#5CFF9F) 100% 100%/1.5px 7px no-repeat}
+.seat.hud svg{color:#86FFBA;filter:drop-shadow(0 0 3px rgba(92,255,159,.7));animation:hudFlicker 5s steps(1) infinite}
+.seat.hud .frog-talk{transform-box:fill-box;transform-origin:center;animation:frogTalk 2.2s ease-in-out infinite}
+@keyframes hudScan{to{background-position:0 12px}}
+@keyframes hudFlicker{0%,100%{opacity:1}42%{opacity:.55}43%{opacity:1}77%{opacity:.75}78%{opacity:1}}
+@keyframes frogTalk{0%,30%,100%{transform:scaleY(.12)}36%{transform:scaleY(1)}42%{transform:scaleY(.35)}48%{transform:scaleY(.9)}54%{transform:scaleY(.2)}60%{transform:scaleY(.75)}66%{transform:scaleY(.12)}}
+/* Magnolia: ink-and-blossom tile, petals drifting down */
+.seat.magnolia{background:linear-gradient(165deg,#2C1724,#150B12);border:1px solid rgba(240,170,195,.6);color:#FFE3EC;font-weight:700}
+.seat.magnolia::after{content:"";position:absolute;right:4px;bottom:4px;width:6px;height:6px;border-radius:1px;background:#C8323C;opacity:.9}
+.seat.magnolia svg{color:#FBE4EC;overflow:visible}
+.seat.magnolia svg .stem{color:#9DBB8C}
+.petals{position:absolute;inset:0;pointer-events:none}
+.petals i{position:absolute;top:-8px;display:block;width:5px;height:7px;border-radius:70% 0 70% 0;background:#FFC7DA;opacity:0;animation:petalFall 5.4s linear infinite}
+.petals i:nth-child(1){left:10%;animation-delay:0s}
+.petals i:nth-child(2){left:62%;animation-delay:1.8s;width:4px;height:6px;background:#FFE1EB}
+.petals i:nth-child(3){left:36%;animation-delay:3.6s;background:#F6A9C4}
+@keyframes petalFall{0%{transform:translate(0,0) rotate(0);opacity:0}10%{opacity:.95}50%{transform:translate(9px,30px) rotate(160deg)}90%{opacity:.85}100%{transform:translate(-3px,62px) rotate(320deg);opacity:0}}
+@media (prefers-reduced-motion: reduce){.seat.owl .owl-head,.seat.owl .owl-face,.seat.owl .owl-pupils,.seat.hud::before,.seat.hud svg,.seat.hud .frog-talk,.petals i{animation:none}.petals i{opacity:.7;top:40%}}
+/* Lotus fan: deep pink petals open into a folding fan, then close; glow and sparkles */
+.seat.taken.lotus svg path.petal{fill:rgba(224,40,125,.58)}
+.seat.taken.lotus svg path.fan-arc{fill:none}
+.seat.lotus svg{color:#FFA9D2;overflow:visible}
+.seat.lotus .pivot{fill:#FFD1E6;stroke:none}
+.seat.lotus .petal{transform-box:view-box;transform-origin:12px 20px;animation:lotusOpen 5.2s cubic-bezier(.45,0,.25,1) infinite}
+.seat.lotus .fan-arc{opacity:0;animation:fanArc 5.2s ease-in-out infinite}
+@keyframes lotusOpen{0%,10%{transform:rotate(calc(var(--a) * .2))}40%,70%{transform:rotate(var(--a))}92%,100%{transform:rotate(calc(var(--a) * .2))}}
+@keyframes fanArc{0%,32%{opacity:0}42%,68%{opacity:.9}80%,100%{opacity:0}}
+/* Cat at the piano */
+.seat.cat{background:linear-gradient(160deg,#211C36,#120F1E);border:1px solid #B7A4FF;color:#ECE6FF;font-weight:700}
+.seat.cat svg{color:#ECE6FF;overflow:visible}
+.seat.cat .paw{transform-box:fill-box;transform-origin:center}
+.seat.cat .paw-l{animation:pawTap .9s ease-in-out infinite}
+.seat.cat .paw-r{animation:pawTap .9s ease-in-out infinite .45s}
+.seat.cat .cat-head{transform-box:view-box;transform-origin:12px 12px;animation:catBop 1.8s ease-in-out infinite}
+.seat.cat .cat-note{animation:catNote 1.8s ease-out infinite}
+@keyframes pawTap{0%,100%{transform:translateY(-1.6px)}45%{transform:translateY(.4px)}}
+@keyframes catBop{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes catNote{0%{transform:translate(0,3px);opacity:0}30%{opacity:1}100%{transform:translate(1.5px,-3px);opacity:0}}
+/* Squirrel running in place */
+.seat.squirrel{background:linear-gradient(160deg,#2B1B10,#160D07);border:1px solid #E0935C;color:#FFD9B3;font-weight:700}
+.seat.squirrel svg{color:#FFD9B3;overflow:visible}
+.seat.squirrel .sq-ground{stroke-dasharray:3 3;animation:sqGround .35s linear infinite}
+.seat.squirrel .sq-body{animation:sqBob .35s ease-in-out infinite}
+.seat.squirrel .sq-tail{transform-box:view-box;transform-origin:9.4px 13.4px;animation:sqTail .7s ease-in-out infinite}
+.seat.squirrel .sq-legs-a,.seat.squirrel .sq-legs-b{transform-box:view-box;transform-origin:13px 16px}
+.seat.squirrel .sq-legs-a{animation:sqLegs .35s ease-in-out infinite}
+.seat.squirrel .sq-legs-b{animation:sqLegs .35s ease-in-out infinite reverse}
+@keyframes sqGround{to{stroke-dashoffset:6}}
+@keyframes sqBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-.9px)}}
+@keyframes sqTail{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(6deg)}}
+@keyframes sqLegs{0%,100%{transform:skewX(22deg)}50%{transform:skewX(-22deg)}}
+/* Hamster kung-fu crash zoom on an old VHS tape */
+.seat.vhs{background:#0D0D11;border:1px solid #6B6B78;color:#F2EEE6;font-weight:700;font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;text-shadow:1px 0 rgba(255,0,70,.75),-1px 0 rgba(0,210,255,.75)}
+.seat.vhs svg{color:#F2EEE6;overflow:visible;filter:drop-shadow(1px 0 0 rgba(255,0,70,.85)) drop-shadow(-1px 0 0 rgba(0,210,255,.85))}
+.seat.vhs .ham{transform-box:view-box;transform-origin:12px 13px;animation:hamZoom 4.6s steps(1,end) infinite}
+.seat.vhs::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px)}
+.seat.vhs::after{content:"";position:absolute;left:0;right:0;height:7px;top:-10px;pointer-events:none;z-index:1;background:linear-gradient(transparent,rgba(255,255,255,.22) 45%,rgba(255,255,255,.06) 60%,transparent);animation:vhsTrack 3.1s linear infinite}
+.vhs-osd{position:absolute;left:4px;top:3px;z-index:2;font:700 6px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;color:#E8FFE8;text-shadow:none;opacity:.85}
+@keyframes hamZoom{0%{transform:scale(1)}30%{transform:scale(1.32)}33%{transform:translate(.6px,-.4px) scale(1.34)}36%{transform:scale(1.32)}58%{transform:scale(1.85)}61%{transform:translate(-.8px,.5px) scale(1.88)}64%{transform:translate(.6px,0) scale(1.85)}67%{transform:scale(1.85)}88%{transform:scale(1)}}
+@keyframes vhsTrack{0%{top:-10px}70%,100%{top:110%}}
+@media (prefers-reduced-motion: reduce){.seat.lotus .petal,.seat.lotus .fan-arc,.seat.cat .paw,.seat.cat .cat-head,.seat.cat .cat-note,.seat.squirrel .sq-ground,.seat.squirrel .sq-body,.seat.squirrel .sq-tail,.seat.squirrel .sq-legs-a,.seat.squirrel .sq-legs-b,.seat.vhs .ham,.seat.vhs::after{animation:none}.seat.lotus .petal{transform:rotate(var(--a))}.seat.lotus .fan-arc{opacity:.9}}
+/* Cheeky goblin in a cave: glowing eyes lurk, he sidles out, winks, ducks back */
+.seat.goblin{background:radial-gradient(circle at 50% 35%,#1C2A20,#090E0B 75%);border:1px solid #7FBF6A;color:#C4EFA2;font-weight:700}
+.seat.goblin svg{color:#B9F28C;overflow:visible}
+.seat.goblin svg > g{stroke-width:1}
+.seat.taken.goblin svg path.cave-in{fill:#040706;stroke:none}
+.seat.goblin .rock{color:#7C8F78;stroke:#7C8F78}
+.seat.goblin .gob{animation:gobPeek 5.6s cubic-bezier(.5,0,.3,1) infinite}
+.seat.goblin .lurk{animation:gobLurk 5.6s linear infinite}
+.seat.goblin .eye-r{animation:gobEye 5.6s steps(1) infinite}
+.seat.goblin .wink{opacity:0;animation:gobWink 5.6s steps(1) infinite}
+@keyframes gobPeek{0%,12%{transform:translate(-18px,2px) rotate(-16deg)}24%,30%{transform:translate(-6px,.6px) rotate(-9deg)}40%,74%{transform:translate(0,0) rotate(0)}88%,100%{transform:translate(-18px,2px) rotate(-16deg)}}
+@keyframes gobLurk{0%,8%{opacity:1}4%{opacity:.15}12%,88%{opacity:0}94%,100%{opacity:1}}
+@keyframes gobEye{0%,52%{opacity:1}53%{opacity:0}62%,100%{opacity:1}}
+@keyframes gobWink{0%,52%{opacity:0}53%{opacity:1}62%,100%{opacity:0}}
+@media (prefers-reduced-motion: reduce){.seat.goblin .gob,.seat.goblin .lurk,.seat.goblin .eye-r,.seat.goblin .wink{animation:none}.seat.goblin .lurk,.seat.goblin .wink{opacity:0}}
+/* 3D icon wrapper (crown and ring) */
+.fx3d{position:relative;display:block;width:30px;height:30px;margin-top:-2px;perspective:90px}
+.seat.styled .fx3d svg{position:absolute;margin:0}
+/* Crown on a fighter-jet HUD */
+.seat.crownhud{background:linear-gradient(180deg,#10233B 0%,#0B1828 54%,#081009 54.5%,#050A06 100%);border:1px solid rgba(140,255,122,.55);color:#A6FF94;font-weight:700;font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace}
+.seat.crownhud .fx3d{color:#8CFF7A;filter:drop-shadow(0 0 2.5px rgba(140,255,122,.75))}
+.seat.styled .fx3d .hud-frame{inset:0;width:30px;height:30px;opacity:.8}
+.seat.crownhud .ret{transform-box:view-box;transform-origin:15px 15px;animation:hudRet 9s linear infinite}
+.seat.crownhud .ladder{animation:hudLadder 2.6s ease-in-out infinite}
+.crown-tilt{position:absolute;inset:5px;transform:rotate(45deg);transform-style:preserve-3d}
+.seat.styled .fx3d .crown-svg{inset:0;width:20px;height:20px;color:#C6FFB5;animation:crownSpin 3.6s linear infinite}
+@keyframes crownSpin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+@keyframes hudRet{to{transform:rotate(360deg)}}
+@keyframes hudLadder{0%,100%{transform:translateY(-1px)}50%{transform:translateY(1px)}}
+/* Dropped gold ring */
+.seat.ringdrop{background:radial-gradient(circle at 50% 30%,#2D1C0D,#120A05 75%);border:1px solid #E3B95C;color:#FFE2A0;font-weight:700}
+.seat.taken.ringdrop svg path.band{fill:url(#bgw-gold);fill-rule:evenodd;stroke:#6E4A0C;stroke-width:.35}
+.seat.ringdrop .glint{fill:none;stroke:#FFFFFF;stroke-width:.9;stroke-linecap:round;opacity:.7}
+.seat.styled .fx3d .ring-svg{left:4px;top:3px;width:22px;height:22px;filter:drop-shadow(0 0 2px rgba(255,200,90,.55));animation:ringDrop 3.8s linear infinite}
+.ring-shadow{position:absolute;left:50%;bottom:1px;width:14px;height:3px;margin-left:-7px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.75),rgba(0,0,0,0));animation:ringShadow 3.8s linear infinite}
+@keyframes ringDrop{
+  0%{transform:translateY(-22px) rotateY(0) rotateX(15deg);opacity:0;animation-timing-function:cubic-bezier(.5,0,1,.6)}
+  6%{opacity:1}
+  48%{transform:translateY(5px) rotateY(540deg) rotateX(25deg);animation-timing-function:cubic-bezier(0,.4,.5,1)}
+  56%{transform:translateY(0) rotateY(610deg) rotateX(40deg);animation-timing-function:cubic-bezier(.5,0,1,.6)}
+  64%{transform:translateY(5px) rotateY(680deg) rotateX(62deg);animation-timing-function:ease-out}
+  72%,88%{transform:translateY(6px) rotateY(720deg) rotateX(74deg);opacity:1}
+  100%{transform:translateY(6px) rotateY(720deg) rotateX(74deg);opacity:0}}
+@keyframes ringShadow{0%{transform:scale(.2);opacity:0}48%{transform:scale(1);opacity:.85}56%{transform:scale(.75);opacity:.6}64%,88%{transform:scale(1.05);opacity:.85}100%{transform:scale(1.05);opacity:0}}
+@media (prefers-reduced-motion: reduce){.seat.crownhud .ret,.seat.crownhud .ladder,.seat.styled .fx3d .crown-svg,.seat.styled .fx3d .ring-svg,.ring-shadow{animation:none}.seat.styled .fx3d .ring-svg{transform:translateY(4px) rotateX(55deg)}.ring-shadow{opacity:.8}}
 .check-solo{display:flex;gap:10px;align-items:center;font-size:.9rem;cursor:pointer}
 .check-solo input{accent-color:var(--host);width:18px;height:18px}
 /* Food banners */
@@ -373,7 +500,7 @@ button.cell:hover{outline:1px solid var(--accent)}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="bgw-metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6F8FC"/><stop offset=".24" stop-color="#B3BBC8"/><stop offset=".47" stop-color="#6A7383"/><stop offset=".62" stop-color="#E8ECF2"/><stop offset=".82" stop-color="#8B94A3"/><stop offset="1" stop-color="#D7DCE4"/></linearGradient><linearGradient id="bgw-shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient><linearGradient id="bgw-hat" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2B2F38"/><stop offset=".35" stop-color="#0E1015"/><stop offset="1" stop-color="#1C1F27"/></linearGradient><clipPath id="bgw-meeple-clip"><path d="M12 2.4a3.3 3.3 0 0 1 3.3 3.3c0 1.05-.45 1.9-1.15 2.5 2.75.4 6.2 1.3 7.4 2.65.7.8.2 1.95-.85 2.05l-3.9.45 3.3 6.4c.42.82-.18 1.75-1.1 1.75h-3.4L12 17.2l-3.6 4.3H5c-.92 0-1.52-.93-1.1-1.75l3.3-6.4-3.9-.45c-1.05-.1-1.55-1.25-.85-2.05C3.65 9.5 7.1 8.6 9.85 8.2 9.15 7.6 8.7 6.75 8.7 5.7A3.3 3.3 0 0 1 12 2.4z"/></clipPath></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="bgw-metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6F8FC"/><stop offset=".24" stop-color="#B3BBC8"/><stop offset=".47" stop-color="#6A7383"/><stop offset=".62" stop-color="#E8ECF2"/><stop offset=".82" stop-color="#8B94A3"/><stop offset="1" stop-color="#D7DCE4"/></linearGradient><linearGradient id="bgw-shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient><linearGradient id="bgw-hat" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2B2F38"/><stop offset=".35" stop-color="#0E1015"/><stop offset="1" stop-color="#1C1F27"/></linearGradient><linearGradient id="bgw-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF1B8"/><stop offset=".33" stop-color="#E8B63D"/><stop offset=".58" stop-color="#9A6A12"/><stop offset=".8" stop-color="#F4D06B"/><stop offset="1" stop-color="#B8841E"/></linearGradient><clipPath id="bgw-cave-clip"><path d="M3.2 22V13.2C3.2 7.4 7.1 4 12 4s8.8 3.4 8.8 9.2V22z"/></clipPath><clipPath id="bgw-meeple-clip"><path d="M12 2.4a3.3 3.3 0 0 1 3.3 3.3c0 1.05-.45 1.9-1.15 2.5 2.75.4 6.2 1.3 7.4 2.65.7.8.2 1.95-.85 2.05l-3.9.45 3.3 6.4c.42.82-.18 1.75-1.1 1.75h-3.4L12 17.2l-3.6 4.3H5c-.92 0-1.52-.93-1.1-1.75l3.3-6.4-3.9-.45c-1.05-.1-1.55-1.25-.85-2.05C3.65 9.5 7.1 8.6 9.85 8.2 9.15 7.6 8.7 6.75 8.7 5.7A3.3 3.3 0 0 1 12 2.4z"/></clipPath></defs></svg>
 <div class="atmo" aria-hidden="true">
   <div class="atmo-layer atmo-far"><span class="orb o1"></span><span class="orb o2"></span></div>
   <div class="atmo-layer atmo-mid"><span class="orb o3"></span><span class="orb o4"></span></div>
@@ -522,7 +649,67 @@ function modeFilterBar() {
 const canAct = () => !!S.db && !S.readOnly && S.canWrite !== false;
 const meP = () => S.me && byId(S.players, S.me);
 const isHost = p => !!(p && p.host === true);
-const SEAT_STYLES = { "": "Standard", tophat: "Metallic with a top hat" };
+const SEAT_STYLES = { "": "Standard", sparkle: "Sparkly pink", tophat: "Metallic with a top hat", owl: "Owl, head turning", frog: "Frog on a comms screen", lotus: "Lotus fan, deep pink and sparkly", cat: "Cat playing piano", squirrel: "Squirrel running", hamster: "Hamster kung-fu zoom (VHS)", goblin: "Cheeky goblin in a cave", crown: "Crown on a fighter HUD", ring: "Dropped gold ring" };
+const STYLE_ALIASES = { magnolia: "lotus" };
+const styleOf = p => { if (!p) return ""; if (typeof p.style === "string") { const s = STYLE_ALIASES[p.style] || p.style; return SEAT_STYLES[s] !== undefined ? s : ""; } return p.host === true ? "sparkle" : ""; };
+const LOTUS_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="currentColor" stroke-width="1.1" stroke-linejoin="round">' +
+  '<path class="fan-arc" d="M1.95 15.53A11 11 0 0 1 22.05 15.53M6.52 17.56A6 6 0 0 1 17.48 17.56"/>' +
+  '<path class="petal" style="--a:-66deg" d="M12 20C10.6 17 10.8 12.3 12 9 13.2 12.3 13.4 17 12 20Z"/><path class="petal" style="--a:-44deg" d="M12 20C10.6 17 10.8 12.3 12 9 13.2 12.3 13.4 17 12 20Z"/><path class="petal" style="--a:-22deg" d="M12 20C10.6 17 10.8 12.3 12 9 13.2 12.3 13.4 17 12 20Z"/><path class="petal" style="--a:0deg" d="M12 20C10.6 17 10.8 12.3 12 9 13.2 12.3 13.4 17 12 20Z"/><path class="petal" style="--a:22deg" d="M12 20C10.6 17 10.8 12.3 12 9 13.2 12.3 13.4 17 12 20Z"/><path class="petal" style="--a:44deg" d="M12 20C10.6 17 10.8 12.3 12 9 13.2 12.3 13.4 17 12 20Z"/><path class="petal" style="--a:66deg" d="M12 20C10.6 17 10.8 12.3 12 9 13.2 12.3 13.4 17 12 20Z"/>' + '<circle class="pivot" cx="12" cy="20" r="1.3"/></g></svg>';
+const CAT_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">' +
+  '<path class="cat-note" d="M19.4 2.8v3.6a1.1 1.1 0 1 1-.9-1.1M19.4 2.8l2.3-.7v1.1"/>' +
+  '<g class="cat-head"><path d="M7.6 6.6 7.9 2.7l2.4 2M16.4 6.6l-.3-3.9-2.4 2"/><ellipse cx="12" cy="8" rx="4.9" ry="4"/>' +
+  '<path d="M9.3 7.8q.9-.9 1.8 0M12.9 7.8q.9-.9 1.8 0M12 9.3v.6M11 10.2q1 .7 2 0M6.6 8.9l-2.2-.3M6.7 9.9l-2.1.4M17.4 8.9l2.2-.3M17.3 9.9l2.1.4"/></g>' +
+  '<path d="M8.4 11.4C7.6 12.8 7.5 14.2 7.8 15.5M15.6 11.4c.8 1.4.9 2.8.6 4.1"/>' +
+  '<rect x="2.2" y="16.3" width="19.6" height="5.6" rx="1"/><path d="M5 16.3v5.6M7.8 16.3v5.6M10.6 16.3v5.6M13.4 16.3v5.6M16.2 16.3v5.6M19 16.3v5.6"/>' +
+  '<g fill="currentColor" stroke="none"><rect x="4.3" y="16.3" width="1.3" height="3"/><rect x="7.1" y="16.3" width="1.3" height="3"/><rect x="12.7" y="16.3" width="1.3" height="3"/><rect x="15.5" y="16.3" width="1.3" height="3"/></g>' +
+  '<ellipse class="paw paw-l" cx="9.2" cy="15.6" rx="1.6" ry="1"/><ellipse class="paw paw-r" cx="14.8" cy="15.6" rx="1.6" ry="1"/></g></svg>';
+const SQUIRREL_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">' +
+  '<path class="sq-ground" d="M0 21.2H24"/>' +
+  '<g class="sq-body"><path class="sq-tail" d="M9.4 13.4C5.4 13.8 3.4 10.6 4.4 7.3 5.4 4 9.4 3.4 10.7 6.1c.9 1.9-.5 3.6-2.2 3"/>' +
+  '<path d="M9 14c0-3.5 2.5-5 5-4.5s3.5 2.5 3 4.5c-.4 1.6-2 2.4-4 2.4h-2.5C9.6 16.4 9 15.4 9 14z"/>' +
+  '<circle cx="17.6" cy="9.6" r="2.5"/><path d="M16.8 7.4l.5-1.8 1 1.6"/><circle cx="18.4" cy="9.2" r=".5" fill="currentColor" stroke="none"/><circle cx="20.1" cy="10" r=".35" fill="currentColor" stroke="none"/>' +
+  '<g class="sq-legs-a"><path d="M15.4 15.8l1.3 3.4M11.2 16.2l-1.6 3"/></g><g class="sq-legs-b"><path d="M14.2 16l-.9 3.2M12.4 16.3l.9 3"/></g></g></g></svg>';
+const HAMSTER_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><g class="ham">' +
+  '<circle cx="7" cy="6.8" r="2"/><circle cx="17" cy="6.8" r="2"/>' +
+  '<path d="M4.5 13.5C4.5 8.6 7.8 6 12 6s7.5 2.6 7.5 7.5c0 4.5-3.3 7-7.5 7s-7.5-2.5-7.5-7z"/>' +
+  '<path d="M7.8 11.2l2.6 1M16.2 11.2l-2.6 1M11.3 14.5h1.4l-.7.8zM12 15.3q-.8 1-1.8.6M12 15.3q.8 1 1.8.6M11.3 15.9v1.3h1.4v-1.3M12 15.9v1.3M5.6 15.5q1.4 1.6 3 1.2M18.4 15.5q-1.4 1.6-3 1.2M3.6 13.8l2.5.4M3.8 15.6l2.4-.2M20.4 13.8l-2.5.4M20.2 15.6l-2.4-.2"/>' +
+  '<g fill="currentColor" stroke="none"><circle cx="9.4" cy="13" r=".85"/><circle cx="14.6" cy="13" r=".85"/></g></g></g></svg>';
+const GOBLIN_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">' +
+  '<path class="cave-in" d="M3.2 22V13.2C3.2 7.4 7.1 4 12 4s8.8 3.4 8.8 9.2V22z"/>' +
+  '<g class="lurk" fill="#F4FF8A" stroke="none"><ellipse cx="10.4" cy="13" rx=".75" ry=".5"/><ellipse cx="13.6" cy="13" rx=".75" ry=".5"/></g>' +
+  '<g clip-path="url(#bgw-cave-clip)"><g class="gob">' +
+  '<path d="M8.5 12.8 3.9 10.6l3.9 4M15.5 12.8l4.6-2.2-3.9 4"/>' +
+  '<path d="M8 13.6C8 10.4 9.8 8.8 12 8.8s4 1.6 4 4.8-1.8 5-4 5-4-1.8-4-5z"/>' +
+  '<path d="M8.7 11.1c.7-2.9 2.3-4.4 4-5.4.7 1.9 2 3.4 2.6 5.4M8.4 11.4q3.6-1.2 7.2 0"/>' +
+  '<path d="M9.6 13.1q.9-.7 1.8 0-.9.6-1.8 0"/><g class="eye-r"><path d="M12.6 13.1q.9-.7 1.8 0-.9.6-1.8 0"/></g><path class="wink" d="M12.6 13.2q.9.5 1.8 0"/>' +
+  '<path d="M12 13.9q1 1.1 0 1.7M9.6 15.9Q12 17.9 14.4 15.9M10.9 16.6l.4.9.4-.8"/>' +
+  '<g fill="#F4FF8A" stroke="none"><circle cx="10.5" cy="13.1" r=".42"/><circle class="eye-r" cx="13.5" cy="13.1" r=".42"/></g>' +
+  '</g></g>' +
+  '<path class="rock" d="M2.4 22.2 2 14.4l1.2-4.6-.5-2.3 2.6-2.8L8 3.2l3.1.5 2.4-1.2 3 1.2 2.4.8 1.6 2.7 1 3.2-.4 3.4.8 3.4-.4 5"/>' +
+  '<path class="rock" d="M5.6 6.6l.9 1.2M18.6 6.4l-.8 1.3M20.4 15.4l-.9.3"/></g></svg>';
+const CROWN_ICON = '<span class="fx3d" aria-hidden="true"><svg class="hud-frame" viewBox="0 0 30 30"><g fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round">' +
+  '<g class="ret"><circle cx="15" cy="15" r="11.6" stroke-dasharray="5 3.2"/></g><path d="M15 1.4v2.4M15 26.2v2.4M1.4 15h2.4M26.2 15h2.4M10.5 1.2v1.2M19.5 1.2v1.2"/>' +
+  '<g class="ladder"><path d="M.6 8.6h3.6v1M.6 21.4h3.6v-1M29.4 8.6h-3.6v1M29.4 21.4h-3.6v-1"/></g></g></svg>' +
+  '<span class="crown-tilt"><svg class="crown-svg" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">' +
+  '<path d="M5 16.2 4 8.2l4.6 3.6L12 5.4l3.4 6.4L20 8.2l-1 8z"/><path d="M5 16.2h14v3H5z"/><path d="M12 16.9l.9 1-.9 1-.9-1z"/>' +
+  '<g fill="currentColor" stroke="none"><circle cx="4" cy="8.2" r="1.05"/><circle cx="12" cy="5.4" r="1.05"/><circle cx="20" cy="8.2" r="1.05"/></g></g></svg></span></span>';
+const RING_ICON = '<span class="fx3d" aria-hidden="true"><span class="ring-shadow"></span><svg class="ring-svg" viewBox="0 0 24 24">' +
+  '<path class="band" d="M12 4.6a7.4 7.4 0 1 0 0 14.8a7.4 7.4 0 1 0 0-14.8zM12 7.6a4.4 4.4 0 1 1 0 8.8a4.4 4.4 0 1 1 0-8.8z"/><path class="glint" d="M7.2 9a5.8 5.8 0 0 1 3.6-2.6"/></svg></span>';
+const VHS_OSD = '<span class="vhs-osd" aria-hidden="true">▶ PLAY</span>';
+const OWL_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g class="owl-head">' +
+  '<path d="M5.2 8.2 4.4 3.2l4.2 2.9M18.8 8.2l.8-5-4.2 2.9"/><path d="M4.4 12.6c0-5 3.4-7.1 7.6-7.1s7.6 2.1 7.6 7.1c0 5.1-3.4 8.6-7.6 8.6s-7.6-3.5-7.6-8.6z"/>' +
+  '<g class="owl-face"><path d="M5.8 9.7c1.9-1.5 4.3-1.4 6.2.6 1.9-2 4.3-2.1 6.2-.6"/><circle cx="8.7" cy="12.4" r="2.6"/><circle cx="15.3" cy="12.4" r="2.6"/>' +
+  '<g class="owl-pupils" fill="currentColor" stroke="none"><circle cx="8.7" cy="12.4" r="1.05"/><circle cx="15.3" cy="12.4" r="1.05"/></g><path d="M12 14.3l-1.1 1.9 1.1 1.4 1.1-1.4z"/></g></g></g></svg>';
+const FROG_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+  '<path d="M3.6 15.4c0-4.4 3.7-6.6 8.4-6.6s8.4 2.2 8.4 6.6c0 3.4-3.6 5.4-8.4 5.4s-8.4-2-8.4-5.4z"/><circle cx="7.4" cy="7.6" r="3"/><circle cx="16.6" cy="7.6" r="3"/>' +
+  '<g fill="currentColor" stroke="none"><circle cx="7.9" cy="7.4" r="1.15"/><circle cx="16.1" cy="7.4" r="1.15"/><circle cx="10.6" cy="12.6" r=".45"/><circle cx="13.4" cy="12.6" r=".45"/></g>' +
+  '<path d="M7.2 15.6c1.6.9 3.2 1.3 4.8 1.3s3.2-.4 4.8-1.3"/><ellipse class="frog-talk" cx="12" cy="17.6" rx="2.6" ry="1.3"/></g></svg>';
+const MAGNOLIA_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">' +
+  '<path d="M8.9 11.3C6.6 10.2 4.7 10.9 3.9 13c1.7.9 3.8 1 5.6.2M15.1 11.3c2.3-1.1 4.2-.4 5 1.7-1.7.9-3.8 1-5.6.2"/>' +
+  '<path d="M12 19.2c-3.4-1.9-4.8-6-3.6-10.4 1.8 1.5 3.2 4.6 3.6 10.4zM12 19.2c3.4-1.9 4.8-6 3.6-10.4-1.8 1.5-3.2 4.6-3.6 10.4z" class="pf"/>' +
+  '<path d="M12 18.4c-1.6-3.6-1.5-9 0-13.6 1.5 4.6 1.6 10 0 13.6z" class="pf"/>' +
+  '<g class="stem" stroke="currentColor"><path d="M12 19.2v3.3M12 21.2c1.2-1.2 2.6-1.5 3.8-1.1-.7 1.2-2.2 1.6-3.8 1.1z"/></g></g></svg>';
+const PETALS = '<span class="petals" aria-hidden="true"><i></i><i></i><i></i></span>';
 const METAL_MEEPLE = '<svg viewBox="0 -5.5 24 29.5" aria-hidden="true"><path class="m-body" d="M12 2.4a3.3 3.3 0 0 1 3.3 3.3c0 1.05-.45 1.9-1.15 2.5 2.75.4 6.2 1.3 7.4 2.65.7.8.2 1.95-.85 2.05l-3.9.45 3.3 6.4c.42.82-.18 1.75-1.1 1.75h-3.4L12 17.2l-3.6 4.3H5c-.92 0-1.52-.93-1.1-1.75l3.3-6.4-3.9-.45c-1.05-.1-1.55-1.25-.85-2.05C3.65 9.5 7.1 8.6 9.85 8.2 9.15 7.6 8.7 6.75 8.7 5.7A3.3 3.3 0 0 1 12 2.4z"/>' +
   '<g clip-path="url(#bgw-meeple-clip)"><rect class="shine" x="-9" y="-6" width="5" height="34" fill="url(#bgw-shine)"/></g>' +
   '<g transform="rotate(-9 12 3)"><rect class="hat" x="9.2" y="-4.8" width="5.6" height="7.8" rx="0.7"/><rect class="band" x="9.2" y="1.1" width="5.6" height="1.3"/>' +
@@ -851,8 +1038,7 @@ function gameInfo(gid) {
 function playerModal(pid) {
   const p = pid ? byId(S.players, pid) : null;
   const html = "<h2>" + (p ? "Edit player" : "Add a player") + '</h2><form class="form" id="f"><div class="field"><label for="f-name">Name</label><input id="f-name" required maxlength="40" value="' + esc(p ? p.name : "") + '"></div>' +
-    '<label class="check-solo"><input type="checkbox" id="f-host"' + (isHost(p) ? " checked" : "") + "> Teaching games: sparkly pink seat and an \"is teaching\" tag on their tables</label>" +
-    '<div class="field"><label for="f-style">Seat style</label><select id="f-style">' + Object.entries(SEAT_STYLES).map(([k, l]) => '<option value="' + k + '"' + (((p && p.style) || "") === k ? " selected" : "") + ">" + l + "</option>").join("") + "</select></div>" +
+    '<div class="field"><label for="f-style">Seat style</label><select id="f-style">' + Object.entries(SEAT_STYLES).map(([k, l]) => '<option value="' + k + '"' + (styleOf(p) === k ? " selected" : "") + ">" + l + "</option>").join("") + "</select></div>" +
     (p ? '<p class="sub" style="margin:0">To change when ' + esc(p.name) + " is around, tap their cells in the grid.</p>" : '<p class="sub" style="margin:0">They\'ll start as here for every block. Tap cells in the grid to mark them away.</p>') +
     '<div class="actions">' + (p ? '<button type="button" class="btn danger" data-m="del">Remove player</button><span class="spacer"></span>' : "") +
     '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (p ? "Save" : "Add player") + "</button></div></form>";
@@ -867,9 +1053,9 @@ function playerModal(pid) {
       e.preventDefault();
       const name = m.querySelector("#f-name").value.trim(); if (!name) return;
       run(async () => {
-        const host = m.querySelector("#f-host").checked, style = m.querySelector("#f-style").value;
-        if (p) await write(() => S.db.doc("players/" + p.id).update({ name, host, style }));
-        else await write(() => S.db.doc("players/" + slug(name)).set({ name, host, style, away: [], notes: {} }));
+        const style = m.querySelector("#f-style").value;
+        if (p) await write(() => S.db.doc("players/" + p.id).update({ name, style, host: false }));
+        else await write(() => S.db.doc("players/" + slug(name)).set({ name, style, away: [], notes: {} }));
         closeModal(); toast(p ? "Saved." : name + " added.");
       });
     };
@@ -938,8 +1124,10 @@ function renderSeat(t, c, i) {
   if (c) {
     const p = byId(S.players, c.playerId);
     const mine = c.playerId === S.me;
-    const host = isHost(p), metal = p.style === "tophat";
-    return '<button class="seat taken' + (mine ? " me" : "") + (metal ? " metal" : host ? " host" : "") + (i >= seats ? " overflow" : "") + '" style="--h:' + hue(p.name) + '" data-act="seat" data-table="' + esc(t.id) + '" data-player="' + esc(p.id) + '" aria-label="' + esc(p.name + (host ? ", teaching" : "") + (mine ? " (you), tap to leave" : "")) + '">' + (metal ? METAL_MEEPLE : MEEPLE) + (host && !metal ? SPARKLES : "") + "<span>" + esc(mine ? "You" : p.name) + "</span></button>";
+    const st = styleOf(p);
+    const cls = { sparkle: " host", tophat: " metal", owl: " owl styled", frog: " hud styled", lotus: " host lotus styled", cat: " cat styled", squirrel: " squirrel styled", hamster: " vhs styled", goblin: " goblin styled", crown: " crownhud styled", ring: " ringdrop styled" }[st] || "";
+    const icon = { sparkle: MEEPLE + SPARKLES, tophat: METAL_MEEPLE, owl: OWL_ICON, frog: FROG_ICON, lotus: LOTUS_ICON + SPARKLES, cat: CAT_ICON, squirrel: SQUIRREL_ICON, hamster: HAMSTER_ICON + VHS_OSD, goblin: GOBLIN_ICON, crown: CROWN_ICON, ring: RING_ICON }[st] || MEEPLE;
+    return '<button class="seat taken' + (mine ? " me" : "") + cls + (i >= seats ? " overflow" : "") + '" style="--h:' + hue(p.name) + '" data-act="seat" data-table="' + esc(t.id) + '" data-player="' + esc(p.id) + '" aria-label="' + esc(p.name + (mine ? " (you), tap to leave" : "")) + '">' + icon + "<span>" + esc(mine ? "You" : p.name) + "</span></button>";
   }
   const dis = !S.organiser && !canAct();
   return '<button class="seat empty" data-act="seat" data-table="' + esc(t.id) + '" aria-label="Open seat, tap to claim"' + (dis ? " disabled" : "") + ">" + MEEPLE + "<span>Open</span></button>";
@@ -962,7 +1150,6 @@ function renderTable(t) {
     (S.organiser ? '<button class="icon-btn" data-act="edit-table" data-id="' + esc(t.id) + '" aria-label="Edit table">✎</button>' : "") + "</div>" +
     '<div class="t-meta">' + [plural(seats, "seat"), g && g.weight, g && g.time].filter(Boolean).map(esc).join(" · ") + "</div>" +
     '<div class="seats">' + seatHtml + "</div>" +
-    cl.map(c => byId(S.players, c.playerId)).filter(isHost).map(hp => '<div class="t-host">' + esc(hp.name) + " is teaching</div>").join("") +
     (tags.length ? '<div class="tags">' + tags.map(x => '<span class="tag">' + esc(x) + "</span>").join("") + "</div>" : "") +
     (t.note ? '<div class="t-note">' + esc(t.note) + "</div>" : "") +
     '<div class="t-links"><a href="' + esc(videoFor(g)) + '" target="_blank" rel="noopener">' + (g && safeUrl(g.video) ? "Watch how to play" : "Find a how-to video") + " ↗</a>" +
