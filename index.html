@@ -897,6 +897,17 @@ main,.site-foot{position:relative;z-index:1}
 @keyframes unRoll2{0%,62%{transform:translateY(0);opacity:0}63%{opacity:1}80%{transform:translateY(2200%);opacity:1}81%,100%{transform:translateY(2200%);opacity:0}}
 @media (prefers-reduced-motion: reduce){.vhs-lines{display:none}.un-static::before{animation:none}}
 .check-solo{display:flex;gap:10px;align-items:center;font-size:.9rem;cursor:pointer}
+/* Orders tab: vote and lock in from the meal vote panel */
+.orders-view .ob-bar{grid-template-columns:minmax(0,1.1fr) minmax(60px,1.6fr) auto auto;row-gap:2px}
+.ob-vote-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ob-vote-hint{font-size:.74rem;color:var(--muted)}
+.ob-bar-acts{display:flex;gap:6px;justify-content:flex-end}
+.ob-bar-who{grid-column:1/-1;font-size:.74rem;color:var(--muted)}
+.ob-bar.out{opacity:.5}
+.ob-vote-btn.on{background:rgba(107,240,138,.16);border-color:#6BF08A;color:#C8FFD4}
+.ob-lock{border-color:rgba(255,216,74,.6);color:#FFE7A0}
+.ob-myvote{font-size:.7rem;font-weight:800;color:#C8FFD4;white-space:nowrap}
+@media (max-width:620px){.orders-view .ob-bar{grid-template-columns:minmax(0,1fr) auto}.orders-view .ob-bar-track{grid-column:1/-1;grid-row:2}.orders-view .ob-bar-n{grid-row:1;grid-column:2}.orders-view .ob-bar-acts{grid-column:1/-1;justify-content:flex-start}}
 /* ---- chosen meal ---- */
 .chosen-pill{font-size:.64rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1A1204;background:linear-gradient(90deg,#FFD84A,#FFB547);border-radius:999px;padding:2px 8px;margin-left:auto;white-space:nowrap;box-shadow:0 0 8px rgba(255,216,74,.45)}
 .food-card.is-chosen{border-style:solid;border-color:#FFD84A;box-shadow:0 0 0 1px rgba(255,216,74,.35),0 6px 14px rgba(0,0,0,.3)}
@@ -2302,9 +2313,16 @@ function obCard(s, featured, kicker) {
     '<button class="btn small" data-act="copy-orders" data-id="' + esc(s.id) + '">Copy list</button></header>';
   if (opts.length) {
     const total = opts.reduce((n, f) => n + votesFor(s.id, f.id).length, 0), lead = leaderIn(s.id);
-    h += '<div class="ob-vote"><h4>' + (chosenIn(s.id) ? "Meal vote · closed" : "Meal vote") + "</h4>" + opts.map(f => {
-      const n = votesFor(s.id, f.id).length, pct = total ? Math.round(n / total * 100) : 0;
-      return '<div class="ob-bar' + (lead === f.id ? " lead" : "") + '"><span class="ob-bar-name">' + esc(f.name) + (lead === f.id ? ' <em>' + (chosenIn(s.id) ? "Chosen" : "Leading") + "</em>" : "") + '</span><span class="ob-bar-track"><span style="width:' + pct + '%"></span></span><span class="ob-bar-n">' + n + "</span></div>";
+    const chV = chosenIn(s.id), myV = myVote(s.id);
+    h += '<div class="ob-vote"><div class="ob-vote-head"><h4>' + (chV ? "Meal vote · closed" : "Meal vote") + "</h4>" +
+      (chV ? (S.organiser ? '<button class="btn small ghost" data-act="lock-meal" data-s="' + esc(s.id) + '" data-f="">Reopen voting</button>' : "") : '<span class="ob-vote-hint">Tap an option to vote</span>') + "</div>" + opts.map(f => {
+      const n = votesFor(s.id, f.id).length, pct = total ? Math.round(n / total * 100) : 0, mine = !!(myV && myV.foodId === f.id);
+      const acts = chV ? (mine ? '<span class="ob-myvote">Your vote</span>' : "")
+        : '<button class="btn small ob-vote-btn' + (mine ? " on" : "") + '" data-act="vote" data-s="' + esc(s.id) + '" data-f="' + esc(f.id) + '" aria-pressed="' + mine + '">' + (mine ? "✓ Voted" : "Vote") + "</button>" +
+          (S.organiser ? '<button class="btn small ob-lock" data-act="lock-meal" data-s="' + esc(s.id) + '" data-f="' + esc(f.id) + '">Lock in</button>' : "");
+      const who = votesFor(s.id, f.id).map(c => { const pl = byId(S.players, c.playerId); return pl ? esc(pl.name) : ""; }).filter(Boolean).join(", ");
+      return '<div class="ob-bar' + (lead === f.id ? " lead" : "") + (chV && chV !== f.id ? " out" : "") + '"><span class="ob-bar-name">' + esc(f.name) + (lead === f.id ? ' <em>' + (chV ? "Chosen" : "Leading") + "</em>" : "") + '</span><span class="ob-bar-track"><span style="width:' + pct + '%"></span></span><span class="ob-bar-n">' + n + "</span>" +
+        '<span class="ob-bar-acts">' + acts + "</span>" + (who ? '<span class="ob-bar-who">' + who + "</span>" : "") + "</div>";
     }).join("") + "</div>";
   }
   h += extras.map(f => {
@@ -2346,7 +2364,7 @@ function renderOrders() {
   const list = orderSessions();
   let h = '<section class="ob-banner"><div class="ob-vid-slot" aria-hidden="true"></div><div class="ob-banner-shade"></div>' +
     '<i class="ob-spark s1"></i><i class="ob-spark s2"></i><i class="ob-spark s3"></i>' +
-    '<div class="ob-banner-text"><span class="ob-banner-kicker">Order up!</span><h2>Food orders</h2><p>Coffee runs, snack runs and anything else that\'s confirmed. Put your order in here, and change or remove it any time before then. Meal votes are on the schedule.</p></div>' +
+    '<div class="ob-banner-text"><span class="ob-banner-kicker">Order up!</span><h2>Food orders</h2><p>Coffee runs, snack runs and anything else that\'s confirmed. Vote on the meal, then put your order in once it\'s locked in. Change or remove anything any time before then.</p></div>' +
     '<button class="ob-vid-btn" data-act="vid-toggle" aria-label="Pause the banner video">❚❚</button></section>';
   if (!list.length) return '<div class="orders-view">' + h + '<p class="ob-empty">Nothing to order yet. ' + (S.organiser ? "Add food on the Food tab and tick <b>Confirmed extra</b> to start taking orders." : "Check back closer to the weekend.") + "</p></div>";
   const upcoming = list.filter(s => !sessionOver(s)), past = list.filter(sessionOver);
