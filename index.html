@@ -897,6 +897,93 @@ main,.site-foot{position:relative;z-index:1}
 @keyframes unRoll2{0%,62%{transform:translateY(0);opacity:0}63%{opacity:1}80%{transform:translateY(2200%);opacity:1}81%,100%{transform:translateY(2200%);opacity:0}}
 @media (prefers-reduced-motion: reduce){.vhs-lines{display:none}.un-static::before{animation:none}}
 .check-solo{display:flex;gap:10px;align-items:center;font-size:.9rem;cursor:pointer}
+/* ===== Orders tab: cosy anime cafe theme around the banner video ===== */
+.orders-view{--cafe:#FFE7C7;--peach:#FFB38A;--blush:#FF8FB8;--mint:#7CE7C9;--neon:#FF6FD8;position:relative;padding:2px 0 24px}
+.orders-view::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 15% 10%,rgba(255,179,138,.12),transparent 50%),radial-gradient(ellipse at 85% 30%,rgba(255,111,216,.10),transparent 50%),radial-gradient(ellipse at 40% 90%,rgba(124,231,201,.08),transparent 50%),url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27120%27%20height%3D%27120%27%20fill%3D%27none%27%20stroke%3D%27rgba%28255%2C200%2C160%2C0.07%29%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%208v10a4%204%200%200%200%208%200V8M16%208v26M28%208c-3%203-3%2011%200%2014v12%27/%3E%3Cpath%20d%3D%27M66%2022h16v10a6%206%200%200%201-6%206h-4a6%206%200%200%201-6-6zM82%2025h3a3%203%200%200%201%200%206h-3M70%2017c-2-3%202-5%200-8M77%2017c-2-3%202-5%200-8%27/%3E%3Cpath%20d%3D%27M12%2066l26%206-16%2024z%27/%3E%3Ccircle%20cx%3D%2722%27%20cy%3D%2774%27%20r%3D%271.6%27/%3E%3Ccircle%20cx%3D%2726%27%20cy%3D%2783%27%20r%3D%271.6%27/%3E%3Cpath%20d%3D%27M64%2082h32a16%2016%200%200%201-32%200zM80%2066l16%2014M86%2062l14%2014%27/%3E%3Cpath%20d%3D%27M44%2044h20M44%2044c0-6%204-9%2010-9s10%203%2010%209M44%2049h20M45%2053h18a3%203%200%200%201-3%203H48a3%203%200%200%201-3-3z%27%20transform%3D%27rotate%28-12%2054%2046%29%27/%3E%3C/svg%3E");background-size:auto,auto,auto,120px 120px}
+.ob-banner{position:relative;isolation:isolate;overflow:hidden;border-radius:24px;margin:6px 0 20px;width:100%;height:clamp(240px,34vw,420px);background:#2A1A22 url("orders-banner.jpg") center/cover no-repeat;border:2px solid rgba(255,200,160,.55);box-shadow:0 14px 34px rgba(0,0,0,.45),0 0 0 6px rgba(255,179,138,.08)}
+.ob-vid-slot{position:absolute;inset:0;z-index:-2}
+.ob-vid{width:100%;height:100%;object-fit:cover;display:block}
+.ob-banner-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(32,14,24,.86) 0%,rgba(32,14,24,.55) 34%,rgba(32,14,24,0) 62%),linear-gradient(0deg,rgba(32,14,24,.55),transparent 40%)}
+.ob-banner-text{position:absolute;left:clamp(16px,4vw,36px);bottom:clamp(16px,4vw,34px);max-width:min(440px,72%);color:#FFF6EC}
+.ob-banner-kicker{display:inline-block;position:relative;font-weight:800;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#3A1626;background:var(--peach);border-radius:14px;padding:5px 12px;box-shadow:0 3px 0 rgba(0,0,0,.25);transform:rotate(-3deg);animation:obBob 3s ease-in-out infinite}
+.ob-banner-kicker::after{content:"";position:absolute;left:16px;bottom:-7px;border:7px solid transparent;border-top-color:var(--peach);border-bottom:0}
+.ob-banner h2{margin:10px 0 6px;font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,5vw,3rem);line-height:1;color:#FFFFFF;text-shadow:3px 3px 0 #E8607F,6px 6px 0 rgba(0,0,0,.35);letter-spacing:.01em}
+.ob-banner p{margin:0;font-size:.92rem;line-height:1.45;color:#FFE7D6;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.ob-vid-btn{position:absolute;right:12px;bottom:12px;width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.7);background:rgba(32,14,24,.6);color:#fff;font-size:.8rem;cursor:pointer}
+.ob-vid-btn:hover,.ob-vid-btn:focus-visible{background:var(--blush);color:#3A1626}
+.ob-spark{position:absolute;z-index:1;width:12px;height:12px;background:#FFF6D6;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 4px var(--peach));opacity:0;pointer-events:none;animation:teachTwinkle 2.8s ease-in-out infinite}
+.ob-spark.s1{left:44%;top:14%}.ob-spark.s2{left:62%;top:30%;width:9px;height:9px;animation-delay:.9s}.ob-spark.s3{left:30%;top:18%;width:8px;height:8px;animation-delay:1.8s}
+@keyframes obBob{0%,100%{transform:rotate(-3deg) translateY(0)}50%{transform:rotate(-1deg) translateY(-3px)}}
+/* menu-card styling */
+.orders-view .ob-card{background:linear-gradient(180deg,rgba(255,231,199,.07),rgba(255,179,138,.03)),#1B1420;border:1.5px solid rgba(255,190,140,.35);border-radius:22px;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.orders-view .ob-card.ob-hero{background:linear-gradient(135deg,rgba(255,179,138,.16),rgba(255,111,216,.12) 55%,rgba(124,231,201,.12)),#21151F;border-color:rgba(255,190,140,.7);animation:obGlow 4s ease-in-out infinite}
+.orders-view .ob-card.ob-hero::before{background:linear-gradient(115deg,rgba(255,179,138,.14),rgba(255,111,216,.12) 30%,rgba(124,231,201,.10) 60%,rgba(255,179,138,.14));background-size:300% 300%;animation:vhsShift 14s ease-in-out infinite alternate}
+.orders-view .ob-card.ob-hero::after{display:none}
+@keyframes obGlow{0%,100%{box-shadow:0 10px 24px rgba(0,0,0,.35),0 0 0 1px rgba(255,179,138,.5),0 0 16px rgba(255,143,184,.18)}50%{box-shadow:0 10px 24px rgba(0,0,0,.35),0 0 0 1px rgba(255,179,138,.7),0 0 30px rgba(255,143,184,.38)}}
+.orders-view .ob-kicker{display:inline-block;position:relative;white-space:nowrap;color:#3A1626;background:var(--mint);border-radius:12px;padding:3px 10px;letter-spacing:.1em}
+.orders-view .ob-hero .ob-kicker{background:var(--peach)}
+.orders-view .ob-kicker::after{content:"";position:absolute;left:12px;bottom:-6px;border:6px solid transparent;border-top-color:inherit;border-bottom:0}
+.orders-view .ob-kicker::after{border-top-color:var(--mint)}.orders-view .ob-hero .ob-kicker::after{border-top-color:var(--peach)}
+.orders-view .ob-title{margin-top:8px;color:#FFF3E6}
+.orders-view .ob-when{background:rgba(255,231,199,.12);border:1px solid rgba(255,190,140,.35);color:var(--cafe)}
+.orders-view .ob-vote,.orders-view .ob-item{background:rgba(255,231,199,.05);border:1px dashed rgba(255,190,140,.38);border-radius:16px}
+.orders-view .ob-item h4,.orders-view .ob-vote h4{color:var(--cafe)}
+.orders-view .ob-item h4 svg{color:var(--peach)}
+@keyframes obSteam{0%{opacity:0;transform:translateY(4px) scaleX(1)}30%{opacity:.8}100%{opacity:0;transform:translateY(-8px) scaleX(-1)}}
+.orders-view .ob-bar-track{background:rgba(255,231,199,.1)}
+.orders-view .ob-bar-track span{background:linear-gradient(90deg,var(--mint),var(--blush))}
+.orders-view .ob-bar.lead .ob-bar-track span{background:linear-gradient(90deg,#FFD84A,var(--peach))}
+.orders-view .ord-list{border-top:1px dotted rgba(255,190,140,.3);padding-top:8px}
+.orders-view .btn.primary{background:var(--peach);color:#3A1626;border-color:var(--peach)}
+.orders-view .ob-past summary{color:var(--cafe)}
+@media (max-width:620px){.ob-banner{height:auto;aspect-ratio:auto;padding-top:56%;display:flex;flex-direction:column;background-color:#200E18;background-position:top center;background-size:100% auto}.ob-banner-shade{background:linear-gradient(0deg,#200E18 0%,#200E18 34%,rgba(32,14,24,.4) 55%,rgba(32,14,24,0) 70%)}.ob-vid-slot{bottom:auto;height:0;padding-top:56.25%}.ob-vid-slot .ob-vid{position:absolute;inset:0}.ob-banner-text{position:relative;left:auto;bottom:auto;max-width:none;padding:4px 18px 18px}.ob-banner h2{font-size:2rem}.ob-vid-btn{top:12px;bottom:auto}.orders-view .ob-head{align-items:flex-start}.orders-view .ob-head > div{flex-basis:100%}}
+@media (prefers-reduced-motion: reduce){.ob-banner-kicker,.ob-spark,.orders-view .ob-card.ob-hero,.orders-view .ob-card.ob-hero::before,.orders-view .ob-item h4::after{animation:none}}
+/* ---- Food tiers + orders ---- */
+.tier-label{grid-column:1/-1;margin:6px 2px -2px;font:700 .7rem/1.2 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase;color:#FFBE78}
+.conf-pill{font-size:.64rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#062A16;background:#6BF08A;border-radius:999px;padding:2px 8px;margin-left:auto;white-space:nowrap}
+.food-card.is-extra{border-style:solid;border-color:rgba(107,240,138,.45)}
+.orders{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.order-btn{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:7px 11px;border-radius:10px;border:1px dashed rgba(107,240,138,.6);background:transparent;color:#C8FFD4;font:inherit;font-size:.82rem;font-weight:700;cursor:pointer;text-align:left}
+.order-btn span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.order-btn:hover,.order-btn:focus-visible{border-style:solid}
+.order-btn.on{border-style:solid;background:rgba(107,240,138,.1)}
+.order-btn .vc{flex:none;font-weight:600;font-size:.76rem;color:var(--muted);background:rgba(255,255,255,.06);border-radius:999px;padding:2px 8px}
+.ord-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.ord-row{position:relative;display:flex;align-items:center;gap:8px;min-width:0}
+.ord-row .ord-who.vt{width:auto;min-width:92px;max-width:46%;flex:none;font-size:.72rem;padding:3px 10px;min-height:22px}
+.ord-row .ord-who.vt-owlwatch{padding-left:32px}.ord-row .ord-who.vt-owlwatch .a{left:6px}.ord-row .ord-who.vt-owlwatch .b{left:15px}
+.ord-what{flex:1;min-width:0;font-size:.84rem;color:var(--ink);overflow-wrap:anywhere}
+.ord-row .vt-x{position:static;margin:0;flex:none}
+.ob-intro h2{font-family:var(--display);margin:4px 0 4px}
+.ob-intro p{margin:0 0 14px;color:var(--muted);max-width:62ch}
+.ob-empty{color:var(--muted)}
+.ob-card{position:relative;background:var(--surface);border:1px solid var(--tone-bar,var(--line));border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.ob-card.ob-hero{background:var(--tone);margin-bottom:16px;padding:18px}
+.ob-card.ob-done{opacity:.7}
+.ob-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.ob-head > div{flex:1;min-width:0}
+.ob-kicker{font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tone-bar,#8EA6FF)}
+.ob-title{margin:2px 0 0;font-family:var(--display);font-size:1.15rem}
+.ob-hero .ob-title{font-size:1.6rem}
+.ob-when{font-weight:700;font-size:.82rem;background:rgba(0,0,0,.35);border-radius:999px;padding:4px 12px}
+.ob-vote,.ob-item{background:rgba(6,9,18,.55);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.ob-vote h4,.ob-item h4{margin:0;font-size:.95rem;display:flex;align-items:center;gap:6px}
+.ob-item h4 svg{width:16px;height:16px}
+.ob-item-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ob-item-head h4{flex:1;min-width:0}
+.ob-details{margin:0;font-size:.82rem;color:var(--muted)}
+.ob-none{margin:0;font-size:.82rem;color:var(--muted);font-style:italic}
+.ob-bar{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) auto;align-items:center;gap:10px;font-size:.86rem}
+.ob-bar-name em{font-style:normal;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1A1204;background:#FFD84A;border-radius:999px;padding:1px 6px;margin-left:4px}
+.ob-bar-track{height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.ob-bar-track span{display:block;height:100%;border-radius:999px;background:var(--tone-bar,#8EA6FF)}
+.ob-bar.lead .ob-bar-track span{background:#FFD84A}
+.ob-bar-n{font-weight:800;min-width:1.5em;text-align:right}
+.ob-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.ob-past{margin-top:18px}
+.ob-past summary{cursor:pointer;font-weight:700;color:var(--muted);margin-bottom:12px}
+.ob-copy{width:100%;box-sizing:border-box;font:.85rem/1.4 ui-monospace,Menlo,Consolas,monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px}
+@media (max-width:620px){.ob-grid{grid-template-columns:1fr}.ord-row .ord-who.vt{min-width:80px}}
 /* ===== Neon tiger (your video): the clip plays in the seat, tags and name plate ===== */
 .seat.tiger{background-color:#2A0634;background-image:linear-gradient(180deg,transparent 42%,rgba(28,3,36,.82) 92%),url("tiger-seat.webp");background-size:auto,cover;background-position:0 0,50% 58%;background-repeat:no-repeat;border:1px solid #FF4FD8;animation:tgPulse 2s ease-in-out infinite}
 .seat.tiger .tg-space{display:block;width:30px;height:30px;margin:-2px 0 0;font-style:normal}
@@ -1326,6 +1413,7 @@ button.cell:hover{outline:1px solid var(--accent)}
       <a class="tab" href="#schedule" data-view="schedule">Schedule</a>
       <a class="tab" href="#games" data-view="games">Games</a>
       <a class="tab" href="#food" data-view="food">Food</a>
+      <a class="tab" href="#orders" data-view="orders">Orders</a>
       <a class="tab" href="#people" data-view="people">Who's around</a>
     </nav>
   </div>
@@ -2079,7 +2167,7 @@ function foodSlots(f) {
 const foodIn = sid => foodSorted().filter(f => foodSlots(f).includes(sid));
 const slotLabel = id => id === ANY ? "Any time" : sessionName(byId(S.sessions, id));
 const slotOrder = ids => [...sessionsSorted().map(s => s.id).filter(id => ids.includes(id)), ...(ids.includes(ANY) ? [ANY] : [])];
-const foodDoc = (f, slots) => ({ name: f.name || "", details: f.details || "", by: f.by || "", order: f.order || Date.now(), cover: f.cover || "", coverPos: f.coverPos || "middle", sessionIds: slots });
+const foodDoc = (f, slots) => ({ name: f.name || "", details: f.details || "", by: f.by || "", order: f.order || Date.now(), cover: f.cover || "", coverPos: f.coverPos || "middle", sessionIds: slots, extra: !!f.extra });
 const foodKey = f => "f__" + f.id;
 const foodHasCover = f => !!(coverData(foodKey(f)) || safeUrl(f.cover));
 async function setFoodSlots(f, slots) { await write(() => S.db.doc("food/" + f.id).set(foodDoc(f, slots))); }
@@ -2089,7 +2177,7 @@ const voteId = (sid, pid) => "vote__" + sid + "__" + pid;
 const votesFor = (sid, fid) => S.claims.filter(c => c.vote && c.sessionId === sid && c.foodId === fid && byId(S.players, c.playerId)).sort((a, b) => (a.at || 0) - (b.at || 0));
 const myVote = sid => S.me ? S.claims.find(c => c.id === voteId(sid, S.me)) : null;
 function leaderIn(sid) {
-  const counts = foodIn(sid).map(f => [f.id, votesFor(sid, f.id).length]).sort((a, b) => b[1] - a[1]);
+  const counts = foodIn(sid).filter(f => !isExtra(f)).map(f => [f.id, votesFor(sid, f.id).length]).sort((a, b) => b[1] - a[1]);
   return counts.length && counts[0][1] > 0 && (counts.length === 1 || counts[0][1] > counts[1][1]) ? counts[0][0] : null;
 }
 function voteTag(p, c) {
@@ -2114,6 +2202,137 @@ async function onVote(sid, fid) {
   await castVote(sid, fid);
 }
 
+/* ---------- Food tiers: voting options vs confirmed extras people order from ---------- */
+const isExtra = f => !!(f && f.extra);
+const tierSort = list => [...list.filter(f => !isExtra(f)), ...list.filter(isExtra)];
+const orderId = (sid, fid, pid) => "order__" + sid + "__" + fid + "__" + pid;
+const ordersFor = (sid, fid) => S.claims.filter(c => c.ord && c.sessionId === sid && c.foodId === fid && byId(S.players, c.playerId)).sort((a, b) => (a.at || 0) - (b.at || 0));
+const myOrder = (sid, fid) => S.me ? S.claims.find(c => c.id === orderId(sid, fid, S.me)) : null;
+function orderRow(c) {
+  const p = byId(S.players, c.playerId); if (!p) return "";
+  const x = S.organiser ? '<button class="vt-x" data-act="unvote" data-id="' + esc(c.id) + '" aria-label="Remove ' + esc(p.name) + '\'s order" title="Remove ' + esc(p.name) + '\'s order">×</button>' : "";
+  return '<li class="ord-row"><span class="vt vt-' + (styleOf(p) || "plain") + ' ord-who" style="--h:' + hue(p.name) + '"><i class="a"></i><i class="b"></i><i class="c"></i><b>' + esc(p.name) + "</b></span>" +
+    '<span class="ord-what">' + esc(c.orderText || "Yes please") + "</span>" + x + "</li>";
+}
+function orderBlock(f, sid) {
+  const os = ordersFor(sid, f.id), mine = myOrder(sid, f.id);
+  return '<div class="orders"><button class="order-btn' + (mine ? " on" : "") + '" data-act="order" data-s="' + esc(sid) + '" data-f="' + esc(f.id) + '">' +
+    "<span>" + (mine ? "✓ Your order: " + esc(mine.orderText || "Yes please") : "＋ Add my order") + '</span><span class="vc">' + plural(os.length, "order") + "</span></button>" +
+    (os.length ? '<ul class="ord-list">' + os.map(orderRow).join("") + "</ul>" : "") + "</div>";
+}
+function orderModal(sid, fid) {
+  const f = byId(S.food, fid), s = byId(S.sessions, sid); if (!f || !s) return;
+  const mine = myOrder(sid, fid);
+  const html = "<h2>" + (mine ? "Change your order" : "Add your order") + '</h2><p class="sub">' + esc(f.name) + " · " + esc(sessionName(s)) + "</p>" +
+    (f.details ? '<p class="sub">' + esc(f.details) + "</p>" : "") +
+    '<form class="form" id="f"><div class="field"><label for="o-text">What would you like?</label><input id="o-text" maxlength="140" placeholder="e.g. Large flat white, oat milk" value="' + esc(mine ? mine.orderText || "" : "") + '"><span class="hint">Leave it blank if you just want to be counted in.</span></div>' +
+    '<div class="actions">' + (mine ? '<button type="button" class="btn danger" data-m="del">Remove my order</button><span class="spacer"></span>' : "") +
+    '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (mine ? "Save" : "Add order") + "</button></div></form>";
+  openModal(html, m => {
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    const del = m.querySelector('[data-m="del"]');
+    if (del) del.onclick = () => run(async () => { await write(() => S.db.doc("claims/" + mine.id).delete()); closeModal(); toast("Order removed."); });
+    setTimeout(() => m.querySelector("#o-text").focus(), 50);
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      const text = m.querySelector("#o-text").value.trim();
+      run(async () => {
+        await write(() => S.db.doc("claims/" + orderId(sid, fid, S.me)).set({ sessionId: sid, playerId: S.me, foodId: fid, ord: true, orderText: text, at: mine ? (mine.at || Date.now()) : Date.now() }));
+        closeModal(); toast(mine ? "Order updated." : "Order in for " + f.name + ".");
+      });
+    };
+  });
+}
+function onOrder(sid, fid) {
+  if (!canAct()) { toast(S.db ? "You can view the schedule but not change it." : "The live schedule isn't connected here."); return; }
+  if (!meP()) { askWho(() => orderModal(sid, fid)); return; }
+  orderModal(sid, fid);
+}
+
+/* ---------- Orders tab ---------- */
+function orderSessions() {
+  const ids = NOW && NOW.order ? NOW.order : sessionsSorted().map(s => s.id);
+  return ids.map(id => byId(S.sessions, id)).filter(s => s && (foodIn(s.id).some(isExtra) || (s.kind === "meal" && foodIn(s.id).some(f => !isExtra(f)))));
+}
+const sessionOver = s => !!(NOW && NOW.times && NOW.times[s.id] && NOW.times[s.id].b < Date.now());
+function orderSummaryText(s) {
+  const out = [sessionName(s) + (whenText(s) ? " (" + whenText(s) + ")" : "")];
+  const opts = foodIn(s.id).filter(f => !isExtra(f));
+  if (s.kind === "meal" && opts.length) {
+    const lead = leaderIn(s.id), lf = lead && byId(S.food, lead);
+    out.push("Meal vote: " + (lf ? lf.name + " is leading (" + plural(votesFor(s.id, lf.id).length, "vote") + ")" : "no clear winner yet"));
+  }
+  foodIn(s.id).filter(isExtra).forEach(f => {
+    const os = ordersFor(s.id, f.id);
+    out.push("", f.name + ": " + plural(os.length, "order"));
+    os.forEach(c => out.push("- " + byId(S.players, c.playerId).name + (c.orderText ? ": " + c.orderText : "")));
+  });
+  return out.join("\n");
+}
+function obCard(s, featured, kicker) {
+  const opts = s.kind === "meal" ? foodIn(s.id).filter(f => !isExtra(f)) : [];
+  const extras = foodIn(s.id).filter(isExtra);
+  let h = '<section class="ob-card' + (featured ? " ob-hero hero is-live" : "") + (sessionOver(s) ? " ob-done" : "") + '" style="' + tone(s.id) + '">' +
+    '<header class="ob-head"><div><div class="ob-kicker">' + esc(kicker) + '</div><h3 class="ob-title">' + esc(sessionName(s)) + "</h3></div>" +
+    (whenText(s) && !sessionOver(s) ? '<span class="ob-when">' + esc(whenText(s)) + "</span>" : "") +
+    '<button class="btn small" data-act="copy-orders" data-id="' + esc(s.id) + '">Copy list</button></header>';
+  if (opts.length) {
+    const total = opts.reduce((n, f) => n + votesFor(s.id, f.id).length, 0), lead = leaderIn(s.id);
+    h += '<div class="ob-vote"><h4>Meal vote</h4>' + opts.map(f => {
+      const n = votesFor(s.id, f.id).length, pct = total ? Math.round(n / total * 100) : 0;
+      return '<div class="ob-bar' + (lead === f.id ? " lead" : "") + '"><span class="ob-bar-name">' + esc(f.name) + (lead === f.id ? ' <em>Leading</em>' : "") + '</span><span class="ob-bar-track"><span style="width:' + pct + '%"></span></span><span class="ob-bar-n">' + n + "</span></div>";
+    }).join("") + "</div>";
+  }
+  h += extras.map(f => {
+    const os = ordersFor(s.id, f.id), mine = myOrder(s.id, f.id);
+    return '<div class="ob-item"><div class="ob-item-head"><h4>' + FOOD_ICON + esc(f.name) + '</h4><span class="pill">' + plural(os.length, "order") + "</span>" +
+      '<button class="btn small' + (mine ? "" : " primary") + '" data-act="order" data-s="' + esc(s.id) + '" data-f="' + esc(f.id) + '">' + (mine ? "Edit my order" : "Add my order") + "</button></div>" +
+      (f.details ? '<p class="ob-details">' + esc(f.details) + "</p>" : "") +
+      (os.length ? '<ul class="ord-list">' + os.map(orderRow).join("") + "</ul>" : '<p class="ob-none">No orders yet.</p>') + "</div>";
+  }).join("");
+  return h + "</section>";
+}
+/* ---------- Orders tab banner video: one persistent element so re-renders don't restart it ---------- */
+const OBV = { node: null, paused: false };
+function syncOrdersVideo() {
+  const slot = document.querySelector(".ob-vid-slot");
+  if (!slot) return;
+  if (!OBV.node) {
+    const v = document.createElement("video");
+    v.className = "ob-vid"; v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.setAttribute("muted", "");
+    v.preload = "auto"; v.poster = "orders-banner.jpg"; v.src = "orders-banner.mp4"; v.setAttribute("aria-hidden", "true");
+    OBV.node = v;
+    if (reduceMotion()) OBV.paused = true;
+  }
+  if (OBV.node.parentNode !== slot) slot.appendChild(OBV.node);
+  if (OBV.paused) OBV.node.pause(); else { const pr = OBV.node.play(); if (pr && pr.catch) pr.catch(() => {}); }
+  const b = document.querySelector(".ob-vid-btn");
+  if (b) { b.textContent = OBV.paused ? "▶" : "❚❚"; b.setAttribute("aria-label", OBV.paused ? "Play the banner video" : "Pause the banner video"); }
+}
+function renderOrders() {
+  const list = orderSessions();
+  let h = '<section class="ob-banner"><div class="ob-vid-slot" aria-hidden="true"></div><div class="ob-banner-shade"></div>' +
+    '<i class="ob-spark s1"></i><i class="ob-spark s2"></i><i class="ob-spark s3"></i>' +
+    '<div class="ob-banner-text"><span class="ob-banner-kicker">Order up!</span><h2>Food orders</h2><p>Coffee runs, snack runs and anything else that\'s confirmed. Put your order in here, and change or remove it any time before then. Meal votes are on the schedule.</p></div>' +
+    '<button class="ob-vid-btn" data-act="vid-toggle" aria-label="Pause the banner video">❚❚</button></section>';
+  if (!list.length) return '<div class="orders-view">' + h + '<p class="ob-empty">Nothing to order yet. ' + (S.organiser ? "Add food on the Food tab and tick <b>Confirmed extra</b> to start taking orders." : "Check back closer to the weekend.") + "</p></div>";
+  const upcoming = list.filter(s => !sessionOver(s)), past = list.filter(sessionOver);
+  if (upcoming.length) {
+    const live = NOW && NOW.mode === "now" && NOW.id === upcoming[0].id;
+    h += obCard(upcoming[0], true, live ? "On now" : "Next order run");
+    if (upcoming.length > 1) h += '<div class="ob-grid">' + upcoming.slice(1).map(s => obCard(s, false, "Coming up")).join("") + "</div>";
+  }
+  if (past.length) h += '<details class="ob-past"><summary>Earlier (' + past.length + ")</summary>" + '<div class="ob-grid">' + past.map(s => obCard(s, false, "Done")).join("") + "</div></details>";
+  return '<div class="orders-view">' + h + "</div>";
+}
+function copyOrders(sid) {
+  const s = byId(S.sessions, sid); if (!s) return;
+  const text = orderSummaryText(s);
+  const fallback = () => openModal('<h2>Order list</h2><p class="sub">Select all and copy.</p><textarea class="ob-copy" readonly rows="12">' + esc(text) + '</textarea><div class="actions"><button type="button" class="btn primary" data-m="cancel">Done</button></div>', m => {
+    const t = m.querySelector("textarea"); t.focus(); t.select(); m.querySelector('[data-m="cancel"]').onclick = closeModal; });
+  try { navigator.clipboard.writeText(text).then(() => toast("Order list copied."), fallback); } catch (e) { fallback(); }
+}
+
 function renderFoodCard(f, ctx) {
   const p = f.by ? byId(S.players, f.by) : null;
   const slots = foodSlots(f);
@@ -2123,14 +2342,16 @@ function renderFoodCard(f, ctx) {
     if (ctx) tools += '<button class="icon-btn" data-act="unslot-food" data-id="' + esc(f.id) + '" data-s="' + esc(ctx) + '" aria-label="Take ' + esc(f.name || "this food") + " off " + esc(slotLabel(ctx)) + '" title="Take off ' + esc(slotLabel(ctx)) + '">×</button>';
     tools += '<button class="icon-btn" data-act="edit-food" data-id="' + esc(f.id) + '" aria-label="Edit ' + esc(f.name || "food") + '">✎</button>';
   }
-  const vs = ctx ? byId(S.sessions, ctx) : null, voting = !!(vs && vs.kind === "meal");
-  const lead = voting && leaderIn(ctx) === f.id ? '<span class="lead-pill">Leading</span>' : "";
-  return '<div class="food-card">' + (foodHasCover(f) ? coverHtml(f, "sm", { key: foodKey(f), badge: false }) : "") +
+  const vs = ctx ? byId(S.sessions, ctx) : null, extra = isExtra(f), voting = !!(vs && vs.kind === "meal") && !extra, ordering = extra && !!vs;
+  const lead = voting && leaderIn(ctx) === f.id ? '<span class="lead-pill">Leading</span>' : extra ? '<span class="conf-pill">Confirmed</span>' : "";
+  const inSlot = vs ? foodIn(ctx) : [];
+  const tierLabel = extra && vs && inSlot.some(x => !isExtra(x)) && inSlot.find(isExtra) === f ? '<div class="tier-label">Also on · order if you want</div>' : "";
+  return tierLabel + '<div class="food-card' + (extra ? " is-extra" : "") + '">' + (foodHasCover(f) ? coverHtml(f, "sm", { key: foodKey(f), badge: false }) : "") +
     '<div class="food-top">' + FOOD_ICON + '<span class="food-name">' + esc(f.name || "Food") + "</span>" + lead + tools + "</div>" +
     (f.details ? '<p class="food-details">' + esc(f.details) + "</p>" : "") +
     (p ? '<div class="food-meta">Sorted by <b>' + esc(p.name) + "</b></div>" : "") +
     (others.length ? '<div class="food-meta">' + (ctx ? "Also on: " : "On the menu: ") + esc(others.join(", ")) + "</div>" : "") +
-    (voting ? voteBlock(f, ctx) : "") +
+    (voting ? voteBlock(f, ctx) : "") + (ordering ? orderBlock(f, ctx) : "") +
     "</div>";
 }
 
@@ -2154,6 +2375,7 @@ function foodModal(fid, presetSid) {
   html += '<form class="form" id="f">' +
     '<div class="field"><label for="f-name">Food</label><input id="f-name" required maxlength="60" placeholder="e.g. Pizza, McDonald\'s, Sausage sizzle" value="' + esc(f ? f.name : "") + '"></div>' +
     '<fieldset class="field check-field"><legend>When</legend><div class="check-list">' + boxes + '</div><span class="hint">Tick every slot it\'s for. Leave them all unticked to keep it on your list without a slot yet.</span></fieldset>' +
+    '<label class="check-solo extra-check"><input type="checkbox" id="f-extra"' + (f && f.extra ? " checked" : "") + '> <span><b>Confirmed extra</b>: no voting. It\'s happening, and people can put in an order (e.g. a coffee run or snacks).</span></label>' +
     '<div class="field"><label for="f-details">Details</label><textarea id="f-details" maxlength="400" placeholder="e.g. Ordering from Domino\'s at 6pm. One vegetarian, one gluten-free.">' + esc(f ? f.details : "") + "</textarea></div>" +
     '<div class="field"><label for="f-by">Who\'s sorting it</label><select id="f-by">' + people + "</select></div>" +
     '<fieldset class="cover-field"><legend>Banner image (optional)</legend><div id="f-prev"></div>' +
@@ -2195,7 +2417,7 @@ function foodModal(fid, presetSid) {
       const slots = slotOrder([...m.querySelectorAll('input[name="slot"]:checked')].map(c => c.value));
       const cover = m.querySelector("#f-cover").value.trim();
       if (cover && !safeUrl(cover)) { toast("The image link needs to start with https://"); return; }
-      const data = foodDoc({ name, details: m.querySelector("#f-details").value.trim(), by: m.querySelector("#f-by").value, order: f ? f.order : Date.now(), cover, coverPos: m.querySelector("#f-pos").value }, slots);
+      const data = foodDoc({ name, details: m.querySelector("#f-details").value.trim(), by: m.querySelector("#f-by").value, order: f ? f.order : Date.now(), cover, coverPos: m.querySelector("#f-pos").value, extra: m.querySelector("#f-extra").checked }, slots);
       run(async () => {
         const id = f ? f.id : slug("food-" + name);
         await write(() => S.db.doc("food/" + id).set(data));
@@ -2241,7 +2463,7 @@ function renderSession(s) {
   if (away.length) stats += '<span class="pill" title="' + esc(away.map(p => p.name + (noteFor(p, s.id) ? " (" + noteFor(p, s.id) + ")" : "")).join(", ")) + '">' + away.length + " away</span>";
   const tools = S.organiser ? '<button class="icon-btn" data-act="move-s" data-dir="-1" data-id="' + esc(s.id) + '" aria-label="Move earlier">←</button><button class="icon-btn" data-act="move-s" data-dir="1" data-id="' + esc(s.id) + '" aria-label="Move later">→</button><button class="icon-btn" data-act="edit-session" data-id="' + esc(s.id) + '" aria-label="Edit time block">✎</button>' : "";
   const food = foodIn(s.id);
-  let body = (meal ? food.map(f => renderFoodCard(f, s.id)).join("") : "") + tabs.map(renderTable).join("") + (!meal ? food.map(f => renderFoodCard(f, s.id)).join("") : "");
+  let body = (meal ? tierSort(food).map(f => renderFoodCard(f, s.id)).join("") : "") + tabs.map(renderTable).join("") + (!meal ? tierSort(food).map(f => renderFoodCard(f, s.id)).join("") : "");
   if (S.organiser) body += (meal ? '<button class="add-tile" data-act="add-food" data-id="' + esc(s.id) + '">+ Add food</button><button class="add-tile" data-act="add-table" data-id="' + esc(s.id) + '">+ Add a table</button>'
                                  : '<button class="add-tile" data-act="add-table" data-id="' + esc(s.id) + '">+ Add a table</button>');
   else if (!tabs.length && !food.length) body += '<div class="col-note">' + (meal ? "Meal break. Food to be decided." : "No games picked yet") + "</div>";
@@ -2357,7 +2579,7 @@ function myStatus(s, short) {
 }
 function blockBody(s) {
   const meal = s.kind === "meal", tabs = tablesIn(s.id), food = foodIn(s.id), free = freeIn(s.id);
-  let body = food.map(f => renderFoodCard(f, s.id)).join("") + tabs.map(renderTable).join("");
+  let body = tierSort(food).map(f => renderFoodCard(f, s.id)).join("") + tabs.map(renderTable).join("");
   if (S.organiser) body += '<button class="add-tile" data-act="add-table" data-id="' + esc(s.id) + '">+ Add a table</button>';
   if (!body) body = '<div class="col-note">' + (meal ? "Meal break. Food to be decided." : "No games picked yet") + "</div>";
   return myStatus(s) + '<div class="hero-tables">' + body + "</div>" +
@@ -2392,7 +2614,7 @@ function renderUpNext(s) {
     return '<div class="un-game type-' + (modeOf(g) || "none") + (g && !modeMatch(g) ? " dim" : "") + '">' + modeBadge(g) + '<div class="un-name">' + esc(gameName(g)) + "</div>" + (t.teach ? teachTag(true) : "") +
       '<div class="un-seats"><span class="sd-row">' + seatDots(t) + '</span><span class="' + (o ? "chip-open" : "chip-full") + '">' + (o ? o + " open" : "Full") + "</span></div>" +
       '<div class="un-sub">' + taken + " of " + seatsOf(t) + " seats taken" + (g && g.time ? " · " + esc(g.time) : "") + "</div></div>";
-  }).join("") + food.map(f => { const n = s.kind === "meal" ? votesFor(s.id, f.id).length : 0; return '<div class="un-game un-food"><div class="un-name">' + FOOD_ICON + esc(f.name) + "</div>" + (f.details ? '<div class="un-sub">' + esc(f.details) + "</div>" : "") + (n ? '<div class="un-sub">' + plural(n, "vote") + (leaderIn(s.id) === f.id ? " · leading" : "") + "</div>" : "") + "</div>"; }).join("");
+  }).join("") + tierSort(food).map(f => { const ex = isExtra(f), n = ex ? ordersFor(s.id, f.id).length : s.kind === "meal" ? votesFor(s.id, f.id).length : 0; return '<div class="un-game un-food"><div class="un-name">' + FOOD_ICON + esc(f.name) + "</div>" + (f.details ? '<div class="un-sub">' + esc(f.details) + "</div>" : "") + (ex ? '<div class="un-sub">Confirmed · ' + plural(n, "order") + "</div>" : n ? '<div class="un-sub">' + plural(n, "vote") + (leaderIn(s.id) === f.id ? " · leading" : "") + "</div>" : "") + "</div>"; }).join("");
   return '<div class="upnext" role="button" tabindex="0" aria-expanded="false" data-act="open-block" data-id="' + esc(s.id) + '" style="' + tone(s.id) + '"><span class="un-static" aria-hidden="true"></span>' +
     '<div class="un-head"><span class="next-kicker">Up next</span><h3 class="un-title">' + esc(sessionName(s)) + "</h3>" + (when ? '<span class="un-when">' + esc(when) + "</span>" : "") +
     (mine ? '<span class="un-me">' + mine + "</span>" : "") + (s.kind === "meal" ? mealTv(true) : "") + '<span class="un-expand">Open block ▾</span></div>' +
@@ -2549,7 +2771,7 @@ function render() {
   const y = window.scrollY;
   const oldBoard = document.getElementById("board");
   const bx = oldBoard ? oldBoard.scrollLeft : null;
-  app.innerHTML = banners() + (S.view === "games" ? renderGames() : S.view === "food" ? renderFood() : S.view === "people" ? renderPeople() : renderSchedule());
+  app.innerHTML = banners() + (S.view === "games" ? renderGames() : S.view === "food" ? renderFood() : S.view === "orders" ? renderOrders() : S.view === "people" ? renderPeople() : renderSchedule());
   const nb = document.getElementById("board");
   if (nb && bx != null) nb.scrollLeft = bx;
   if (nb && !autoScrolled && COLS.every(c => S.got[c])) {
@@ -2564,6 +2786,7 @@ function render() {
   }
   setupRail();
   syncHeroBg();
+  syncOrdersVideo();
   window.scrollTo(0, y);
 }
 
@@ -2619,11 +2842,14 @@ document.addEventListener("click", e => {
   switch (a) {
     case "seat": run(() => onSeat(el.dataset.table, el.dataset.player)); break;
     case "vote": run(() => onVote(el.dataset.s, el.dataset.f)); break;
+    case "order": onOrder(el.dataset.s, el.dataset.f); break;
+    case "copy-orders": copyOrders(el.dataset.id); break;
+    case "vid-toggle": OBV.paused = !OBV.paused; syncOrdersVideo(); break;
     case "unvote": {
       if (!S.organiser) break;
       const vc = S.claims.find(x => x.id === el.dataset.id); if (!vc) break;
       const vp = byId(S.players, vc.playerId), vf = byId(S.food, vc.foodId);
-      run(async () => { await write(() => S.db.doc("claims/" + vc.id).delete()); toast("Removed " + ((vp && vp.name) || "their") + "'s vote" + (vf ? " for " + vf.name : "") + "."); });
+      run(async () => { await write(() => S.db.doc("claims/" + vc.id).delete()); toast("Removed " + ((vp && vp.name) || "their") + "'s " + (vc.ord ? "order" : "vote") + (vf ? " for " + vf.name : "") + "."); });
       break;
     }
     case "who": askWho(); break;
@@ -2660,7 +2886,7 @@ document.addEventListener("click", e => {
   }
 });
 
-const VIEWS = ["schedule", "games", "food", "people"];
+const VIEWS = ["schedule", "games", "food", "orders", "people"];
 function setView(v, keepScroll) {
   S.view = VIEWS.includes(v) ? v : "schedule";
   if (location.hash !== "#" + S.view) { try { history.replaceState(null, "", "#" + S.view); } catch (e) {} }
