@@ -897,6 +897,19 @@ main,.site-foot{position:relative;z-index:1}
 @keyframes unRoll2{0%,62%{transform:translateY(0);opacity:0}63%{opacity:1}80%{transform:translateY(2200%);opacity:1}81%,100%{transform:translateY(2200%);opacity:0}}
 @media (prefers-reduced-motion: reduce){.vhs-lines{display:none}.un-static::before{animation:none}}
 .check-solo{display:flex;gap:10px;align-items:center;font-size:.9rem;cursor:pointer}
+/* ===== Neon tiger (your video): the clip plays in the seat, tags and name plate ===== */
+.seat.tiger{background-color:#2A0634;background-image:linear-gradient(180deg,transparent 42%,rgba(28,3,36,.82) 92%),url("tiger-seat.webp");background-size:auto,cover;background-position:0 0,50% 58%;background-repeat:no-repeat;border:1px solid #FF4FD8;animation:tgPulse 2s ease-in-out infinite}
+.seat.tiger .tg-space{display:block;width:30px;height:30px;margin:-2px 0 0;font-style:normal}
+.seat.tiger > span{position:relative;z-index:1;color:#FFE9F8;font-weight:800;letter-spacing:.04em;text-shadow:0 0 3px #FF4FD8,0 0 8px rgba(255,79,216,.75),0 1px 2px rgba(20,0,30,.9)}
+@keyframes tgPulse{0%,100%{box-shadow:0 0 6px rgba(255,79,216,.45)}50%{box-shadow:0 0 14px rgba(255,79,216,.85)}}
+.vt-tiger{background-color:#2A0634;background-image:linear-gradient(270deg,rgba(142,20,104,0) 0,rgba(142,20,104,0) 34px,#8E1468 100px),url("tiger-seat.webp"),linear-gradient(90deg,#2A0634,#8E1468 55%);background-size:auto,auto 240%,auto;background-position:0 0,right 0 top 60%,0 0;background-repeat:no-repeat;border-color:#FF4FD8;color:#FFE9F8;animation:tgPulse 2s ease-in-out infinite}
+.vt-tiger b{font-weight:800;letter-spacing:.05em;text-shadow:0 0 4px #FF4FD8,0 0 10px rgba(255,79,216,.75),0 1px 2px rgba(20,0,30,.9)}
+.mine .mine-plate.vt-tiger{background-image:linear-gradient(270deg,rgba(142,20,104,0) 0,rgba(142,20,104,0) 90px,#8E1468 236px),url("tiger-seat.webp"),linear-gradient(90deg,#2A0634,#8E1468 55%);background-size:auto,auto 300%,auto;background-position:0 0,right 0 top 62%,0 0}
+@media (prefers-reduced-motion: reduce){.seat.tiger,.vt-tiger{animation:none}.seat.tiger{background-image:linear-gradient(180deg,transparent 42%,rgba(28,3,36,.82) 92%),url("tiger-seat.jpg")}.vt-tiger{background-image:linear-gradient(270deg,rgba(142,20,104,0) 0,rgba(142,20,104,0) 34px,#8E1468 100px),url("tiger-seat.jpg"),linear-gradient(90deg,#2A0634,#8E1468 55%)}.mine .mine-plate.vt-tiger{background-image:linear-gradient(270deg,rgba(142,20,104,0) 0,rgba(142,20,104,0) 90px,#8E1468 236px),url("tiger-seat.jpg"),linear-gradient(90deg,#2A0634,#8E1468 55%)}}
+/* Organiser: remove someone's food vote */
+.vt.has-x{padding-right:34px}
+.vt-x{position:absolute;right:5px;top:50%;z-index:4;width:20px;height:20px;margin-top:-10px;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:rgba(8,10,18,.78);color:#FFFFFF;font:700 .9rem/1 system-ui,sans-serif;cursor:pointer;pointer-events:auto}
+.vt-x:hover,.vt-x:focus-visible{background:#C0392B;border-color:#FFFFFF}
 /* ===== Owl: Midnight watcher ===== */
 .seat.owlwatch{background:linear-gradient(180deg,#0B1240,#1C1050);border:1px solid #6D74D8;color:#E6E8FF;font-weight:700}
 .seat.owlwatch::before{background-image:radial-gradient(1px 1px at 12% 18%,#FFFFFF 60%,transparent 61%),radial-gradient(1px 1px at 30% 55%,#CFD6FF 60%,transparent 61%),radial-gradient(1px 1px at 86% 40%,#FFFFFF 60%,transparent 61%),radial-gradient(1px 1px at 64% 12%,#FFFFFF 60%,transparent 61%),radial-gradient(1px 1px at 8% 70%,#CFD6FF 60%,transparent 61%),radial-gradient(circle at 85% 14%,#141752 0 4.4px,transparent 4.9px),radial-gradient(circle at 80% 18%,#F5F0D0 0 5px,transparent 5.5px);animation:owStars 3.2s ease-in-out infinite alternate}
@@ -1446,7 +1459,7 @@ function modeFilterBar() {
 const canAct = () => !!S.db && !S.readOnly && S.canWrite !== false;
 const meP = () => S.me && byId(S.players, S.me);
 const isHost = p => !!(p && p.host === true);
-const SEAT_STYLES = { "": "Standard", sparkle: "Sparkly pink", tophat: "Metallic with a top hat", owl: "Owl, head turning", frog: "Frog on a comms screen", lotus: "Lotus fan, deep pink and sparkly", cat: "Cat playing piano", squirrel: "Squirrel running", hamster: "Hamster kung-fu zoom (VHS)", goblin: "Cheeky goblin", crown: "Crown on a fighter HUD", ring: "Dropped gold ring", lava: "Lava lamp", fire: "Campfire with embers", disco: "Disco ball", storm: "Thunderstorm", slime: "8-bit slime", aurora: "Howling wolf under the aurora", sword: "Giant sword slash", heart: "Extra life (8-bit heart)", coin: "Coin toss", levelup: "Level up", chest: "Loot chest", dice: "Lucky roll (d6)", blocks: "Line clear (falling blocks)", shmup: "Space shooter", arcade: "Arcade stick combo", crit: "Critical hit", respawn: "Respawn beam", bomb: "Lit bomb", rhythm: "Rhythm combo", greyfox: "Grey fox (silver, ear twitch and dash)", void: "Void wormhole (purple)", dmmetal: "DM screen, d20, axe, fireball (heavy metal)", owlwatch: "Owl: midnight watcher", owlscholar: "Owl: arcane scholar", owlflight: "Owl: night flight", lpond: "Lotus fan: moonlit pond", link: "Lotus fan: ink-wash", lkin: "Lotus fan: kintsugi bloom", yacht: "Yacht rock" };
+const SEAT_STYLES = { "": "Standard", sparkle: "Sparkly pink", tophat: "Metallic with a top hat", owl: "Owl, head turning", frog: "Frog on a comms screen", lotus: "Lotus fan, deep pink and sparkly", cat: "Cat playing piano", squirrel: "Squirrel running", hamster: "Hamster kung-fu zoom (VHS)", goblin: "Cheeky goblin", crown: "Crown on a fighter HUD", ring: "Dropped gold ring", lava: "Lava lamp", fire: "Campfire with embers", disco: "Disco ball", storm: "Thunderstorm", slime: "8-bit slime", aurora: "Howling wolf under the aurora", sword: "Giant sword slash", heart: "Extra life (8-bit heart)", coin: "Coin toss", levelup: "Level up", chest: "Loot chest", dice: "Lucky roll (d6)", blocks: "Line clear (falling blocks)", shmup: "Space shooter", arcade: "Arcade stick combo", crit: "Critical hit", respawn: "Respawn beam", bomb: "Lit bomb", rhythm: "Rhythm combo", greyfox: "Grey fox (silver, ear twitch and dash)", void: "Void wormhole (purple)", dmmetal: "DM screen, d20, axe, fireball (heavy metal)", owlwatch: "Owl: midnight watcher", owlscholar: "Owl: arcane scholar", owlflight: "Owl: night flight", lpond: "Lotus fan: moonlit pond", link: "Lotus fan: ink-wash", lkin: "Lotus fan: kintsugi bloom", yacht: "Yacht rock", tiger: "Neon tiger (your video)" };
 const STYLE_ALIASES = { magnolia: "lotus", dm80: "dmmetal", dmhop: "dmmetal" };
 const styleOf = p => { if (!p) return ""; if (typeof p.style === "string") { const s = STYLE_ALIASES[p.style] || p.style; return SEAT_STYLES[s] !== undefined ? s : ""; } return p.host === true ? "sparkle" : ""; };
 const LOTUS_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="currentColor" stroke-width="1.1" stroke-linejoin="round">' +
@@ -1532,6 +1545,7 @@ const YACHT_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" 
 const LPOND_ICON = LOTUS_ICON + '<i class="rip r1"></i><i class="rip r2"></i><i class="koi"></i>';
 const LINK_ICON = LOTUS_ICON.replace('<circle class="pivot"', '<g class="ink-g"><path class="ink" d="M4.4 15.4c1.6-1.4 2.6-.6 3.6-2s2-2.2 3.2-.6 2.2 1.2 3.4-.2 2.6-1.6 5 1.4"/><path class="ink" d="M8.2 17.2c1.2-.8 2.4-.4 3.6-1.2s2.6-.6 4.2.6"/><circle class="ink-sun" cx="16.6" cy="12.2" r="1.1"/></g><circle class="pivot"') + '<i class="pf p1"></i><i class="pf p2"></i><i class="pf p3"></i>';
 const LKIN_ICON = LOTUS_ICON + '<i class="gd g1"></i><i class="gd g2"></i><i class="gd g3"></i><i class="gd g4"></i>';
+const TIGER_ICON = '<i class="tg-space" aria-hidden="true"></i>';
 const SWORD_ICON = '<span class="slash" aria-hidden="true"></span><svg viewBox="0 0 24 24" aria-hidden="true"><g class="sword-g">' +
   '<path class="blade" d="M12 .8 14 3.8V15.2H10V3.8Z"/><path class="fuller" d="M12 4.2V14.2"/>' +
   '<path class="guard" d="M6.8 15.2H17.2L16.4 16.8H7.6Z"/><path class="grip" d="M11 16.8h2v4.4h-2z"/><path class="wrap" d="M11 18.2l2-.5M11 19.6l2-.5"/>' +
@@ -1971,8 +1985,8 @@ function renderSeat(t, c, i) {
     const p = byId(S.players, c.playerId);
     const mine = c.playerId === S.me;
     const st = styleOf(p);
-    const cls = { sparkle: " host", tophat: " metal", owl: " owl styled", frog: " hud styled", lotus: " host lotus styled", cat: " cat styled", squirrel: " squirrel styled", hamster: " vhs styled", goblin: " goblin styled", crown: " crownhud styled", ring: " ringdrop styled", lava: " lava styled", fire: " fire styled", disco: " disco bgfx styled", storm: " storm bgfx styled", slime: " slime styled", aurora: " aurora bgfx styled", sword: " sword bgfx styled", heart: " heart styled", coin: " coin styled", levelup: " levelup bgfx styled", chest: " chest styled", dice: " dice styled", blocks: " blocks styled", shmup: " shmup bgfx styled", arcade: " arcade styled", crit: " crit bgfx styled", respawn: " respawn styled", bomb: " bomb styled", rhythm: " rhythm styled", greyfox: " greyfox styled", void: " void styled", dmmetal: " dmmetal bgfx styled", owlwatch: " owlwatch bgfx styled", owlscholar: " owlscholar styled", owlflight: " owlflight styled", lpond: " host lotus styled lpond", link: " host lotus styled link", lkin: " host lotus styled lkin", yacht: " yacht styled" }[st] || "";
-    const icon = { sparkle: MEEPLE + SPARKLES, tophat: METAL_MEEPLE, owl: OWL_ICON, frog: FROG_ICON, lotus: LOTUS_ICON + SPARKLES, cat: CAT_ICON, squirrel: SQUIRREL_ICON, hamster: HAMSTER_ICON + VHS_OSD, goblin: GOBLIN_ICON, crown: CROWN_ICON, ring: RING_ICON, lava: LAVA_ICON, fire: FIRE_ICON, disco: DISCO_ICON, storm: STORM_ICON, slime: SLIME_ICON, aurora: WOLF_ICON, sword: SWORD_ICON, heart: HEART_ICON, coin: COIN_ICON, levelup: LEVEL_ICON, chest: CHEST_ICON, dice: DICE_ICON, blocks: BLOCKS_ICON, shmup: SHMUP_ICON, arcade: ARCADE_ICON, crit: CRIT_ICON, respawn: RESPAWN_ICON, bomb: BOMB_ICON, rhythm: RHYTHM_ICON, greyfox: GREYFOX_ICON, void: VOID_ICON, dmmetal: DMMETAL_ICON, owlwatch: OWLWATCH_ICON, owlscholar: OWLSCHOLAR_ICON, owlflight: OWLFLIGHT_ICON, lpond: LPOND_ICON, link: LINK_ICON, lkin: LKIN_ICON, yacht: YACHT_ICON }[st] || MEEPLE;
+    const cls = { sparkle: " host", tophat: " metal", owl: " owl styled", frog: " hud styled", lotus: " host lotus styled", cat: " cat styled", squirrel: " squirrel styled", hamster: " vhs styled", goblin: " goblin styled", crown: " crownhud styled", ring: " ringdrop styled", lava: " lava styled", fire: " fire styled", disco: " disco bgfx styled", storm: " storm bgfx styled", slime: " slime styled", aurora: " aurora bgfx styled", sword: " sword bgfx styled", heart: " heart styled", coin: " coin styled", levelup: " levelup bgfx styled", chest: " chest styled", dice: " dice styled", blocks: " blocks styled", shmup: " shmup bgfx styled", arcade: " arcade styled", crit: " crit bgfx styled", respawn: " respawn styled", bomb: " bomb styled", rhythm: " rhythm styled", greyfox: " greyfox styled", void: " void styled", dmmetal: " dmmetal bgfx styled", owlwatch: " owlwatch bgfx styled", owlscholar: " owlscholar styled", owlflight: " owlflight styled", lpond: " host lotus styled lpond", link: " host lotus styled link", lkin: " host lotus styled lkin", yacht: " yacht styled", tiger: " tiger styled" }[st] || "";
+    const icon = { sparkle: MEEPLE + SPARKLES, tophat: METAL_MEEPLE, owl: OWL_ICON, frog: FROG_ICON, lotus: LOTUS_ICON + SPARKLES, cat: CAT_ICON, squirrel: SQUIRREL_ICON, hamster: HAMSTER_ICON + VHS_OSD, goblin: GOBLIN_ICON, crown: CROWN_ICON, ring: RING_ICON, lava: LAVA_ICON, fire: FIRE_ICON, disco: DISCO_ICON, storm: STORM_ICON, slime: SLIME_ICON, aurora: WOLF_ICON, sword: SWORD_ICON, heart: HEART_ICON, coin: COIN_ICON, levelup: LEVEL_ICON, chest: CHEST_ICON, dice: DICE_ICON, blocks: BLOCKS_ICON, shmup: SHMUP_ICON, arcade: ARCADE_ICON, crit: CRIT_ICON, respawn: RESPAWN_ICON, bomb: BOMB_ICON, rhythm: RHYTHM_ICON, greyfox: GREYFOX_ICON, void: VOID_ICON, dmmetal: DMMETAL_ICON, owlwatch: OWLWATCH_ICON, owlscholar: OWLSCHOLAR_ICON, owlflight: OWLFLIGHT_ICON, lpond: LPOND_ICON, link: LINK_ICON, lkin: LKIN_ICON, yacht: YACHT_ICON, tiger: TIGER_ICON }[st] || MEEPLE;
     return '<button class="seat taken' + (mine ? " me" : "") + cls + (i >= seats ? " overflow" : "") + '" style="--h:' + hue(p.name) + '" data-act="seat" data-table="' + esc(t.id) + '" data-player="' + esc(p.id) + '" aria-label="' + esc(p.name + (mine ? " (you), tap to leave" : "")) + '">' + icon + "<span>" + esc(mine ? "You" : p.name) + "</span></button>";
   }
   const dis = !S.organiser && !canAct();
@@ -2078,15 +2092,16 @@ function leaderIn(sid) {
   const counts = foodIn(sid).map(f => [f.id, votesFor(sid, f.id).length]).sort((a, b) => b[1] - a[1]);
   return counts.length && counts[0][1] > 0 && (counts.length === 1 || counts[0][1] > counts[1][1]) ? counts[0][0] : null;
 }
-function voteTag(p) {
+function voteTag(p, c) {
   const st = styleOf(p) || "plain";
-  return '<span class="vt vt-' + st + '" style="--h:' + hue(p.name) + '"><i class="a"></i><i class="b"></i><i class="c"></i><b>' + esc(p.name) + "</b></span>";
+  const x = c && S.organiser ? '<button class="vt-x" data-act="unvote" data-id="' + esc(c.id) + '" aria-label="Remove ' + esc(p.name) + '\'s vote" title="Remove ' + esc(p.name) + '\'s vote">×</button>' : "";
+  return '<span class="vt vt-' + st + (x ? " has-x" : "") + '" style="--h:' + hue(p.name) + '"><i class="a"></i><i class="b"></i><i class="c"></i><b>' + esc(p.name) + "</b>" + x + "</span>";
 }
 function voteBlock(f, sid) {
   const vs = votesFor(sid, f.id), mine = myVote(sid), on = !!(mine && mine.foodId === f.id);
   return '<div class="votes"><button class="vote-btn' + (on ? " on" : "") + '" data-act="vote" data-s="' + esc(sid) + '" data-f="' + esc(f.id) + '" aria-pressed="' + on + '">' +
     "<span>" + (on ? "✓ Your vote" : "Vote for this") + '</span><span class="vc">' + plural(vs.length, "vote") + "</span></button>" +
-    vs.map(c => voteTag(byId(S.players, c.playerId))).join("") + "</div>";
+    vs.map(c => voteTag(byId(S.players, c.playerId), c)).join("") + "</div>";
 }
 async function castVote(sid, fid) {
   const id = voteId(sid, S.me), cur = S.claims.find(c => c.id === id);
@@ -2604,6 +2619,13 @@ document.addEventListener("click", e => {
   switch (a) {
     case "seat": run(() => onSeat(el.dataset.table, el.dataset.player)); break;
     case "vote": run(() => onVote(el.dataset.s, el.dataset.f)); break;
+    case "unvote": {
+      if (!S.organiser) break;
+      const vc = S.claims.find(x => x.id === el.dataset.id); if (!vc) break;
+      const vp = byId(S.players, vc.playerId), vf = byId(S.food, vc.foodId);
+      run(async () => { await write(() => S.db.doc("claims/" + vc.id).delete()); toast("Removed " + ((vp && vp.name) || "their") + "'s vote" + (vf ? " for " + vf.name : "") + "."); });
+      break;
+    }
     case "who": askWho(); break;
     case "layout": S.layout = el.dataset.l; try { localStorage.setItem("bgw-layout", S.layout); } catch (e2) {} render(); window.scrollTo(0, 0); break;
     case "toggle-later": S.laterOpen = !S.laterOpen; render(); break;
