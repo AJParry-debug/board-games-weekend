@@ -897,6 +897,35 @@ main,.site-foot{position:relative;z-index:1}
 @keyframes unRoll2{0%,62%{transform:translateY(0);opacity:0}63%{opacity:1}80%{transform:translateY(2200%);opacity:1}81%,100%{transform:translateY(2200%);opacity:0}}
 @media (prefers-reduced-motion: reduce){.vhs-lines{display:none}.un-static::before{animation:none}}
 .check-solo{display:flex;gap:10px;align-items:center;font-size:.9rem;cursor:pointer}
+/* ---- Burn-in care: Now view layout shuffle ---- */
+.now-stage{display:flex;flex-direction:column;gap:16px}
+.now-stage > .hero{order:1}.now-stage > .upnext{order:2}.now-stage > .later{order:3}
+.now-stage.nv1 > .upnext,.now-stage.nv3 > .upnext{order:0}
+.now-stage.nv2 .hero.is-live .hero-head,.now-stage.nv3 .hero.is-live .hero-head{flex-direction:row-reverse}
+.now-stage.nv2 .hero.is-live .hero-tables,.now-stage.nv3 .hero.is-live .hero-tables{direction:rtl}
+.now-stage.nv2 .hero.is-live .hero-tables > *,.now-stage.nv3 .hero.is-live .hero-tables > *{direction:ltr}
+.now-stage.nv1{padding-left:1.2%}.now-stage.nv2{padding-right:1.2%}.now-stage.nv3{padding-left:.6%;padding-right:.6%}
+.now-stage.nv-change{animation:nvFade 1.2s ease-out}
+@keyframes nvFade{0%{opacity:0;filter:blur(3px)}100%{opacity:1;filter:none}}
+.sb-test{align-self:flex-end;font-size:.78rem}
+/* ---- Screen break overlay ---- */
+#screen-break{position:fixed;inset:0;z-index:9999;background:#04050B;opacity:0;transition:opacity .6s ease;cursor:pointer;overflow:hidden}
+#screen-break.in{opacity:1}#screen-break.out{opacity:0}
+.sb-die{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;gap:10px;color:hsl(var(--sb-h,260) 90% 72%);filter:drop-shadow(0 0 14px hsl(var(--sb-h,260) 90% 60% / .7));transition:color .4s,filter .4s;will-change:transform}
+.sb-die svg{width:clamp(110px,14vw,190px);height:auto;animation:d20Spin 9s linear infinite}
+.sb-die-label{font-family:var(--display);font-weight:800;font-size:clamp(1rem,2vw,1.6rem);letter-spacing:.04em;white-space:nowrap}
+.sb-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sb-shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,5,11,.85),rgba(4,5,11,0) 45%)}
+.sb-info{position:absolute;left:4vw;bottom:5vh;display:flex;flex-direction:column;gap:6px;color:#E7E9F5;text-shadow:0 2px 6px rgba(0,0,0,.8);animation:sbDrift 20s linear both}
+.sb-time{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,5vw,4rem);line-height:1}
+.sb-now{font-size:clamp(1rem,1.8vw,1.4rem);font-weight:700}
+.sb-next{font-size:clamp(.9rem,1.4vw,1.1rem);color:#B9BED6}
+.sb-tap{margin-top:6px;font-size:.8rem;color:#7F86A6}
+#screen-break.sb-alt .sb-info{left:auto;right:4vw;bottom:auto;top:6vh;align-items:flex-end;text-align:right;animation-name:sbDriftL}
+@keyframes sbDriftL{0%{transform:translateX(0)}100%{transform:translateX(-3vw)}}
+@keyframes sbDrift{0%{transform:translateX(0)}100%{transform:translateX(3vw)}}
+@keyframes d20Spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.now-stage.nv-change,.sb-die svg,.sb-info{animation:none}.sb-die{left:50%;top:40%;transform:translate(-50%,-50%)!important}}
 /* ---- Restaurant menus ---- */
 .menu-field{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .menu-field legend{font-weight:700;padding:0 6px}
@@ -2674,7 +2703,11 @@ function renderSchedule() {
   }
   const groups = [...dayGroups().entries()];
   const bar = '<div class="board-bar">' + layoutSeg() + modeFilterBar() + '<span class="spacer"></span>' + (S.layout === "now" ? "" : jumpButtons(groups)) + "</div>";
-  if (S.layout === "now") return bar + renderNow();
+  if (S.layout === "now") {
+    const v = nowVariant(), changed = lastVariant !== null && lastVariant !== v; lastVariant = v;
+    return bar + '<div class="now-stage nv' + v + (changed ? " nv-change" : "") + '">' + renderNow() +
+      (S.organiser ? '<button class="btn small ghost sb-test" data-act="test-break">Preview screen break</button>' : "") + "</div>";
+  }
   let h = renderMine() + renderSummary() + bar;
   if (S.layout === "spine") return h + renderSpine(groups);
   h += '<div class="board-outer"><div class="board" id="board">';
@@ -2825,6 +2858,59 @@ setInterval(() => {
   heroShow(HB.ok[HB.idx], true);
 }, HOLD_MS);
 
+/* ---------- Big-screen burn-in care: layout shuffle + idle screen breaks (Now view only) ---------- */
+const SHUFFLE_MS = 8 * 60 * 1000, BREAK_EVERY = 15 * 60 * 1000, BREAK_IDLE = 2 * 60 * 1000, BREAK_LEN = 20000;
+let lastVariant = null, lastTouch = Date.now(), lastBreak = Date.now(), breakNo = 0, breakTimer = null;
+const nowVariant = () => Math.floor(Date.now() / SHUFFLE_MS) % 4;
+["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => window.addEventListener(ev, () => { lastTouch = Date.now(); }, { passive: true }));
+const onNowScreen = () => S.view === "schedule" && S.layout === "now" && !modalOpen && !document.hidden;
+function endBreak() {
+  const o = document.getElementById("screen-break"); if (!o) return;
+  clearTimeout(breakTimer); o.classList.add("out"); lastBreak = Date.now(); lastTouch = Date.now();
+  if (o._raf) cancelAnimationFrame(o._raf);
+  const v = o.querySelector("video"); if (v) v.pause();
+  setTimeout(() => o.remove(), 700);
+}
+function startBreak() {
+  if (document.getElementById("screen-break")) return;
+  breakNo++;
+  const s = NOW ? byId(S.sessions, NOW.id) : null, next = NOW && NOW.nextId ? byId(S.sessions, NOW.nextId) : null;
+  const t = new Date().toLocaleTimeString("en-AU", { hour: "numeric", minute: "2-digit" });
+  const info = '<div class="sb-info"><span class="sb-time">' + esc(t) + "</span>" + (s ? '<span class="sb-now">' + esc((NOW.mode === "now" ? "On now: " : "Up first: ") + sessionName(s)) + "</span>" : "") +
+    (next ? '<span class="sb-next">Next: ' + esc(sessionName(next)) + "</span>" : "") + '<span class="sb-tap">Tap anywhere to go back</span></div>';
+  const useVideo = breakNo % 2 === 0 && !reduceMotion();
+  const o = document.createElement("div");
+  o.id = "screen-break"; if (Math.floor(breakNo / 2) % 2) o.classList.add("sb-alt"); o.setAttribute("role", "dialog"); o.setAttribute("aria-label", "Screen break. Tap to return to the schedule.");
+  o.innerHTML = useVideo
+    ? '<video class="sb-video" muted loop playsinline autoplay src="' + mediaUrl("orders-banner.mp4") + '" poster="' + mediaUrl("orders-banner.jpg") + '"></video><div class="sb-shade"></div>' + info
+    : '<div class="sb-die">' + D20 + '<span class="sb-die-label">' + esc((S.cfg && S.cfg.title) || "Board Games Weekend") + "</span></div>" + info;
+  document.body.appendChild(o);
+  o.addEventListener("pointerdown", endBreak);
+  if (useVideo) { const v = o.querySelector("video"); v.addEventListener("error", () => { o.remove(); breakNo++; startBreak(); }); const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); }
+  else if (!reduceMotion()) {
+    const d = o.querySelector(".sb-die"); let x = Math.random() * 0.6 * innerWidth, y = Math.random() * 0.5 * innerHeight, vx = 110, vy = 80, hueV = Math.floor(Math.random() * 360), last = performance.now();
+    d.style.setProperty("--sb-h", hueV);
+    const step = now => {
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      const w = innerWidth - d.offsetWidth, hh = innerHeight - d.offsetHeight;
+      x += vx * dt; y += vy * dt; let hit = false;
+      if (x <= 0 || x >= w) { vx = -vx; x = Math.max(0, Math.min(w, x)); hit = true; }
+      if (y <= 0 || y >= hh) { vy = -vy; y = Math.max(0, Math.min(hh, y)); hit = true; }
+      if (hit) { hueV = (hueV + 70 + Math.floor(Math.random() * 80)) % 360; d.style.setProperty("--sb-h", hueV); }
+      d.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)";
+      o._raf = requestAnimationFrame(step);
+    };
+    o._raf = requestAnimationFrame(step);
+  }
+  requestAnimationFrame(() => o.classList.add("in"));
+  breakTimer = setTimeout(endBreak, BREAK_LEN);
+}
+setInterval(() => {
+  if (!onNowScreen()) { lastBreak = Math.max(lastBreak, Date.now() - BREAK_EVERY + 60000); return; }
+  const now = Date.now();
+  if (now - lastBreak >= BREAK_EVERY && now - lastTouch >= BREAK_IDLE) startBreak();
+  if (lastVariant !== null && nowVariant() !== lastVariant && !document.getElementById("screen-break")) render();
+}, 15000);
 function renderNow() {
   const order = NOW ? NOW.order : sessionsSorted().map(s => s.id);
   let s = NOW ? byId(S.sessions, NOW.id) : null, over = false;
@@ -2994,6 +3080,7 @@ document.addEventListener("click", e => {
     case "vote": run(() => onVote(el.dataset.s, el.dataset.f)); break;
     case "order": onOrder(el.dataset.s, el.dataset.f); break;
     case "copy-orders": copyOrders(el.dataset.id); break;
+    case "test-break": startBreak(); break;
     case "lock-meal": if (S.organiser) run(() => lockMeal(el.dataset.s, el.dataset.f)); break;
     case "vid-toggle": OBV.paused = !OBV.paused; syncOrdersVideo(); break;
     case "unvote": {
