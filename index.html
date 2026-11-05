@@ -897,6 +897,28 @@ main,.site-foot{position:relative;z-index:1}
 @keyframes unRoll2{0%,62%{transform:translateY(0);opacity:0}63%{opacity:1}80%{transform:translateY(2200%);opacity:1}81%,100%{transform:translateY(2200%);opacity:0}}
 @media (prefers-reduced-motion: reduce){.vhs-lines{display:none}.un-static::before{animation:none}}
 .check-solo{display:flex;gap:10px;align-items:center;font-size:.9rem;cursor:pointer}
+/* ---- Restaurant menus ---- */
+.menu-field{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.menu-field legend{font-weight:700;padding:0 6px}
+#f-menu{font:.85rem/1.4 ui-monospace,Menlo,Consolas,monospace}
+.mp-list{max-height:min(48vh,420px);overflow:auto;display:flex;flex-direction:column;gap:12px;padding:2px 4px 2px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-top:10px;padding-bottom:10px}
+.mp-group h4{margin:0 0 6px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mp-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 8px;border-radius:10px}
+.mp-row + .mp-row{border-top:1px dashed var(--line)}
+.mp-row.on{background:rgba(255,179,138,.12)}
+.mp-name{font-size:.92rem}
+.mp-step{display:flex;align-items:center;gap:8px;flex:none}
+.mp-b{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--chip);color:var(--ink);font:700 1rem/1 system-ui,sans-serif;cursor:pointer}
+.mp-b:hover,.mp-b:focus-visible{border-color:#FFB38A}
+.mp-q{min-width:1.2em;text-align:center;font-weight:800}
+.mp-row:not(.on) .mp-q{color:var(--muted)}
+.mp-sum{margin:6px 0 0;font-size:.88rem;font-weight:600;color:#FFE7C7}
+.menu-pill{font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#3A1626;background:#FFB38A;border-radius:999px;padding:2px 7px;margin-left:6px;white-space:nowrap}
+.ob-tally{border-top:1px dotted rgba(255,190,140,.3);padding-top:8px}
+.ob-tally h5{margin:0 0 6px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#FFB38A}
+.ob-tally-list{display:flex;flex-wrap:wrap;gap:6px}
+.ob-tally-i{font-size:.82rem;background:rgba(255,231,199,.08);border:1px solid rgba(255,190,140,.35);border-radius:999px;padding:3px 10px}
+.ob-tally-i b{color:#FFB38A}
 /* Orders tab: vote and lock in from the meal vote panel */
 .orders-view .ob-bar{grid-template-columns:minmax(0,1.1fr) minmax(60px,1.6fr) auto auto;row-gap:2px}
 .ob-vote-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
@@ -2188,7 +2210,7 @@ function foodSlots(f) {
 const foodIn = sid => foodSorted().filter(f => foodSlots(f).includes(sid));
 const slotLabel = id => id === ANY ? "Any time" : sessionName(byId(S.sessions, id));
 const slotOrder = ids => [...sessionsSorted().map(s => s.id).filter(id => ids.includes(id)), ...(ids.includes(ANY) ? [ANY] : [])];
-const foodDoc = (f, slots) => ({ name: f.name || "", details: f.details || "", by: f.by || "", order: f.order || Date.now(), cover: f.cover || "", coverPos: f.coverPos || "middle", sessionIds: slots, extra: !!f.extra });
+const foodDoc = (f, slots) => ({ name: f.name || "", details: f.details || "", by: f.by || "", order: f.order || Date.now(), cover: f.cover || "", coverPos: f.coverPos || "middle", sessionIds: slots, extra: !!f.extra, menuFrom: f.menuFrom || "", menu: Array.isArray(f.menu) ? f.menu : [] });
 const foodKey = f => "f__" + f.id;
 const foodHasCover = f => !!(coverData(foodKey(f)) || safeUrl(f.cover));
 async function setFoodSlots(f, slots) { await write(() => S.db.doc("food/" + f.id).set(foodDoc(f, slots))); }
@@ -2253,7 +2275,71 @@ function orderBlock(f, sid) {
     "<span>" + (mine ? "✓ Your order: " + esc(mine.orderText || "Yes please") : "＋ Add my order") + '</span><span class="vc">' + plural(os.length, "order") + "</span></button>" +
     (os.length ? '<ul class="ord-list">' + os.map(orderRow).join("") + "</ul>" : "") + "</div>";
 }
+/* ---------- Restaurant menus: set orders can only be picked from a menu list ---------- */
+const MENU_PRESETS = {"gyg": {"name": "Guzman y Gomez", "menu": ["# Burritos", "Burrito: Grilled Chicken", "Burrito: Shredded Beef Brisket", "Burrito: Ground Beef", "Burrito: Pulled Pork", "Burrito: Sautéed Vegetables & Guac", "Mini Burrito: Grilled Chicken", "Mini Burrito: Shredded Beef Brisket", "Mini Burrito: Ground Beef", "Cali Burrito: Grilled Chicken", "# Bowls", "Bowl: Grilled Chicken", "Bowl: Shredded Beef Brisket", "Bowl: Ground Beef", "Bowl: Pulled Pork", "Bowl: Sautéed Vegetables & Guac", "Mini Bowl: Grilled Chicken", "Mini Bowl: Shredded Beef Brisket", "# Nachos & tacos", "Nachos: Grilled Chicken", "Nachos: Shredded Beef Brisket", "Nachos: Ground Beef", "Soft Tender Taco: Grilled Chicken", "Soft Tender Taco: Ground Beef", "Soft Tender Taco: Shredded Beef Brisket", "# Sides", "Fries (chipotle seasoned)", "Corn Chips & Guacamole", "Corn Chips & Salsa", "Churros", "# Drinks", "Coke No Sugar (can)", "Mexican soft drink (Jarritos)", "Water"]}, "kfc": {"name": "KFC", "menu": ["# Chicken", "Original Recipe chicken (1 piece)", "Original Recipe chicken (3 pieces)", "Original Tenders (3)", "Zinger Tenders (3)", "Nuggets (6)", "Popcorn Chicken", "9 piece bucket", "# Burgers & wraps", "Zinger Burger", "Original Recipe Burger", "Tower Burger", "Zinger Stacker", "Twister wrap", "# Boxes", "Zinger Box", "Original Recipe Box", "# Sides", "Chips (regular)", "Chips (large)", "Potato & Gravy", "Coleslaw", "Gravy (large)", "# Drinks", "Pepsi Max (regular)", "Pepsi Max (large)", "Solo", "Water"]}, "dominos": {"name": "Domino's", "menu": ["# Pizzas", "Pepperoni", "Hawaiian", "BBQ Meatlovers", "Margherita", "Veggie Supreme", "Peri Peri Chicken", "Supreme", "Simply Cheese", "# Pasta", "Meatlovers Pasta", "Vegorama Pasta", "# Sides", "Garlic Bread", "Cheesy Garlic Bread", "Potato Gems", "Chicken Wings", "# Desserts", "Choc Lava Cake", "# Drinks", "Pepsi Max (1.25L)", "Pepsi (1.25L)", "Solo (1.25L)"]}, "maccas": {"name": "McDonald's", "menu": ["# Burgers", "Big Mac", "Quarter Pounder", "Double Quarter Pounder", "Cheeseburger", "Double Cheeseburger", "Hamburger", "McChicken", "McSpicy", "McCrispy", "Filet-O-Fish", "# Meals (medium fries + drink)", "Big Mac Meal", "Quarter Pounder Meal", "McChicken Meal", "McSpicy Meal", "10 McNuggets Meal", "# Chicken", "Chicken McNuggets (6)", "Chicken McNuggets (10)", "Chicken McNuggets (20)", "# Sides", "Fries (small)", "Fries (medium)", "Fries (large)", "# Sweets", "McFlurry (Oreo)", "Sundae (hot fudge)", "Apple Pie", "Thickshake (chocolate)", "# Drinks", "Coke (medium)", "Coke No Sugar (medium)", "Sprite (medium)", "Frozen Coke", "Flat White (McCafé)"]}};
+const hasMenu = f => !!(f && Array.isArray(f.menu) && f.menu.some(l => l && l[0] !== "#"));
+function menuGroups(f) {
+  const out = []; let g = { h: "", items: [] };
+  (f.menu || []).forEach(l => { if (l.startsWith("#")) { if (g.items.length || g.h) out.push(g); g = { h: l.replace(/^#+\s*/, ""), items: [] }; } else g.items.push(l); });
+  if (g.items.length) out.push(g);
+  return out.filter(x => x.items.length);
+}
+const orderTextFrom = (items, note) => items.map(x => (x.q > 1 ? x.q + "× " : "") + x.n).join(", ") + (note ? (items.length ? " · " : "") + note : "");
+function menuTally(sid, f) {
+  const t = new Map();
+  ordersFor(sid, f.id).forEach(c => (c.orderItems || []).forEach(x => t.set(x.n, (t.get(x.n) || 0) + (x.q || 1))));
+  const order = (f.menu || []).filter(l => l[0] !== "#");
+  return [...t.entries()].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
+}
+function tallyHtml(sid, f) {
+  const t = menuTally(sid, f); if (!t.length) return "";
+  return '<div class="ob-tally"><h5>Total to order</h5><div class="ob-tally-list">' + t.map(([n, q]) => '<span class="ob-tally-i"><b>' + q + "×</b> " + esc(n) + "</span>").join("") + "</div></div>";
+}
+function menuOrderModal(sid, fid) {
+  const f = byId(S.food, fid), s = byId(S.sessions, sid); if (!f || !s) return;
+  const mine = myOrder(sid, fid), qty = new Map(((mine && mine.orderItems) || []).map(x => [x.n, x.q || 1]));
+  const rest = f.menuFrom && MENU_PRESETS[f.menuFrom] ? MENU_PRESETS[f.menuFrom].name : "";
+  const groups = menuGroups(f);
+  const html = "<h2>" + (mine ? "Change your order" : "Add your order") + '</h2><p class="sub">' + esc(f.name) + (rest && rest !== f.name ? " · " + esc(rest) : "") + " · " + esc(sessionName(s)) + "</p>" +
+    '<form class="form" id="f"><div class="field"><input id="m-find" type="search" placeholder="Search the menu…" autocomplete="off" aria-label="Search the menu"></div>' +
+    '<div class="mp-list">' + groups.map(g => '<div class="mp-group"><h4>' + esc(g.h || "Menu") + "</h4>" + g.items.map(n => {
+      const q = qty.get(n) || 0;
+      return '<div class="mp-row' + (q ? " on" : "") + '" data-n="' + esc(n) + '"><span class="mp-name">' + esc(n) + '</span><span class="mp-step"><button type="button" class="mp-b" data-d="-1" aria-label="One less ' + esc(n) + '">−</button><span class="mp-q">' + q + '</span><button type="button" class="mp-b" data-d="1" aria-label="One more ' + esc(n) + '">+</button></span></div>';
+    }).join("") + "</div>").join("") + "</div>" +
+    '<div class="field"><label for="o-note">Notes (optional)</label><input id="o-note" maxlength="100" placeholder="e.g. no pickles, extra sauce" value="' + esc((mine && mine.note) || "") + '"></div>' +
+    '<p class="mp-sum" id="m-sum"></p>' +
+    '<div class="actions">' + (mine ? '<button type="button" class="btn danger" data-m="del">Remove my order</button><span class="spacer"></span>' : "") +
+    '<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">' + (mine ? "Save" : "Add order") + "</button></div></form>";
+  openModal(html, m => {
+    const sum = m.querySelector("#m-sum");
+    const picked = () => [...m.querySelectorAll(".mp-row")].map(r => ({ n: r.dataset.n, q: +r.querySelector(".mp-q").textContent })).filter(x => x.q > 0);
+    const show = () => { const p = picked(); sum.textContent = p.length ? "Your order: " + orderTextFrom(p, "") : "Tap + on anything you'd like."; };
+    m.querySelectorAll(".mp-b").forEach(b => b.onclick = () => {
+      const r = b.closest(".mp-row"), q = r.querySelector(".mp-q"), v = Math.max(0, Math.min(20, +q.textContent + +b.dataset.d));
+      q.textContent = v; r.classList.toggle("on", v > 0); show();
+    });
+    m.querySelector("#m-find").addEventListener("input", e => {
+      const t = e.target.value.trim().toLowerCase();
+      m.querySelectorAll(".mp-row").forEach(r => r.hidden = !!t && !r.dataset.n.toLowerCase().includes(t));
+      m.querySelectorAll(".mp-group").forEach(g => g.hidden = ![...g.querySelectorAll(".mp-row")].some(r => !r.hidden));
+    });
+    show();
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    const del = m.querySelector('[data-m="del"]');
+    if (del) del.onclick = () => run(async () => { await write(() => S.db.doc("claims/" + mine.id).delete()); closeModal(); toast("Order removed."); });
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      const items = picked(), note = m.querySelector("#o-note").value.trim();
+      if (!items.length) { toast("Pick at least one thing from the menu."); return; }
+      run(async () => {
+        await write(() => S.db.doc("claims/" + orderId(sid, fid, S.me)).set({ sessionId: sid, playerId: S.me, foodId: fid, ord: true, orderItems: items, note, orderText: orderTextFrom(items, note), at: mine ? (mine.at || Date.now()) : Date.now() }));
+        closeModal(); toast(mine ? "Order updated." : "Order in for " + f.name + ".");
+      });
+    };
+  });
+}
 function orderModal(sid, fid) {
+  if (hasMenu(byId(S.food, fid))) { menuOrderModal(sid, fid); return; }
   const f = byId(S.food, fid), s = byId(S.sessions, sid); if (!f || !s) return;
   const mine = myOrder(sid, fid);
   const html = "<h2>" + (mine ? "Change your order" : "Add your order") + '</h2><p class="sub">' + esc(f.name) + " · " + esc(sessionName(s)) + "</p>" +
@@ -2300,6 +2386,7 @@ function orderSummaryText(s) {
     const os = ordersFor(s.id, f.id);
     out.push("", f.name + ": " + plural(os.length, "order"));
     os.forEach(c => out.push("- " + byId(S.players, c.playerId).name + (c.orderText ? ": " + c.orderText : "")));
+    if (hasMenu(f)) { const t = menuTally(s.id, f); if (t.length) out.push("Total to order: " + t.map(([n, q]) => q + "× " + n).join(", ")); }
   });
   return out.join("\n");
 }
@@ -2327,10 +2414,10 @@ function obCard(s, featured, kicker) {
   }
   h += extras.map(f => {
     const os = ordersFor(s.id, f.id), mine = myOrder(s.id, f.id);
-    return '<div class="ob-item"><div class="ob-item-head"><h4>' + FOOD_ICON + esc(f.name) + (f.id === chM ? '<em class="ob-chosen">Chosen meal</em>' : "") + '</h4><span class="pill">' + plural(os.length, "order") + "</span>" +
+    return '<div class="ob-item"><div class="ob-item-head"><h4>' + FOOD_ICON + esc(f.name) + (f.id === chM ? '<em class="ob-chosen">Chosen meal</em>' : "") + (hasMenu(f) ? '<em class="menu-pill">Set menu</em>' : "") + '</h4><span class="pill">' + plural(os.length, "order") + "</span>" +
       '<button class="btn small' + (mine ? "" : " primary") + '" data-act="order" data-s="' + esc(s.id) + '" data-f="' + esc(f.id) + '">' + (mine ? "Edit my order" : "Add my order") + "</button></div>" +
       (f.details ? '<p class="ob-details">' + esc(f.details) + "</p>" : "") +
-      (os.length ? '<ul class="ord-list">' + os.map(orderRow).join("") + "</ul>" : '<p class="ob-none">No orders yet.</p>') + "</div>";
+      (os.length ? '<ul class="ord-list">' + os.map(orderRow).join("") + "</ul>" : '<p class="ob-none">No orders yet.</p>') + (hasMenu(f) ? tallyHtml(s.id, f) : "") + "</div>";
   }).join("");
   return h + "</section>";
 }
@@ -2427,6 +2514,10 @@ function foodModal(fid, presetSid) {
     '<div class="field"><label for="f-name">Food</label><input id="f-name" required maxlength="60" placeholder="e.g. Pizza, McDonald\'s, Sausage sizzle" value="' + esc(f ? f.name : "") + '"></div>' +
     '<fieldset class="field check-field"><legend>When</legend><div class="check-list">' + boxes + '</div><span class="hint">Tick every slot it\'s for. Leave them all unticked to keep it on your list without a slot yet.</span></fieldset>' +
     '<label class="check-solo extra-check"><input type="checkbox" id="f-extra"' + (f && f.extra ? " checked" : "") + '> <span><b>Confirmed extra</b>: no voting. It\'s happening, and people can put in an order (e.g. a coffee run or snacks).</span></label>' +
+    '<fieldset class="field menu-field"><legend>Restaurant menu</legend><div class="field"><label for="f-rest">Orders come from</label><select id="f-rest">' +
+      [["", "No set menu (people type their order)"]].concat(Object.entries(MENU_PRESETS).map(([k, v]) => [k, v.name])).concat([["custom", "My own list"]]).map(([k, l]) => '<option value="' + k + '"' + ((f && (f.menuFrom || (hasMenu(f) ? "custom" : ""))) === k ? " selected" : "") + ">" + esc(l) + "</option>").join("") + "</select></div>" +
+      '<div class="field" id="f-menu-wrap"' + (f && hasMenu(f) ? "" : " hidden") + '><label for="f-menu">Menu items, one per line</label><textarea id="f-menu" rows="9" placeholder="# Burgers&#10;Zinger Burger&#10;Tower Burger">' + esc(f && hasMenu(f) ? f.menu.join("\n") : "") + '</textarea>' +
+      '<span class="hint">People can only order from this list. Start a line with # to make a heading. The built-in lists cover each chain\'s usual Australian menu, but stores vary, so edit it to match yours. For Guzman y Gomez, people can put mild or spicy in their notes.</span></div></fieldset>' +
     '<div class="field"><label for="f-details">Details</label><textarea id="f-details" maxlength="400" placeholder="e.g. Ordering from Domino\'s at 6pm. One vegetarian, one gluten-free.">' + esc(f ? f.details : "") + "</textarea></div>" +
     '<div class="field"><label for="f-by">Who\'s sorting it</label><select id="f-by">' + people + "</select></div>" +
     '<fieldset class="cover-field"><legend>Banner image (optional)</legend><div id="f-prev"></div>' +
@@ -2446,6 +2537,13 @@ function foodModal(fid, presetSid) {
     };
     ["#f-name", "#f-cover"].forEach(id => m.querySelector(id).addEventListener("input", preview));
     m.querySelector("#f-pos").addEventListener("change", preview);
+    const rs = m.querySelector("#f-rest"), mw = m.querySelector("#f-menu-wrap"), mt = m.querySelector("#f-menu");
+    rs.addEventListener("change", () => {
+      const v = rs.value, cur = mt.value.trim(), isPreset = !cur || Object.values(MENU_PRESETS).some(x => x.menu.join("\n") === cur);
+      if (MENU_PRESETS[v] && isPreset) mt.value = MENU_PRESETS[v].menu.join("\n");
+      mw.hidden = !v;
+      if (v && !m.querySelector("#f-name").value.trim() && MENU_PRESETS[v]) m.querySelector("#f-name").value = MENU_PRESETS[v].name;
+    });
     file.addEventListener("change", async () => {
       const fl = file.files && file.files[0]; if (!fl) return;
       try { pending = await shrinkImage(fl); rmb.hidden = false; preview(); }
@@ -2468,7 +2566,8 @@ function foodModal(fid, presetSid) {
       const slots = slotOrder([...m.querySelectorAll('input[name="slot"]:checked')].map(c => c.value));
       const cover = m.querySelector("#f-cover").value.trim();
       if (cover && !safeUrl(cover)) { toast("The image link needs to start with https://"); return; }
-      const data = foodDoc({ name, details: m.querySelector("#f-details").value.trim(), by: m.querySelector("#f-by").value, order: f ? f.order : Date.now(), cover, coverPos: m.querySelector("#f-pos").value, extra: m.querySelector("#f-extra").checked }, slots);
+      const data = foodDoc({ name, details: m.querySelector("#f-details").value.trim(), by: m.querySelector("#f-by").value, order: f ? f.order : Date.now(), cover, coverPos: m.querySelector("#f-pos").value, extra: m.querySelector("#f-extra").checked,
+        menuFrom: m.querySelector("#f-rest").value, menu: m.querySelector("#f-rest").value ? m.querySelector("#f-menu").value.split("\n").map(l => l.trim()).filter(Boolean) : [] }, slots);
       run(async () => {
         const id = f ? f.id : slug("food-" + name);
         await write(() => S.db.doc("food/" + id).set(data));
