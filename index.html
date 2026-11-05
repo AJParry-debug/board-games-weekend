@@ -897,17 +897,89 @@ main,.site-foot{position:relative;z-index:1}
 @keyframes unRoll2{0%,62%{transform:translateY(0);opacity:0}63%{opacity:1}80%{transform:translateY(2200%);opacity:1}81%,100%{transform:translateY(2200%);opacity:0}}
 @media (prefers-reduced-motion: reduce){.vhs-lines{display:none}.un-static::before{animation:none}}
 .check-solo{display:flex;gap:10px;align-items:center;font-size:.9rem;cursor:pointer}
+/* ---- Commercials ---- */
+.tab[data-view="ads"]{color:#FFD400}
+.ads-view h2{font-family:var(--display);margin:6px 0 4px}
+.ads-view .sub{max-width:70ch}
+.ad-form{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin:14px 0}
+.ad-form .field{margin:0;min-width:160px}
+.ad-form .field.grow{flex:1 1 320px}
+.ad-form .field.small{min-width:0;width:90px}
+.ad-switch{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;font-weight:600;cursor:pointer;white-space:nowrap}
+.ad-sound-new{padding-bottom:10px}
+.ad-list{display:flex;flex-direction:column;gap:10px}
+.ad-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.ad-row.off{opacity:.55}
+.ad-thumb{width:128px;height:72px;object-fit:cover;border-radius:8px;background:#000;flex:none}
+.ad-meta{flex:1 1 220px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.ad-meta span{font-size:.82rem;color:var(--muted)}
+.ad-meta a{font-size:.8rem}
+.ad-acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ad-builtins{margin-top:14px}
+.ad-notes{margin-top:14px;font-size:.86rem;color:var(--muted)}
+.ad-notes ul{margin:4px 0 0;padding-left:18px}
+#screen-break.sb-ad{background:#000}
+.sb-ad-frame{position:absolute;inset:0;opacity:0;transition:opacity .5s}
+#screen-break.sb-ad.playing .sb-ad-frame{opacity:1}
+.sb-ad-frame iframe,.sb-ad-frame > div{position:absolute;inset:0;width:100%;height:100%;border:0}
+.sb-ad-shield{position:absolute;inset:0;z-index:2}
+.sb-ad-tag{position:absolute;z-index:3;right:18px;top:16px;display:flex;align-items:center;gap:8px;font:700 .75rem/1 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);border-radius:999px;padding:6px 12px}
+.sb-ad-dot{width:8px;height:8px;border-radius:50%;background:#E0182B;animation:pzBlink 1.4s steps(1) infinite}
+.sb-ad-bump{position:absolute;inset:0;z-index:1;display:grid;place-items:center;color:#fff;font:400 clamp(1.4rem,3vw,2.4rem)/1.2 "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.01em;transition:opacity .4s}
+#screen-break.sb-ad.playing .sb-ad-bump{opacity:0}
+/* ---- Pop-ups (Now view on big screens) ---- */
+.pop-card{position:fixed;z-index:9000;opacity:0;pointer-events:auto;transition:opacity .45s ease,transform .55s cubic-bezier(.2,1.3,.4,1)}
+.pop-card.in{opacity:1}
+.pop-card.out{opacity:0;transition:opacity .5s ease,transform .5s ease}
+.pop-x{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.35);color:#fff;font:700 .85rem/1 system-ui,sans-serif;cursor:pointer;z-index:3}
+/* Infomercial */
+.pop-im{right:24px;bottom:24px;width:340px;padding:14px 16px 0;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#1238A8,#0A1E63);border:3px solid #FFD400;box-shadow:0 0 0 3px #E0182B,0 16px 36px rgba(0,0,0,.55);color:#fff;transform:translateY(40px) scale(.9)}
+.pop-im.in{transform:none;animation:imWobble 3.6s ease-in-out infinite 1s}
+.pop-im.out{transform:translateY(30px) scale(.92)}
+.pop-im::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px);pointer-events:none}
+.im-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.im-kicker{font:900 1.1rem/1.05 Impact,"Arial Black","Haettenschweiler",sans-serif;text-transform:uppercase;color:#FFD400;text-shadow:2px 2px 0 #E0182B,3px 3px 0 #000;letter-spacing:.02em;transform:rotate(-2deg);max-width:200px}
+.im-burst{flex:none;display:grid;place-items:center;width:84px;height:84px;margin:-6px 18px 0 0;text-align:center;font:900 .78rem/1 Impact,"Arial Black",sans-serif;color:#E0182B;background:#FFD400;clip-path:polygon(50% 0,61% 13%,77% 6%,79% 22%,95% 22%,88% 37%,100% 50%,88% 63%,95% 78%,79% 78%,77% 94%,61% 87%,50% 100%,39% 87%,23% 94%,21% 78%,5% 78%,12% 63%,0 50%,12% 37%,5% 22%,21% 22%,23% 6%,39% 13%);animation:imSpin 2.4s ease-in-out infinite}
+.im-when{margin-top:6px;font-family:var(--display);font-weight:800;font-size:1.15rem}
+.im-when em{display:block;font-style:normal;font-size:.8rem;font-weight:700;color:#8FE3FF}
+.im-list{margin:6px 0 10px;padding:0 0 0 18px;font-size:.88rem;line-height:1.35}
+.im-list li::marker{content:"★ ";color:#FFD400}
+div.im-list{padding:0}
+.im-ticker{margin:0 -16px;background:#E0182B;color:#fff;font:800 .7rem/1 system-ui,sans-serif;letter-spacing:.08em;white-space:nowrap;overflow:hidden;padding:6px 0}
+.im-ticker span{display:inline-block;padding-left:100%;animation:imTick 11s linear infinite}
+@keyframes imTick{to{transform:translateX(-100%)}}
+@keyframes imSpin{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.08)}}
+@keyframes imWobble{0%,100%{transform:rotate(0)}50%{transform:rotate(-.6deg)}}
+/* Did you know? */
+.pop-dyk{left:24px;bottom:24px;display:flex;align-items:flex-end;gap:10px;flex-direction:row-reverse;justify-content:flex-end;transform:translateX(-30px)}
+.pop-dyk.in{transform:none}
+.pop-dyk.out{transform:translateX(-20px)}
+.pop-dyk .pop-x{top:-8px;right:-8px}
+.dyk-bubble{position:relative;max-width:330px;background:#FFF8E7;color:#1D1A2E;border:3px solid #1D1A2E;border-radius:18px;padding:12px 14px;box-shadow:5px 5px 0 #1D1A2E;margin-bottom:46px}
+.dyk-bubble::after{content:"";position:absolute;left:-16px;bottom:14px;width:18px;height:18px;background:#FFF8E7;border-left:3px solid #1D1A2E;border-bottom:3px solid #1D1A2E;transform:skewY(-30deg) rotate(10deg)}
+.dyk-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.dyk-head b{font:900 1rem/1 Impact,"Arial Black",sans-serif;text-transform:uppercase;letter-spacing:.02em;color:#E0287D}
+.dyk-topic{font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:#1D1A2E;color:#FFF8E7;border-radius:999px;padding:2px 8px}
+.dyk-bubble p{margin:0;font-size:.9rem;line-height:1.4;font-weight:600}
+.dyk-buddy{position:relative;width:64px;height:64px;color:#C7B8FF;filter:drop-shadow(0 0 8px rgba(167,139,250,.7));animation:dykBob 1.6s ease-in-out infinite}
+.dyk-buddy svg{width:100%;height:100%}
+.dyk-buddy i{position:absolute;top:40%;width:8px;height:10px;border-radius:50%;background:#fff;box-shadow:inset 2px 0 0 #1D1A2E;animation:dykBlink 4s steps(1) infinite}
+.dyk-buddy .e1{left:34%}.dyk-buddy .e2{left:54%}
+@keyframes dykBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-5px) rotate(4deg)}}
+@keyframes dykBlink{0%,92%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+@media (prefers-reduced-motion: reduce){.pop-card,.pop-card.in,.pop-card.out{transform:none!important;transition:opacity .4s}.pop-im.in,.im-burst,.im-ticker span,.dyk-buddy,.dyk-buddy i{animation:none}.im-ticker span{padding-left:12px}}
 /* ---- Burn-in care: Now view layout shuffle ---- */
 .now-stage{display:flex;flex-direction:column;gap:16px}
-.now-stage > .hero{order:1}.now-stage > .upnext{order:2}.now-stage > .later{order:3}
-.now-stage.nv1 > .upnext,.now-stage.nv3 > .upnext{order:0}
-.now-stage.nv2 .hero.is-live .hero-head,.now-stage.nv3 .hero.is-live .hero-head{flex-direction:row-reverse}
-.now-stage.nv2 .hero.is-live .hero-tables,.now-stage.nv3 .hero.is-live .hero-tables{direction:rtl}
-.now-stage.nv2 .hero.is-live .hero-tables > *,.now-stage.nv3 .hero.is-live .hero-tables > *{direction:ltr}
-.now-stage.nv1{padding-left:1.2%}.now-stage.nv2{padding-right:1.2%}.now-stage.nv3{padding-left:.6%;padding-right:.6%}
+.now-stage.nv1 .hero.is-live .hero-head,.now-stage.nv3 .hero.is-live .hero-head{flex-direction:row-reverse}
+.now-stage.nv2 .hero.is-live .hero-tables,.now-stage.nv3 .hero.is-live .hero-tables,.now-stage.nv1 .un-games{direction:rtl}
+.now-stage.nv2 .hero.is-live .hero-tables > *,.now-stage.nv3 .hero.is-live .hero-tables > *,.now-stage.nv1 .un-games > *{direction:ltr}
+.now-stage.nv2 .un-head,.now-stage.nv3 .un-head{padding-left:2%}
+.now-stage.nv1{padding-left:1.4%}.now-stage.nv2{padding-right:1.4%}.now-stage.nv3{padding-left:.7%;padding-right:.7%}
+.now-stage.nv2 .hero.is-live,.now-stage.nv3 .upnext{border-radius:24px}
+.now-stage.nv1 .hero.is-live{padding:20px 18px 14px}.now-stage.nv3 .hero.is-live{padding:14px 22px 18px}
 .now-stage.nv-change{animation:nvFade 1.2s ease-out}
 @keyframes nvFade{0%{opacity:0;filter:blur(3px)}100%{opacity:1;filter:none}}
-.sb-test{align-self:flex-end;font-size:.78rem}
+.sb-tests{align-self:flex-end;display:flex;gap:6px;flex-wrap:wrap}.sb-tests .btn{font-size:.78rem}
 /* ---- Screen break overlay ---- */
 #screen-break{position:fixed;inset:0;z-index:9999;background:#04050B;opacity:0;transition:opacity .6s ease;cursor:pointer;overflow:hidden}
 #screen-break.in{opacity:1}#screen-break.out{opacity:0}
@@ -1487,6 +1559,7 @@ button.cell:hover{outline:1px solid var(--accent)}
       <a class="tab" href="#food" data-view="food">Food</a>
       <a class="tab" href="#orders" data-view="orders">Orders</a>
       <a class="tab" href="#people" data-view="people">Who's around</a>
+      <a class="tab" href="#ads" data-view="ads" hidden>Commercials</a>
     </nav>
   </div>
 </header>
@@ -2127,6 +2200,7 @@ function renderHeader() {
     : '<button class="btn ghost" data-act="org">Organiser</button>';
   document.getElementById("who").innerHTML = who;
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-current", t.dataset.view === S.view ? "page" : "false"));
+  { const at = document.querySelector('.tab[data-view="ads"]'); if (at) at.hidden = !S.organiser; }
 }
 
 function banners() {
@@ -2706,7 +2780,7 @@ function renderSchedule() {
   if (S.layout === "now") {
     const v = nowVariant(), changed = lastVariant !== null && lastVariant !== v; lastVariant = v;
     return bar + '<div class="now-stage nv' + v + (changed ? " nv-change" : "") + '">' + renderNow() +
-      (S.organiser ? '<button class="btn small ghost sb-test" data-act="test-break">Preview screen break</button>' : "") + "</div>";
+      (S.organiser ? '<div class="sb-tests"><button class="btn small ghost" data-act="test-im">Preview infomercial</button><button class="btn small ghost" data-act="test-dyk">Preview "Did you know?"</button><button class="btn small ghost" data-act="test-break">Preview screen break</button></div>' : "") + "</div>";
   }
   let h = renderMine() + renderSummary() + bar;
   if (S.layout === "spine") return h + renderSpine(groups);
@@ -2869,11 +2943,14 @@ function endBreak() {
   clearTimeout(breakTimer); o.classList.add("out"); lastBreak = Date.now(); lastTouch = Date.now();
   if (o._raf) cancelAnimationFrame(o._raf);
   const v = o.querySelector("video"); if (v) v.pause();
+  if (o._yt) { try { o._yt.destroy(); } catch (e) {} }
   setTimeout(() => o.remove(), 700);
 }
-function startBreak() {
+function startBreak(opts) {
   if (document.getElementById("screen-break")) return;
+  document.querySelectorAll(".pop-card").forEach(popClose);
   breakNo++;
+  if (!opts || !opts.builtin) { const ad = !ON_CLAUDE && nextBreakKind(); if (ad) { startCommercial(ad, () => startBreak({ builtin: true })); return; } }
   const s = NOW ? byId(S.sessions, NOW.id) : null, next = NOW && NOW.nextId ? byId(S.sessions, NOW.nextId) : null;
   const t = new Date().toLocaleTimeString("en-AU", { hour: "numeric", minute: "2-digit" });
   const info = '<div class="sb-info"><span class="sb-time">' + esc(t) + "</span>" + (s ? '<span class="sb-now">' + esc((NOW.mode === "now" ? "On now: " : "Up first: ") + sessionName(s)) + "</span>" : "") +
@@ -2911,6 +2988,148 @@ setInterval(() => {
   if (now - lastBreak >= BREAK_EVERY && now - lastTouch >= BREAK_IDLE) startBreak();
   if (lastVariant !== null && nowVariant() !== lastVariant && !document.getElementById("screen-break")) render();
 }, 15000);
+/* ---------- Big-screen pop-ups: corner infomercials and "Did you know?" bubbles ---------- */
+const DYK = [["Dragon Ball Z", "Most Saiyans are named after vegetables. Vegeta is vegetable, Kakarot is carrot, Raditz is radish and Nappa is napa cabbage."], ["Dragon Ball Z", "Bulma's family is named after underwear. Her son is Trunks and her daughter is Bra. Her name comes from bloomers."], ["Dragon Ball Z", "Goku is loosely based on Sun Wukong, the Monkey King from the Chinese classic Journey to the West. That's why he started out with a tail."], ["Dragon Ball Z", "Frieza warns that Namek will explode in five minutes. Those five minutes famously stretch across roughly ten episodes."], ["Dragon Ball Z", "Japan officially recognises 9 May as Goku Day, because 5 and 9 can be read as 'go' and 'ku'."], ["Dragon Ball Z", "Creator Akira Toriyama also designed the monsters and characters for the Dragon Quest video game series."], ["Naruto", "Naruto shares his name with narutomaki, the white fish cake with a pink swirl you find in a bowl of ramen. Fitting, given his ramen habit."], ["Naruto", "The Naruto manga ran in Weekly Shonen Jump from 1999 to 2014 and finished at exactly 700 chapters."], ["Naruto", "Naruto's creator, Masashi Kishimoto, has a twin brother, Seishi Kishimoto, who is also a manga artist."], ["Naruto", "The Naruto manga has sold more than 250 million copies around the world."], ["Naruto", "In 2019, a joke internet plan to storm Area 51 suggested everyone do the Naruto run, arms back, because 'we can move faster than their bullets'."], ["The Simpsons", "The Simpsons began as short cartoons on The Tracey Ullman Show in 1987, two years before getting their own series."], ["The Simpsons", "Matt Groening named Homer, Marge, Lisa and Maggie after his own family. Bart is an anagram of brat."], ["The Simpsons", "The Simpsons is the longest-running scripted primetime series in American TV history."], ["The Simpsons", "Homer's 'D'oh!' was added to the Oxford English Dictionary in 2001."], ["The Simpsons", "Dan Castellaneta voices Homer, and also Krusty, Grampa, Barney and Groundskeeper Willie."], ["The Simpsons", "Almost everyone in Springfield has four fingers on each hand. God, when he appears, has five."], ["Tenacious D", "Jack Black and Kyle Gass formed Tenacious D in Los Angeles in 1994."], ["Tenacious D", "The band's name comes from basketball commentary, where 'tenacious D' is short for tenacious defence."], ["Tenacious D", "Tenacious D won a Grammy in 2015 for Best Metal Performance with their cover of Dio's The Last in Line."], ["Tenacious D", "Dave Grohl drummed on Tenacious D's first album and played Satan in the 2006 film The Pick of Destiny."], ["Tenacious D", "Tenacious D started out as a short sketch series on HBO in the late 1990s before the albums and the film."], ["Nu metal", "Korn's self-titled 1994 debut is widely credited with kicking off nu metal."], ["Nu metal", "The backwards R in Korn's logo was drawn by singer Jonathan Davis to look like a child had written it."], ["Nu metal", "Slipknot has nine members, and each was given a number from 0 to 8."], ["Nu metal", "All four members of System of a Down are of Armenian heritage."], ["Nu metal", "Papa Roach is named after singer Jacoby Shaddix's grandfather, whose nickname was Papa Roach."], ["Nu metal", "Linkin Park's Hybrid Theory, released in 2000, is one of the best-selling debut albums of the century."], ["Nu metal", "Producer Ross Robinson worked on early Korn, Limp Bizkit and Slipknot records, earning the nickname the Godfather of Nu Metal."]];
+const POP_EVERY = 3.5 * 60 * 1000, POP_LEN = 14000;
+let lastPop = Date.now() - POP_EVERY + 60 * 1000, popNo = 0, dykBag = [];
+const popsOk = () => onNowScreen() && innerWidth >= 900 && !document.getElementById("screen-break") && !document.querySelector(".pop-card");
+function nextFact() {
+  if (!dykBag.length) { dykBag = DYK.map((_, i) => i); for (let i = dykBag.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [dykBag[i], dykBag[j]] = [dykBag[j], dykBag[i]]; } }
+  return DYK[dykBag.pop()];
+}
+function upcomingToday() {
+  if (!NOW || !NOW.order) return [];
+  const cur = byId(S.sessions, NOW.id), i = NOW.order.indexOf(NOW.id);
+  const after = NOW.order.slice(NOW.mode === "now" ? i + 1 : i).map(id => byId(S.sessions, id)).filter(Boolean);
+  const same = after.filter(s => cur && s.day === cur.day);
+  return (same.length ? same : after).slice(0, 3);
+}
+function popClose(el) { if (!el || !el.isConnected) return; el.classList.add("out"); setTimeout(() => el.remove(), 600); }
+function showPop(html, cls) {
+  const el = document.createElement("div");
+  el.className = "pop-card " + cls; el.setAttribute("role", "status"); el.innerHTML = html + '<button class="pop-x" aria-label="Close">×</button>';
+  document.body.appendChild(el);
+  el.querySelector(".pop-x").onclick = () => popClose(el);
+  requestAnimationFrame(() => el.classList.add("in"));
+  setTimeout(() => popClose(el), POP_LEN);
+}
+function showInfomercial() {
+  const list = upcomingToday(); if (!list.length) return false;
+  const s = list[popNo % list.length], meal = s.kind === "meal";
+  const tabs = tablesIn(s.id), open = openIn(s.id), food = foodIn(s.id);
+  const items = meal ? food.filter(f => !isExtra(f)).map(f => f.name) : tabs.map(t => gameName(byId(S.games, t.gameId)));
+  const burst = meal ? "FREE<br>VOTE!" : open > 0 && open <= 6 ? "ONLY " + open + "<br>LEFT!" : open > 0 ? open + " SEATS<br>OPEN!" : "SOLD<br>OUT!";
+  const lines = ["But wait, there's more!", "Coming soon to a table near you!", "Act now, seats are limited!", "As seen on the big screen!"];
+  const html = '<div class="im-top"><span class="im-kicker">' + esc(lines[popNo % lines.length]) + '</span><span class="im-burst">' + burst + "</span></div>" +
+    '<div class="im-when">' + esc(sessionName(s)) + (whenText(s) ? ' <em>' + esc(whenText(s)) + "</em>" : "") + "</div>" +
+    (items.length ? '<ul class="im-list">' + items.slice(0, 4).map(n => "<li>" + esc(n) + "</li>").join("") + (items.length > 4 ? "<li>…and " + (items.length - 4) + " more!</li>" : "") + "</ul>" : '<div class="im-list">' + (meal ? "Meal break. Menu to be decided!" : "Games to be announced!") + "</div>") +
+    '<div class="im-ticker"><span>' + (meal ? "VOTE ON THE MEAL · ORDERS OPEN ON THE ORDERS TAB · " : "CLAIM YOUR SEAT ON THE SCHEDULE · OPERATORS ARE STANDING BY · ") + (meal ? "VOTE ON THE MEAL · ORDERS OPEN ON THE ORDERS TAB" : "CLAIM YOUR SEAT ON THE SCHEDULE · OPERATORS ARE STANDING BY") + "</span></div>";
+  showPop(html, "pop-im");
+  return true;
+}
+function showFact() {
+  const [topic, fact] = nextFact();
+  showPop('<div class="dyk-bubble"><div class="dyk-head"><b>Did you know?</b><span class="dyk-topic">' + esc(topic) + '</span></div><p>' + esc(fact) + '</p></div><div class="dyk-buddy" aria-hidden="true">' + D20 + '<i class="e1"></i><i class="e2"></i></div>', "pop-dyk");
+}
+setInterval(() => {
+  if (!popsOk()) return;
+  if (Date.now() - lastPop < POP_EVERY) return;
+  lastPop = Date.now(); popNo++;
+  if (popNo % 2 === 1) { if (!showInfomercial()) showFact(); } else showFact();
+}, 10000);
+/* ---------- Commercial breaks: organiser-curated YouTube clips in the screen-break rotation ---------- */
+const ADS = { items: [], builtins: true };
+let adNo = 0, ytLoading = null;
+const ytId = u => { const m = String(u || "").trim().match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([A-Za-z0-9_-]{11})/); return m ? m[1] : (/^[A-Za-z0-9_-]{11}$/.test(String(u || "").trim()) ? String(u).trim() : ""); };
+const ytStartFromUrl = u => { const m = String(u || "").match(/[?&](?:t|start)=(\d+h)?(\d+m)?(\d+)s?/); return m ? (parseInt(m[1] || 0, 10) * 3600 + parseInt(m[2] || 0, 10) * 60 + parseInt(m[3], 10)) : 0; };
+const parseTime = t => { t = String(t || "").trim(); if (!t) return 0; if (/^\d+$/.test(t)) return +t; const p = t.split(":").map(Number); return p.some(isNaN) ? 0 : p.reduce((a, b) => a * 60 + b, 0); };
+const fmtTime = s => s ? Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0") : "";
+const liveAds = () => ADS.items.filter(a => a.on !== false && a.vid);
+async function saveAds() { await write(() => S.db.doc("config/commercials").set({ items: ADS.items, builtins: ADS.builtins !== false })); }
+function loadYT() {
+  if (window.YT && window.YT.Player) return Promise.resolve();
+  if (ytLoading) return ytLoading;
+  ytLoading = new Promise((res, rej) => {
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => { if (prev) try { prev(); } catch (e) {} res(); };
+    const sc = document.createElement("script"); sc.src = "https://www.youtube.com/iframe_api"; sc.async = true;
+    sc.onerror = () => { ytLoading = null; rej(new Error("yt")); };
+    document.head.appendChild(sc);
+    setTimeout(() => rej(new Error("yt-timeout")), 8000);
+  });
+  return ytLoading;
+}
+function startCommercial(ad, fallback) {
+  if (document.getElementById("screen-break")) return;
+  document.querySelectorAll(".pop-card").forEach(popClose);
+  const o = document.createElement("div");
+  o.id = "screen-break"; o.className = "sb-ad"; o.setAttribute("role", "dialog"); o.setAttribute("aria-label", "Commercial break. Tap to return to the schedule.");
+  o.innerHTML = '<div class="sb-ad-frame"><div id="sb-yt"></div></div><div class="sb-ad-shield"></div><div class="sb-ad-tag"><span class="sb-ad-dot"></span>Commercial break · tap to skip</div><div class="sb-ad-bump">We\'ll be right back.</div>';
+  document.body.appendChild(o);
+  requestAnimationFrame(() => o.classList.add("in"));
+  o.addEventListener("pointerdown", endBreak);
+  let started = false, gaveUp = false;
+  const bail = () => { if (gaveUp || started) return; gaveUp = true; o.remove(); if (fallback) fallback(); };
+  loadYT().then(() => {
+    if (!o.isConnected) return;
+    const pv = { autoplay: 1, controls: 0, disablekb: 1, fs: 0, iv_load_policy: 3, modestbranding: 1, playsinline: 1, rel: 0, mute: ad.sound ? 0 : 1 };
+    if (ad.start) pv.start = ad.start;
+    if (ad.end && ad.end > (ad.start || 0)) pv.end = ad.end;
+    o._yt = new YT.Player("sb-yt", { videoId: ad.vid, playerVars: pv, events: {
+      onReady: e => { if (!ad.sound) e.target.mute(); e.target.playVideo(); setTimeout(() => { if (!started && o.isConnected && ad.sound) { e.target.mute(); e.target.playVideo(); } }, 2500); },
+      onStateChange: e => { if (e.data === YT.PlayerState.PLAYING && !started) { started = true; o.classList.add("playing"); clearTimeout(breakTimer); breakTimer = setTimeout(endBreak, 90000); } if (e.data === YT.PlayerState.ENDED) endBreak(); },
+      onError: () => bail()
+    } });
+  }).catch(bail);
+  breakTimer = setTimeout(bail, 9000);
+}
+function nextBreakKind() {
+  const ads = liveAds();
+  if (!ads.length) return null;
+  if (ADS.builtins !== false && breakNo % 3 === 2) return null;
+  return ads[adNo++ % ads.length];
+}
+
+/* ---------- Commercials tab (organiser only) ---------- */
+function renderAds() {
+  const rows = ADS.items.map((a, i) => '<div class="ad-row' + (a.on === false ? " off" : "") + '">' +
+    '<img class="ad-thumb" alt="" loading="lazy" src="https://i.ytimg.com/vi/' + esc(a.vid) + '/mqdefault.jpg" onerror="this.style.visibility=\'hidden\'">' +
+    '<div class="ad-meta"><b>' + esc(a.title || "Commercial " + (i + 1)) + '</b><span>' + (a.start || a.end ? "Plays " + (fmtTime(a.start) || "0:00") + " to " + (fmtTime(a.end) || "the end") : "Plays the whole video (up to 90 seconds)") + (a.sound ? " · with sound" : " · muted") + "</span>" +
+    '<a href="https://www.youtube.com/watch?v=' + esc(a.vid) + '" target="_blank" rel="noopener">Open on YouTube ↗</a></div>' +
+    '<div class="ad-acts"><label class="ad-switch"><input type="checkbox" data-act="ad-on" data-i="' + i + '"' + (a.on === false ? "" : " checked") + '> In rotation</label>' +
+    '<label class="ad-switch"><input type="checkbox" data-act="ad-sound" data-i="' + i + '"' + (a.sound ? " checked" : "") + '> Sound</label>' +
+    '<button class="btn small" data-act="ad-play" data-i="' + i + '">Preview</button>' +
+    '<button class="icon-btn" data-act="ad-move" data-i="' + i + '" data-d="-1" aria-label="Move up"' + (i ? "" : " disabled") + '>↑</button>' +
+    '<button class="icon-btn" data-act="ad-move" data-i="' + i + '" data-d="1" aria-label="Move down"' + (i < ADS.items.length - 1 ? "" : " disabled") + '>↓</button>' +
+    '<button class="icon-btn" data-act="ad-del" data-i="' + i + '" aria-label="Remove">×</button></div></div>').join("");
+  return '<section class="ads-view"><h2>Commercial breaks</h2><p class="sub">Only organisers see this tab. YouTube clips you add here take over the big screen during screen breaks on the Now view, every 15 minutes when nobody\'s using it. They play in this order, then loop.</p>' +
+    '<form class="ad-form" id="ad-form"><div class="field grow"><label for="ad-url">YouTube link</label><input id="ad-url" placeholder="https://www.youtube.com/watch?v=…" required></div>' +
+    '<div class="field"><label for="ad-title">Name (optional)</label><input id="ad-title" maxlength="60" placeholder="e.g. Fake cereal ad"></div>' +
+    '<div class="field small"><label for="ad-start">Start at</label><input id="ad-start" placeholder="0:00" inputmode="numeric"></div>' +
+    '<div class="field small"><label for="ad-end">Stop at</label><input id="ad-end" placeholder="end" inputmode="numeric"></div>' +
+    '<label class="ad-switch ad-sound-new"><input type="checkbox" id="ad-snd"> Sound</label>' +
+    '<button class="btn primary" type="submit">Add commercial</button></form>' +
+    (rows ? '<div class="ad-list">' + rows + "</div>" : '<p class="ob-empty">No commercials yet. Paste a YouTube link above to add one.</p>') +
+    '<label class="check-solo ad-builtins"><input type="checkbox" data-act="ad-builtins"' + (ADS.builtins !== false ? " checked" : "") + '> Mix in the built-in breaks too (bouncing d20 and the banner video), every third break</label>' +
+    '<div class="ad-notes"><p><b>Good to know</b></p><ul>' +
+    "<li>Some YouTube videos don't allow being played on other websites. If one won't play, the screen quietly shows a built-in break instead.</li>" +
+    "<li>Browsers often block sound until someone has tapped the page. Tap the big screen once after opening it and sound will work; otherwise clips play muted.</li>" +
+    "<li>Use Start at and Stop at to play just the funny bit, for example 1:05 to 1:35. Clips stop after 90 seconds regardless.</li>" +
+    (ON_CLAUDE ? "<li><b>The Claude-hosted copy can't play YouTube</b>, so it always shows the built-in breaks. Commercials play on your GitHub site.</li>" : "") +
+    "</ul></div></section>";
+}
+function bindAdsForm() {
+  const f = document.getElementById("ad-form"); if (!f) return;
+  f.onsubmit = e => {
+    e.preventDefault();
+    const url = f.querySelector("#ad-url").value, vid = ytId(url);
+    if (!vid) { toast("That doesn't look like a YouTube link."); return; }
+    const start = parseTime(f.querySelector("#ad-start").value) || ytStartFromUrl(url), end = parseTime(f.querySelector("#ad-end").value);
+    if (end && end <= start) { toast("Stop at needs to be after Start at."); return; }
+    ADS.items.push({ id: "ad" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), vid, url: url.trim(), title: f.querySelector("#ad-title").value.trim(), start, end, sound: f.querySelector("#ad-snd").checked, on: true });
+    run(async () => { await saveAds(); toast("Commercial added."); });
+  };
+}
 function renderNow() {
   const order = NOW ? NOW.order : sessionsSorted().map(s => s.id);
   let s = NOW ? byId(S.sessions, NOW.id) : null, over = false;
@@ -2998,6 +3217,7 @@ function renderPeople() {
 }
 
 function render() {
+  if (S.view === "ads" && !S.organiser) S.view = "schedule";
   TONES = tones();
   NOW = nowState();
   renderHeader();
@@ -3007,7 +3227,7 @@ function render() {
   const y = window.scrollY;
   const oldBoard = document.getElementById("board");
   const bx = oldBoard ? oldBoard.scrollLeft : null;
-  app.innerHTML = banners() + (S.view === "games" ? renderGames() : S.view === "food" ? renderFood() : S.view === "orders" ? renderOrders() : S.view === "people" ? renderPeople() : renderSchedule());
+  app.innerHTML = banners() + (S.view === "games" ? renderGames() : S.view === "food" ? renderFood() : S.view === "orders" ? renderOrders() : S.view === "people" ? renderPeople() : S.view === "ads" ? renderAds() : renderSchedule());
   const nb = document.getElementById("board");
   if (nb && bx != null) nb.scrollLeft = bx;
   if (nb && !autoScrolled && COLS.every(c => S.got[c])) {
@@ -3023,6 +3243,7 @@ function render() {
   setupRail();
   syncHeroBg();
   syncOrdersVideo();
+  bindAdsForm();
   window.scrollTo(0, y);
 }
 
@@ -3081,6 +3302,14 @@ document.addEventListener("click", e => {
     case "order": onOrder(el.dataset.s, el.dataset.f); break;
     case "copy-orders": copyOrders(el.dataset.id); break;
     case "test-break": startBreak(); break;
+    case "ad-play": { const a = ADS.items[+el.dataset.i]; if (!a) break; if (ON_CLAUDE) { toast("YouTube can't play on the Claude-hosted copy. Try it on your GitHub site."); break; } startCommercial(a, () => toast("That video won't play here. YouTube may not allow it on other sites.")); break; }
+    case "ad-move": { const i = +el.dataset.i, j = i + +el.dataset.d; if (j < 0 || j >= ADS.items.length) break; [ADS.items[i], ADS.items[j]] = [ADS.items[j], ADS.items[i]]; run(saveAds); break; }
+    case "ad-on": { const a = ADS.items[+el.dataset.i]; if (a) { a.on = el.checked; run(saveAds); } break; }
+    case "ad-sound": { const a = ADS.items[+el.dataset.i]; if (a) { a.sound = el.checked; run(saveAds); } break; }
+    case "ad-builtins": ADS.builtins = el.checked; run(saveAds); break;
+    case "ad-del": { const i = +el.dataset.i; ADS.items.splice(i, 1); run(async () => { await saveAds(); toast("Commercial removed."); }); break; }
+    case "test-im": document.querySelectorAll(".pop-card").forEach(popClose); popNo++; if (!showInfomercial()) toast("Nothing coming up to advertise."); break;
+    case "test-dyk": document.querySelectorAll(".pop-card").forEach(popClose); showFact(); break;
     case "lock-meal": if (S.organiser) run(() => lockMeal(el.dataset.s, el.dataset.f)); break;
     case "vid-toggle": OBV.paused = !OBV.paused; syncOrdersVideo(); break;
     case "unvote": {
@@ -3124,7 +3353,7 @@ document.addEventListener("click", e => {
   }
 });
 
-const VIEWS = ["schedule", "games", "food", "orders", "people"];
+const VIEWS = ["schedule", "games", "food", "orders", "people", "ads"];
 function setView(v, keepScroll) {
   S.view = VIEWS.includes(v) ? v : "schedule";
   if (location.hash !== "#" + S.view) { try { history.replaceState(null, "", "#" + S.view); } catch (e) {} }
@@ -3199,6 +3428,7 @@ async function boot() {
     }, onErr);
   }
   db.doc("config/event").onSnapshot(snap => { S.cfg = snap.exists ? snap.data() : null; schedule(); }, () => {});
+  db.doc("config/commercials").onSnapshot(snap => { const d = snap.exists ? snap.data() : null; ADS.items = d && Array.isArray(d.items) ? d.items : []; ADS.builtins = !d || d.builtins !== false; schedule(); }, () => {});
   if (S.uid) {
     db.doc("data/users/" + S.uid + "/profile").onSnapshot(snap => {
       const d = snap.exists ? snap.data() : null;
