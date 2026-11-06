@@ -925,6 +925,8 @@ main,.site-foot{position:relative;z-index:1}
 #screen-break.sb-cm{background:#000}
 .sb-cm-frame{position:absolute;inset:0;opacity:0;transition:opacity .5s}
 #screen-break.sb-cm.playing .sb-cm-frame{opacity:1}
+.sb-cm-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.cm-file{font-size:.8rem;color:#FFD400}
 .sb-cm-frame iframe,.sb-cm-frame > div{position:absolute;inset:0;width:100%;height:100%;border:0}
 .sb-cm-shield{position:absolute;inset:0;z-index:2}
 .sb-cm-tag{position:absolute;z-index:3;right:18px;top:16px;display:flex;align-items:center;gap:8px;font:700 .75rem/1 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);border-radius:999px;padding:6px 12px}
@@ -2948,13 +2950,14 @@ function endBreak() {
   if (o._raf) cancelAnimationFrame(o._raf);
   const v = o.querySelector("video"); if (v) v.pause();
   if (o._yt) { try { o._yt.destroy(); } catch (e) {} }
+  if (o._vid) { try { o._vid.pause(); o._vid.removeAttribute("src"); o._vid.load(); } catch (e) {} }
   setTimeout(() => o.remove(), 700);
 }
 function startBreak(opts) {
   if (document.getElementById("screen-break")) return;
   document.querySelectorAll(".pop-card").forEach(popClose);
   breakNo++;
-  if (!opts || !opts.builtin) { const ad = !ON_CLAUDE && nextBreakKind(); if (ad) { startCommercial(ad, () => startBreak({ builtin: true })); return; } }
+  if (!opts || !opts.builtin) { const ad = nextBreakKind(); if (ad) { startCommercial(ad, () => startBreak({ builtin: true })); return; } }
   const s = NOW ? byId(S.sessions, NOW.id) : null, next = NOW && NOW.nextId ? byId(S.sessions, NOW.nextId) : null;
   const t = new Date().toLocaleTimeString("en-AU", { hour: "numeric", minute: "2-digit" });
   const info = '<div class="sb-info"><span class="sb-time">' + esc(t) + "</span>" + (s ? '<span class="sb-now">' + esc((NOW.mode === "now" ? "On now: " : "Up first: ") + sessionName(s)) + "</span>" : "") +
@@ -3048,7 +3051,16 @@ const ytId = u => { const m = String(u || "").trim().match(/(?:youtu\.be\/|youtu
 const ytStartFromUrl = u => { const m = String(u || "").match(/[?&](?:t|start)=(\d+h)?(\d+m)?(\d+)s?/); return m ? (parseInt(m[1] || 0, 10) * 3600 + parseInt(m[2] || 0, 10) * 60 + parseInt(m[3], 10)) : 0; };
 const parseTime = t => { t = String(t || "").trim(); if (!t) return 0; if (/^\d+$/.test(t)) return +t; const p = t.split(":").map(Number); return p.some(isNaN) ? 0 : p.reduce((a, b) => a * 60 + b, 0); };
 const fmtTime = s => s ? Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0") : "";
-const liveAds = () => ADS.items.filter(a => a.on !== false && a.vid);
+const liveAds = () => ADS.items.filter(a => a.on !== false && !a.removed && (a.file || (a.vid && !ON_CLAUDE)));
+/* Video-file commercials that ship with the site (next to index.html). Add more entries as files are added. */
+const LOCAL_ADS = [
+  { file: "commercial-1.mp4", poster: "commercial-1.jpg", title: "Cardboard Crackhead Con: now in Magnoliafan Vision", sound: true }
+];
+function mergeLocalAds() {
+  LOCAL_ADS.forEach(L => { if (!ADS.items.some(a => a.file === L.file)) ADS.items.push({ id: "file-" + L.file, kind: "file", file: L.file, poster: L.poster, title: L.title, start: 0, end: 0, sound: !!L.sound, on: true }); });
+}
+mergeLocalAds();
+
 async function saveAds() { await write(() => S.db.doc("config/commercials").set({ items: ADS.items, builtins: ADS.builtins !== false })); }
 function loadYT() {
   if (window.YT && window.YT.Player) return Promise.resolve();
@@ -3074,6 +3086,22 @@ function startCommercial(ad, fallback) {
   o.addEventListener("pointerdown", endBreak);
   let started = false, gaveUp = false;
   const bail = () => { if (gaveUp || started) return; gaveUp = true; o.remove(); if (fallback) fallback(); };
+  if (ad.file) {
+    const v = document.createElement("video");
+    v.className = "sb-cm-video"; v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "auto";
+    if (ad.poster) v.poster = mediaUrl(ad.poster);
+    v.muted = !ad.sound; v.src = mediaUrl(ad.file);
+    o.querySelector(".sb-cm-frame").appendChild(v); o._vid = v;
+    v.addEventListener("loadedmetadata", () => { if (ad.start) v.currentTime = ad.start; });
+    v.addEventListener("playing", () => { if (!started) { started = true; o.classList.add("playing"); clearTimeout(breakTimer); breakTimer = setTimeout(endBreak, 90000); } });
+    v.addEventListener("timeupdate", () => { if (ad.end && v.currentTime >= ad.end) endBreak(); });
+    v.addEventListener("ended", endBreak);
+    v.addEventListener("error", bail);
+    const go = () => { const pr = v.play(); if (pr && pr.catch) pr.catch(() => { if (!v.muted) { v.muted = true; v.play().catch(bail); } else bail(); }); };
+    go();
+    breakTimer = setTimeout(bail, 9000);
+    return;
+  }
   loadYT().then(() => {
     if (!o.isConnected) return;
     const pv = { autoplay: 1, controls: 0, disablekb: 1, fs: 0, iv_load_policy: 3, modestbranding: 1, playsinline: 1, rel: 0, mute: ad.sound ? 0 : 1 };
@@ -3096,29 +3124,30 @@ function nextBreakKind() {
 
 /* ---------- Commercials tab (organiser only) ---------- */
 function renderAds() {
-  const rows = ADS.items.map((a, i) => '<div class="cm-row' + (a.on === false ? " off" : "") + '">' +
-    '<img class="cm-thumb" alt="" loading="lazy" src="https://i.ytimg.com/vi/' + esc(a.vid) + '/mqdefault.jpg" onerror="this.style.visibility=\'hidden\'">' +
+  const rows = ADS.items.map((a, i) => a.removed ? "" : '<div class="cm-row' + (a.on === false ? " off" : "") + '">' +
+    '<img class="cm-thumb" alt="" loading="lazy" src="' + (a.file ? esc(mediaUrl(a.poster || "")) : "https://i.ytimg.com/vi/" + esc(a.vid) + "/mqdefault.jpg") + '" onerror="this.style.visibility=\'hidden\'">' +
     '<div class="cm-meta"><b>' + esc(a.title || "Commercial " + (i + 1)) + '</b><span>' + (a.start || a.end ? "Plays " + (fmtTime(a.start) || "0:00") + " to " + (fmtTime(a.end) || "the end") : "Plays the whole video (up to 90 seconds)") + (a.sound ? " · with sound" : " · muted") + "</span>" +
-    '<a href="https://www.youtube.com/watch?v=' + esc(a.vid) + '" target="_blank" rel="noopener">Open on YouTube ↗</a></div>' +
+    (a.file ? '<span class="cm-file">Video file on the site: ' + esc(a.file) + "</span></div>" : '<a href="https://www.youtube.com/watch?v=' + esc(a.vid) + '" target="_blank" rel="noopener">Open on YouTube ↗</a></div>') +
     '<div class="cm-acts"><label class="cm-switch"><input type="checkbox" data-act="cm-on" data-i="' + i + '"' + (a.on === false ? "" : " checked") + '> In rotation</label>' +
     '<label class="cm-switch"><input type="checkbox" data-act="cm-sound" data-i="' + i + '"' + (a.sound ? " checked" : "") + '> Sound</label>' +
     '<button class="btn small" data-act="cm-play" data-i="' + i + '">Preview</button>' +
     '<button class="icon-btn" data-act="cm-move" data-i="' + i + '" data-d="-1" aria-label="Move up"' + (i ? "" : " disabled") + '>↑</button>' +
     '<button class="icon-btn" data-act="cm-move" data-i="' + i + '" data-d="1" aria-label="Move down"' + (i < ADS.items.length - 1 ? "" : " disabled") + '>↓</button>' +
     '<button class="icon-btn" data-act="cm-del" data-i="' + i + '" aria-label="Remove">×</button></div></div>').join("");
-  return '<section class="cm-view"><h2>Commercial breaks <small class="site-ver">Site version 6 Nov, 5:10pm</small></h2><p class="sub">Only organisers see this tab. YouTube clips you add here take over the big screen during screen breaks on the Now view, every 15 minutes when nobody\'s using it. They play in this order, then loop.</p>' +
+  return '<section class="cm-view"><h2>Commercial breaks <small class="site-ver">Site version 6 Nov, 7pm</small></h2><p class="sub">Only organisers see this tab. YouTube clips you add here take over the big screen during screen breaks on the Now view, every 15 minutes when nobody\'s using it. They play in this order, then loop.</p>' +
     '<form class="cm-form" id="cm-form"><div class="field grow"><label for="cm-url">YouTube link</label><input id="cm-url" placeholder="https://www.youtube.com/watch?v=…" required></div>' +
     '<div class="field"><label for="cm-title">Name (optional)</label><input id="cm-title" maxlength="60" placeholder="e.g. Fake cereal ad"></div>' +
     '<div class="field small"><label for="cm-start">Start at</label><input id="cm-start" placeholder="0:00" inputmode="numeric"></div>' +
     '<div class="field small"><label for="cm-end">Stop at</label><input id="cm-end" placeholder="end" inputmode="numeric"></div>' +
     '<label class="cm-switch cm-sound-new"><input type="checkbox" id="cm-snd"> Sound</label>' +
     '<button class="btn primary" type="submit">Add commercial</button></form>' +
-    (rows ? '<h3 class="cm-list-h">Your commercials (' + ADS.items.length + ')</h3><div class="cm-list">' + rows + "</div>" : '<div class="cm-empty"><b>No commercials yet.</b> Paste a YouTube link above and tap <b>Add commercial</b>. Each one you add appears here as a row with its own controls: <b>In rotation</b> to switch it on or off, <b>Sound</b>, <b>Preview</b> to watch it full screen, <b>↑ ↓</b> to change the order, and <b>×</b> to remove it.</div>') +
+    (rows ? '<h3 class="cm-list-h">Your commercials (' + ADS.items.filter(a => !a.removed).length + ')</h3><div class="cm-list">' + rows + "</div>" : '<div class="cm-empty"><b>No commercials yet.</b> Paste a YouTube link above and tap <b>Add commercial</b>. Each one you add appears here as a row with its own controls: <b>In rotation</b> to switch it on or off, <b>Sound</b>, <b>Preview</b> to watch it full screen, <b>↑ ↓</b> to change the order, and <b>×</b> to remove it.</div>') +
     '<label class="check-solo cm-builtins"><input type="checkbox" data-act="cm-builtins"' + (ADS.builtins !== false ? " checked" : "") + '> Mix in the built-in breaks too (bouncing d20 and the banner video), every third break</label>' +
     '<div class="cm-notes"><p><b>Good to know</b></p><ul>' +
     "<li>Some YouTube videos don't allow being played on other websites. If one won't play, the screen quietly shows a built-in break instead.</li>" +
     "<li>Browsers often block sound until someone has tapped the page. Tap the big screen once after opening it and sound will work; otherwise clips play muted.</li>" +
     "<li>Use Start at and Stop at to play just the funny bit, for example 1:05 to 1:35. Clips stop after 90 seconds regardless.</li>" +
+    "<li>Commercials marked <b>Video file on the site</b> are your own videos. They play on both copies of the site and can't be blocked by YouTube.</li>" +
     (ON_CLAUDE ? "<li><b>The Claude-hosted copy can't play YouTube</b>, so it always shows the built-in breaks. Commercials play on your GitHub site.</li>" : "") +
     "</ul></div></section>";
 }
@@ -3311,12 +3340,12 @@ document.addEventListener("click", e => {
     case "copy-orders": copyOrders(el.dataset.id); break;
     case "test-break": startBreak(); break;
     case "go-ads": setView("ads"); break;
-    case "cm-play": { const a = ADS.items[+el.dataset.i]; if (!a) break; if (ON_CLAUDE) { toast("YouTube can't play on the Claude-hosted copy. Try it on your GitHub site."); break; } startCommercial(a, () => toast("That video won't play here. YouTube may not allow it on other sites.")); break; }
+    case "cm-play": { const a = ADS.items[+el.dataset.i]; if (!a) break; if (ON_CLAUDE && !a.file) { toast("YouTube can't play on the Claude-hosted copy. Try it on your GitHub site."); break; } startCommercial(a, () => toast("That video won't play here. YouTube may not allow it on other sites.")); break; }
     case "cm-move": { const i = +el.dataset.i, j = i + +el.dataset.d; if (j < 0 || j >= ADS.items.length) break; [ADS.items[i], ADS.items[j]] = [ADS.items[j], ADS.items[i]]; run(saveAds); break; }
     case "cm-on": { const a = ADS.items[+el.dataset.i]; if (a) { a.on = el.checked; run(saveAds); } break; }
     case "cm-sound": { const a = ADS.items[+el.dataset.i]; if (a) { a.sound = el.checked; run(saveAds); } break; }
     case "cm-builtins": ADS.builtins = el.checked; run(saveAds); break;
-    case "cm-del": { const i = +el.dataset.i; ADS.items.splice(i, 1); run(async () => { await saveAds(); toast("Commercial removed."); }); break; }
+    case "cm-del": { const i = +el.dataset.i; if (ADS.items[i] && ADS.items[i].file) { ADS.items[i].removed = true; ADS.items[i].on = false; } else ADS.items.splice(i, 1); run(async () => { await saveAds(); toast("Commercial removed."); }); break; }
     case "test-im": document.querySelectorAll(".pop-card").forEach(popClose); popNo++; if (!showInfomercial()) toast("Nothing coming up to advertise."); break;
     case "test-dyk": document.querySelectorAll(".pop-card").forEach(popClose); showFact(); break;
     case "lock-meal": if (S.organiser) run(() => lockMeal(el.dataset.s, el.dataset.f)); break;
@@ -3437,7 +3466,7 @@ async function boot() {
     }, onErr);
   }
   db.doc("config/event").onSnapshot(snap => { S.cfg = snap.exists ? snap.data() : null; schedule(); }, () => {});
-  db.doc("config/commercials").onSnapshot(snap => { const d = snap.exists ? snap.data() : null; ADS.items = d && Array.isArray(d.items) ? d.items : []; ADS.builtins = !d || d.builtins !== false; schedule(); }, () => {});
+  db.doc("config/commercials").onSnapshot(snap => { const d = snap.exists ? snap.data() : null; ADS.items = d && Array.isArray(d.items) ? d.items : []; mergeLocalAds(); ADS.builtins = !d || d.builtins !== false; schedule(); }, () => {});
   if (S.uid) {
     db.doc("data/users/" + S.uid + "/profile").onSnapshot(snap => {
       const d = snap.exists ? snap.data() : null;
