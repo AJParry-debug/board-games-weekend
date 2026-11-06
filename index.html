@@ -916,6 +916,10 @@ main,.site-foot{position:relative;z-index:1}
 .ad-meta a{font-size:.8rem}
 .ad-acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .ad-builtins{margin-top:14px}
+.site-ver{font-family:var(--body,inherit);font-size:.72rem;font-weight:600;color:var(--muted);margin-left:8px;vertical-align:middle}
+.ad-list-h{margin:18px 0 8px;font-size:1rem}
+.ad-empty{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:14px 16px;color:var(--muted);font-size:.9rem;line-height:1.5}.ad-empty b{color:var(--ink)}
+@media (max-width:620px){.ad-thumb{width:100%;height:auto;aspect-ratio:16/9}.ad-acts{width:100%}}
 .ad-notes{margin-top:14px;font-size:.86rem;color:var(--muted)}
 .ad-notes ul{margin:4px 0 0;padding-left:18px}
 #screen-break.sb-ad{background:#000}
@@ -2209,7 +2213,7 @@ function banners() {
   if (S.revoked) h += '<div class="banner warn">Your access to this schedule has changed. Reload the page to see what you can do now.</div>';
   else if (S.slow) h += '<div class="banner warn">Can\'t reach the live schedule yet. What you see may be out of date.</div>';
   if (S.db && !S.revoked && (S.readOnly || S.canWrite === false)) h += '<div class="banner">The schedule is locked for changes right now. You can still see everything.</div>';
-  if (S.organiser) h += '<div class="banner org"><span><strong>Organiser mode.</strong> Tap a seat to seat or remove anyone, use ✎ to edit tables and time blocks, or add games and players on the other tabs.</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn small" data-act="event">Edit details</button><button class="btn small" data-act="lock">Lock</button><button class="btn small danger" data-act="clear-tables">Clear all tables</button></span></div>';
+  if (S.organiser) h += '<div class="banner org"><span><strong>Organiser mode.</strong> Tap a seat to seat or remove anyone, use ✎ to edit tables and time blocks, or add games and players on the other tabs.</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn small" data-act="event">Edit details</button><button class="btn small" data-act="go-ads">Manage commercials</button><button class="btn small" data-act="lock">Lock</button><button class="btn small danger" data-act="clear-tables">Clear all tables</button></span></div>';
   return h;
 }
 
@@ -2780,7 +2784,7 @@ function renderSchedule() {
   if (S.layout === "now") {
     const v = nowVariant(), changed = lastVariant !== null && lastVariant !== v; lastVariant = v;
     return bar + '<div class="now-stage nv' + v + (changed ? " nv-change" : "") + '">' + renderNow() +
-      (S.organiser ? '<div class="sb-tests"><button class="btn small ghost" data-act="test-im">Preview infomercial</button><button class="btn small ghost" data-act="test-dyk">Preview "Did you know?"</button><button class="btn small ghost" data-act="test-break">Preview screen break</button></div>' : "") + "</div>";
+      (S.organiser ? '<div class="sb-tests"><button class="btn small ghost" data-act="go-ads">Manage commercials</button><button class="btn small ghost" data-act="test-im">Preview infomercial</button><button class="btn small ghost" data-act="test-dyk">Preview "Did you know?"</button><button class="btn small ghost" data-act="test-break">Preview screen break</button></div>' : "") + "</div>";
   }
   let h = renderMine() + renderSummary() + bar;
   if (S.layout === "spine") return h + renderSpine(groups);
@@ -3102,14 +3106,14 @@ function renderAds() {
     '<button class="icon-btn" data-act="ad-move" data-i="' + i + '" data-d="-1" aria-label="Move up"' + (i ? "" : " disabled") + '>↑</button>' +
     '<button class="icon-btn" data-act="ad-move" data-i="' + i + '" data-d="1" aria-label="Move down"' + (i < ADS.items.length - 1 ? "" : " disabled") + '>↓</button>' +
     '<button class="icon-btn" data-act="ad-del" data-i="' + i + '" aria-label="Remove">×</button></div></div>').join("");
-  return '<section class="ads-view"><h2>Commercial breaks</h2><p class="sub">Only organisers see this tab. YouTube clips you add here take over the big screen during screen breaks on the Now view, every 15 minutes when nobody\'s using it. They play in this order, then loop.</p>' +
+  return '<section class="ads-view"><h2>Commercial breaks <small class="site-ver">Site version 6 Nov, 4:30pm</small></h2><p class="sub">Only organisers see this tab. YouTube clips you add here take over the big screen during screen breaks on the Now view, every 15 minutes when nobody\'s using it. They play in this order, then loop.</p>' +
     '<form class="ad-form" id="ad-form"><div class="field grow"><label for="ad-url">YouTube link</label><input id="ad-url" placeholder="https://www.youtube.com/watch?v=…" required></div>' +
     '<div class="field"><label for="ad-title">Name (optional)</label><input id="ad-title" maxlength="60" placeholder="e.g. Fake cereal ad"></div>' +
     '<div class="field small"><label for="ad-start">Start at</label><input id="ad-start" placeholder="0:00" inputmode="numeric"></div>' +
     '<div class="field small"><label for="ad-end">Stop at</label><input id="ad-end" placeholder="end" inputmode="numeric"></div>' +
     '<label class="ad-switch ad-sound-new"><input type="checkbox" id="ad-snd"> Sound</label>' +
     '<button class="btn primary" type="submit">Add commercial</button></form>' +
-    (rows ? '<div class="ad-list">' + rows + "</div>" : '<p class="ob-empty">No commercials yet. Paste a YouTube link above to add one.</p>') +
+    (rows ? '<h3 class="ad-list-h">Your commercials (' + ADS.items.length + ')</h3><div class="ad-list">' + rows + "</div>" : '<div class="ad-empty"><b>No commercials yet.</b> Paste a YouTube link above and tap <b>Add commercial</b>. Each one you add appears here as a row with its own controls: <b>In rotation</b> to switch it on or off, <b>Sound</b>, <b>Preview</b> to watch it full screen, <b>↑ ↓</b> to change the order, and <b>×</b> to remove it.</div>') +
     '<label class="check-solo ad-builtins"><input type="checkbox" data-act="ad-builtins"' + (ADS.builtins !== false ? " checked" : "") + '> Mix in the built-in breaks too (bouncing d20 and the banner video), every third break</label>' +
     '<div class="ad-notes"><p><b>Good to know</b></p><ul>' +
     "<li>Some YouTube videos don't allow being played on other websites. If one won't play, the screen quietly shows a built-in break instead.</li>" +
@@ -3127,7 +3131,11 @@ function bindAdsForm() {
     const start = parseTime(f.querySelector("#ad-start").value) || ytStartFromUrl(url), end = parseTime(f.querySelector("#ad-end").value);
     if (end && end <= start) { toast("Stop at needs to be after Start at."); return; }
     ADS.items.push({ id: "ad" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), vid, url: url.trim(), title: f.querySelector("#ad-title").value.trim(), start, end, sound: f.querySelector("#ad-snd").checked, on: true });
-    run(async () => { await saveAds(); toast("Commercial added."); });
+    render();
+    run(async () => {
+      try { await saveAds(); toast("Commercial added. Its controls are in the list below."); }
+      catch (err) { ADS.items = ADS.items.filter(x => x.vid !== vid || x.url !== url.trim()); render(); toast("Couldn't save that commercial" + (err && err.code === "invalid_argument" ? ": the database refused it. Check your Firestore rules are still published." : ". Check your connection and try again.")); throw { quiet: true }; }
+    });
   };
 }
 function renderNow() {
@@ -3302,6 +3310,7 @@ document.addEventListener("click", e => {
     case "order": onOrder(el.dataset.s, el.dataset.f); break;
     case "copy-orders": copyOrders(el.dataset.id); break;
     case "test-break": startBreak(); break;
+    case "go-ads": setView("ads"); break;
     case "ad-play": { const a = ADS.items[+el.dataset.i]; if (!a) break; if (ON_CLAUDE) { toast("YouTube can't play on the Claude-hosted copy. Try it on your GitHub site."); break; } startCommercial(a, () => toast("That video won't play here. YouTube may not allow it on other sites.")); break; }
     case "ad-move": { const i = +el.dataset.i, j = i + +el.dataset.d; if (j < 0 || j >= ADS.items.length) break; [ADS.items[i], ADS.items[j]] = [ADS.items[j], ADS.items[i]]; run(saveAds); break; }
     case "ad-on": { const a = ADS.items[+el.dataset.i]; if (a) { a.on = el.checked; run(saveAds); } break; }
