@@ -897,6 +897,21 @@ main,.site-foot{position:relative;z-index:1}
 @keyframes unRoll2{0%,62%{transform:translateY(0);opacity:0}63%{opacity:1}80%{transform:translateY(2200%);opacity:1}81%,100%{transform:translateY(2200%);opacity:0}}
 @media (prefers-reduced-motion: reduce){.vhs-lines{display:none}.un-static::before{animation:none}}
 .check-solo{display:flex;gap:10px;align-items:center;font-size:.9rem;cursor:pointer}
+/* Bigger, distance-readable facts */
+.pop-card .dyk-bubble{max-width:min(600px,42vw);padding:18px 22px;border-width:4px;border-radius:22px;box-shadow:7px 7px 0 #1D1A2E;margin-bottom:76px}
+.pop-card .dyk-bubble::after{left:-20px;bottom:20px;width:24px;height:24px;border-left-width:4px;border-bottom-width:4px}
+.pop-card .dyk-head{margin-bottom:8px;gap:10px}
+.pop-card .dyk-head b{font-size:clamp(1.3rem,1.8vw,1.8rem)}
+.pop-card .dyk-topic{font-size:clamp(.75rem,.9vw,.95rem);padding:4px 12px}
+.pop-card .dyk-bubble p{font-size:clamp(1.15rem,1.55vw,1.65rem);line-height:1.38;font-weight:700}
+.pop-card .dyk-buddy{width:clamp(80px,7vw,112px);height:clamp(80px,7vw,112px)}
+.pop-card .dyk-buddy i{width:12px;height:15px}
+/* Mini corner commercial */
+.pop-mini{right:24px;bottom:24px;width:clamp(300px,26vw,440px);aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;border:3px solid #FFD400;box-shadow:0 0 0 3px #E0182B,0 16px 36px rgba(0,0,0,.55);transform:translateY(40px) scale(.9)}
+.pop-mini.in{transform:none}.pop-mini.out{transform:translateY(30px) scale(.92)}
+.mini-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mini-tag{position:absolute;z-index:2;left:8px;top:8px;display:flex;align-items:center;gap:6px;font:800 .66rem/1 system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.55);border-radius:999px;padding:5px 9px}
+.mini-tag .sb-cm-dot{width:7px;height:7px;border-radius:50%;background:#E0182B;animation:pzBlink 1.4s steps(1) infinite}
 /* ---- Commercials ---- */
 .tab[data-view="ads"]{color:#FFD400}
 .cm-view h2{font-family:var(--display);margin:6px 0 4px}
@@ -2786,7 +2801,7 @@ function renderSchedule() {
   if (S.layout === "now") {
     const v = nowVariant(), changed = lastVariant !== null && lastVariant !== v; lastVariant = v;
     return bar + '<div class="now-stage nv' + v + (changed ? " nv-change" : "") + '">' + renderNow() +
-      (S.organiser ? '<div class="sb-tests"><button class="btn small ghost" data-act="go-ads">Manage commercials</button><button class="btn small ghost" data-act="test-im">Preview infomercial</button><button class="btn small ghost" data-act="test-dyk">Preview "Did you know?"</button><button class="btn small ghost" data-act="test-break">Preview screen break</button></div>' : "") + "</div>";
+      (S.organiser ? '<div class="sb-tests"><button class="btn small ghost" data-act="go-ads">Manage commercials</button><button class="btn small ghost" data-act="test-im">Preview infomercial</button><button class="btn small ghost" data-act="test-dyk">Preview "Did you know?"</button><button class="btn small ghost" data-act="test-mini">Preview corner commercial</button><button class="btn small ghost" data-act="test-break">Preview screen break</button></div>' : "") + "</div>";
   }
   let h = renderMine() + renderSummary() + bar;
   if (S.layout === "spine") return h + renderSpine(groups);
@@ -2939,7 +2954,7 @@ setInterval(() => {
 }, HOLD_MS);
 
 /* ---------- Big-screen burn-in care: layout shuffle + idle screen breaks (Now view only) ---------- */
-const SHUFFLE_MS = 8 * 60 * 1000, BREAK_EVERY = 15 * 60 * 1000, BREAK_IDLE = 2 * 60 * 1000, BREAK_LEN = 20000;
+const SHUFFLE_MS = 8 * 60 * 1000, BREAK_EVERY = 10 * 60 * 1000, BREAK_IDLE = 2 * 60 * 1000, BREAK_LEN = 20000;
 let lastVariant = null, lastTouch = Date.now(), lastBreak = Date.now(), breakNo = 0, breakTimer = null;
 const nowVariant = () => Math.floor(Date.now() / SHUFFLE_MS) % 4;
 ["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => window.addEventListener(ev, () => { lastTouch = Date.now(); }, { passive: true }));
@@ -2997,6 +3012,7 @@ setInterval(() => {
 }, 15000);
 /* ---------- Big-screen pop-ups: corner infomercials and "Did you know?" bubbles ---------- */
 const DYK = [["Dragon Ball Z", "Most Saiyans are named after vegetables. Vegeta is vegetable, Kakarot is carrot, Raditz is radish and Nappa is napa cabbage."], ["Dragon Ball Z", "Bulma's family is named after underwear. Her son is Trunks and her daughter is Bra. Her name comes from bloomers."], ["Dragon Ball Z", "Goku is loosely based on Sun Wukong, the Monkey King from the Chinese classic Journey to the West. That's why he started out with a tail."], ["Dragon Ball Z", "Frieza warns that Namek will explode in five minutes. Those five minutes famously stretch across roughly ten episodes."], ["Dragon Ball Z", "Japan officially recognises 9 May as Goku Day, because 5 and 9 can be read as 'go' and 'ku'."], ["Dragon Ball Z", "Creator Akira Toriyama also designed the monsters and characters for the Dragon Quest video game series."], ["Naruto", "Naruto shares his name with narutomaki, the white fish cake with a pink swirl you find in a bowl of ramen. Fitting, given his ramen habit."], ["Naruto", "The Naruto manga ran in Weekly Shonen Jump from 1999 to 2014 and finished at exactly 700 chapters."], ["Naruto", "Naruto's creator, Masashi Kishimoto, has a twin brother, Seishi Kishimoto, who is also a manga artist."], ["Naruto", "The Naruto manga has sold more than 250 million copies around the world."], ["Naruto", "In 2019, a joke internet plan to storm Area 51 suggested everyone do the Naruto run, arms back, because 'we can move faster than their bullets'."], ["The Simpsons", "The Simpsons began as short cartoons on The Tracey Ullman Show in 1987, two years before getting their own series."], ["The Simpsons", "Matt Groening named Homer, Marge, Lisa and Maggie after his own family. Bart is an anagram of brat."], ["The Simpsons", "The Simpsons is the longest-running scripted primetime series in American TV history."], ["The Simpsons", "Homer's 'D'oh!' was added to the Oxford English Dictionary in 2001."], ["The Simpsons", "Dan Castellaneta voices Homer, and also Krusty, Grampa, Barney and Groundskeeper Willie."], ["The Simpsons", "Almost everyone in Springfield has four fingers on each hand. God, when he appears, has five."], ["Tenacious D", "Jack Black and Kyle Gass formed Tenacious D in Los Angeles in 1994."], ["Tenacious D", "The band's name comes from basketball commentary, where 'tenacious D' is short for tenacious defence."], ["Tenacious D", "Tenacious D won a Grammy in 2015 for Best Metal Performance with their cover of Dio's The Last in Line."], ["Tenacious D", "Dave Grohl drummed on Tenacious D's first album and played Satan in the 2006 film The Pick of Destiny."], ["Tenacious D", "Tenacious D started out as a short sketch series on HBO in the late 1990s before the albums and the film."], ["Nu metal", "Korn's self-titled 1994 debut is widely credited with kicking off nu metal."], ["Nu metal", "The backwards R in Korn's logo was drawn by singer Jonathan Davis to look like a child had written it."], ["Nu metal", "Slipknot has nine members, and each was given a number from 0 to 8."], ["Nu metal", "All four members of System of a Down are of Armenian heritage."], ["Nu metal", "Papa Roach is named after singer Jacoby Shaddix's grandfather, whose nickname was Papa Roach."], ["Nu metal", "Linkin Park's Hybrid Theory, released in 2000, is one of the best-selling debut albums of the century."], ["Nu metal", "Producer Ross Robinson worked on early Korn, Limp Bizkit and Slipknot records, earning the nickname the Godfather of Nu Metal."]];
+DYK.push(...[["Dragon Ball Z", "Piccolo and his family are named after instruments: his father is King Piccolo and his brothers include Tambourine, Cymbal and Drum."], ["Dragon Ball Z", "In Japanese, Goku has been voiced by the same actor, Masako Nozawa, since 1986."], ["Dragon Ball Z", "Akira Toriyama's wife reportedly suggested the name Kamehameha, after the Hawaiian king."], ["Dragon Ball Z", "Before Dragon Ball, Akira Toriyama's big hit was the comedy manga Dr. Slump."], ["90s Aussie kids' TV", "Round the Twist was based on Paul Jennings' short stories, and the Twist family's lighthouse is the real Split Point Lighthouse at Aireys Inlet, Victoria."], ["90s Aussie kids' TV", "A*mazing was a 90s kids' game show where two schools battled it out, finishing with a race through a giant maze."], ["90s Aussie kids' TV", "Bananas in Pyjamas started as a 1960s song on Play School before B1 and B2 got their own show in 1992."], ["90s Aussie kids' TV", "Mr Squiggle, the man from the moon who turned scribbles into pictures, ran on the ABC for 40 years, from 1959 to 1999."], ["90s Aussie kids' TV", "Lift Off starred EC, short for Every Child, a doll with no mouth who could only speak to the kids in the show."], ["90s Aussie kids' TV", "Johnson and Friends, from 1990, was about toys that came to life in a boy's bedroom, led by Johnson the elephant."], ["90s Aussie kids' TV", "Agro, the furry puppet from Agro's Cartoon Connection, was performed by comedian Jamie Dunn."], ["Basketball", "Basketball was invented in 1891 by James Naismith, a Canadian teacher in Massachusetts, using two peach baskets."], ["Basketball", "Naismith's original game had just 13 rules, and somebody had to climb up and fetch the ball after every basket."], ["Basketball", "Wilt Chamberlain scored 100 points in a single NBA game in 1962, a record that still stands."], ["Basketball", "The NBA brought in the 24-second shot clock in 1954 because teams kept stalling to protect a lead."], ["Basketball", "Australia's men's team, the Boomers, won bronze at the Tokyo Olympics, their first Olympic medal ever."], ["Basketball", "Andrew Gaze played at five Olympic Games for Australia."], ["Orgazmo", "Orgazmo was written and directed by Trey Parker, who also plays the lead, Joe Young, a missionary who ends up a reluctant superhero."], ["Orgazmo", "Orgazmo came out in 1997, the same year South Park premiered on TV."], ["Orgazmo", "Matt Stone is in Orgazmo too, playing a photographer named Dave the Lighting Guy."], ["Orgazmo", "Orgazmo's sidekick is Choda Boy, who fights crime with a homemade gadget called the Orgazmorator."], ["Jay and Silent Bob", "Jay and Silent Bob first appeared in Clerks (1994), which Kevin Smith shot for about $27,000 in the shop where he worked."], ["Jay and Silent Bob", "Silent Bob is played by Kevin Smith himself, and Jay by Jason Mewes, a friend from his home town in New Jersey."], ["Jay and Silent Bob", "Silent Bob barely says a word in the films, then delivers one long, serious speech in Chasing Amy."], ["Jay and Silent Bob", "The pair finally got their own film with Jay and Silent Bob Strike Back in 2001, and a sequel, Reboot, in 2019."], ["Jay and Silent Bob", "Kevin Smith's linked films are nicknamed the View Askewniverse, after his production company, View Askew."], ["Lord of the Rings", "Tolkien saw The Lord of the Rings as one novel. It was split into three volumes by his publisher in 1954 and 1955."], ["Lord of the Rings", "Peter Jackson shot all three films at once in New Zealand, with about 274 days of filming."], ["Lord of the Rings", "The Return of the King won all 11 Oscars it was nominated for, tying the record held by Ben-Hur and Titanic."], ["Lord of the Rings", "Christopher Lee, who played Saruman, was the only cast member who had met Tolkien."], ["Lord of the Rings", "Viggo Mortensen broke two toes kicking an Uruk-hai helmet. The scream of pain made it into the film."], ["Lord of the Rings", "Sean Bean hated flying so much he hiked up a mountain in full costume rather than take the helicopter to set."], ["Legend of Zelda", "The series is named after Princess Zelda, who was named after the writer Zelda Fitzgerald. The hero is Link."], ["Legend of Zelda", "Shigeru Miyamoto based Zelda's sense of adventure on exploring caves and forests near his childhood home in Japan."], ["Legend of Zelda", "The original Legend of Zelda in 1986 came on a shiny gold cartridge."], ["Legend of Zelda", "Ocarina of Time was the first 3D Zelda and introduced Z-targeting, which locks onto enemies in a fight."], ["Legend of Zelda", "Link was left-handed in most of the early games."], ["Nintendo 64", "The Nintendo 64 was going to be called the Ultra 64."], ["Nintendo 64", "The N64 launched in Australia in March 1997, with Super Mario 64 among its first games."], ["Nintendo 64", "N64 games came on cartridges, so there were almost no loading screens, unlike CD-based consoles."], ["Nintendo 64", "GoldenEye 007 was made by Rare, a small studio in England, and turned couch multiplayer into an art form."], ["Nintendo 64", "The Rumble Pak plugged into the N64 controller and brought vibration to home consoles."], ["Final Fantasy 7", "Final Fantasy VII came out on PlayStation in 1997 and needed three discs."], ["Final Fantasy 7", "Final Fantasy VII moved to PlayStation partly because its cut scenes needed far more space than a cartridge could hold."], ["Final Fantasy 7", "The remake is a trilogy: Final Fantasy VII Remake in 2020 and Rebirth in 2024, with a third part to come."], ["Final Fantasy 7", "The Gold Saucer is a giant amusement park in the game, complete with chocobo racing."], ["Futurama", "Futurama, created by Matt Groening, first aired in 1999."], ["Futurama", "Futurama has been brought back from cancellation more than once, most recently with new episodes in 2023."], ["Futurama", "Bender's full name is Bender Bending Rodríguez."], ["Futurama", "A Futurama writer with a maths PhD proved a real theorem for the body-swap episode The Prisoner of Benda."], ["Futurama", "Fans have decoded the alien alphabets hidden in Futurama's backgrounds. They contain jokes."], ["Futurama", "Billy West voices Fry, Professor Farnsworth and Zoidberg."]]);
 const POP_EVERY = 3.5 * 60 * 1000, POP_LEN = 14000;
 let lastPop = Date.now() - POP_EVERY + 60 * 1000, popNo = 0, dykBag = [];
 const popsOk = () => onNowScreen() && innerWidth >= 900 && !document.getElementById("screen-break") && !document.querySelector(".pop-card");
@@ -3012,13 +3028,13 @@ function upcomingToday() {
   return (same.length ? same : after).slice(0, 3);
 }
 function popClose(el) { if (!el || !el.isConnected) return; el.classList.add("out"); setTimeout(() => el.remove(), 600); }
-function showPop(html, cls) {
+function showPop(html, cls, len) {
   const el = document.createElement("div");
   el.className = "pop-card " + cls; el.setAttribute("role", "status"); el.innerHTML = html + '<button class="pop-x" aria-label="Close">×</button>';
   document.body.appendChild(el);
   el.querySelector(".pop-x").onclick = () => popClose(el);
   requestAnimationFrame(() => el.classList.add("in"));
-  setTimeout(() => popClose(el), POP_LEN);
+  setTimeout(() => popClose(el), len || POP_LEN);
 }
 function showInfomercial() {
   const list = upcomingToday(); if (!list.length) return false;
@@ -3036,13 +3052,25 @@ function showInfomercial() {
 }
 function showFact() {
   const [topic, fact] = nextFact();
-  showPop('<div class="dyk-bubble"><div class="dyk-head"><b>Did you know?</b><span class="dyk-topic">' + esc(topic) + '</span></div><p>' + esc(fact) + '</p></div><div class="dyk-buddy" aria-hidden="true">' + D20 + '<i class="e1"></i><i class="e2"></i></div>', "pop-dyk");
+  showPop('<div class="dyk-bubble"><div class="dyk-head"><b>Did you know?</b><span class="dyk-topic">' + esc(topic) + '</span></div><p>' + esc(fact) + '</p></div><div class="dyk-buddy" aria-hidden="true">' + D20 + '<i class="e1"></i><i class="e2"></i></div>', "pop-dyk", 20000);
+}
+/* Facts every 3 minutes on the left; the right corner alternates an infomercial and a muted mini commercial every 4.5 minutes */
+const FACT_EVERY = 3 * 60 * 1000, SIDE_EVERY = 4.5 * 60 * 1000;
+let lastFact = Date.now() - FACT_EVERY + 45 * 1000, lastSide = Date.now() - SIDE_EVERY + 100 * 1000, sideNo = 0;
+function showMiniAd() {
+  const a = (typeof ADS !== "undefined" ? ADS.items : []).find(x => x.file && !x.removed && x.on !== false); if (!a) return false;
+  showPop('<div class="mini-tag"><span class="sb-cm-dot"></span>Commercial</div><video class="mini-vid" muted autoplay loop playsinline preload="auto" src="' + esc(mediaUrl(a.file)) + '"' + (a.poster ? ' poster="' + esc(mediaUrl(a.poster)) + '"' : "") + '></video>', "pop-mini", 11500);
+  const v = document.querySelector(".pop-mini:last-of-type .mini-vid"); if (v) { v.muted = true; const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); }
+  return true;
 }
 setInterval(() => {
-  if (!popsOk()) return;
-  if (Date.now() - lastPop < POP_EVERY) return;
-  lastPop = Date.now(); popNo++;
-  if (popNo % 2 === 1) { if (!showInfomercial()) showFact(); } else showFact();
+  if (!onNowScreen() || innerWidth < 900 || document.getElementById("screen-break")) return;
+  const now = Date.now();
+  if (now - lastFact >= FACT_EVERY && !document.querySelector(".pop-dyk")) { lastFact = now; showFact(); }
+  if (now - lastSide >= SIDE_EVERY && !document.querySelector(".pop-im,.pop-mini")) {
+    lastSide = now; sideNo++; popNo++;
+    if (sideNo % 2 === 1) { if (!showInfomercial()) showMiniAd(); } else if (!showMiniAd()) showInfomercial();
+  }
 }, 10000);
 /* ---------- Commercial breaks: organiser-curated YouTube clips in the screen-break rotation ---------- */
 const ADS = { items: [], builtins: true };
@@ -3134,7 +3162,7 @@ function renderAds() {
     '<button class="icon-btn" data-act="cm-move" data-i="' + i + '" data-d="-1" aria-label="Move up"' + (i ? "" : " disabled") + '>↑</button>' +
     '<button class="icon-btn" data-act="cm-move" data-i="' + i + '" data-d="1" aria-label="Move down"' + (i < ADS.items.length - 1 ? "" : " disabled") + '>↓</button>' +
     '<button class="icon-btn" data-act="cm-del" data-i="' + i + '" aria-label="Remove">×</button></div></div>').join("");
-  return '<section class="cm-view"><h2>Commercial breaks <small class="site-ver">Site version 6 Nov, 7pm</small></h2><p class="sub">Only organisers see this tab. YouTube clips you add here take over the big screen during screen breaks on the Now view, every 15 minutes when nobody\'s using it. They play in this order, then loop.</p>' +
+  return '<section class="cm-view"><h2>Commercial breaks <small class="site-ver">Site version 7 Nov, 9:45am</small></h2><p class="sub">Only organisers see this tab. YouTube clips you add here take over the big screen during screen breaks on the Now view, every 10 minutes when nobody\'s using it. They play in this order, then loop.</p>' +
     '<form class="cm-form" id="cm-form"><div class="field grow"><label for="cm-url">YouTube link</label><input id="cm-url" placeholder="https://www.youtube.com/watch?v=…" required></div>' +
     '<div class="field"><label for="cm-title">Name (optional)</label><input id="cm-title" maxlength="60" placeholder="e.g. Fake cereal ad"></div>' +
     '<div class="field small"><label for="cm-start">Start at</label><input id="cm-start" placeholder="0:00" inputmode="numeric"></div>' +
@@ -3339,6 +3367,7 @@ document.addEventListener("click", e => {
     case "order": onOrder(el.dataset.s, el.dataset.f); break;
     case "copy-orders": copyOrders(el.dataset.id); break;
     case "test-break": startBreak(); break;
+    case "test-mini": document.querySelectorAll(".pop-im,.pop-mini").forEach(popClose); if (!showMiniAd()) toast("No video-file commercial is switched on."); break;
     case "go-ads": setView("ads"); break;
     case "cm-play": { const a = ADS.items[+el.dataset.i]; if (!a) break; if (ON_CLAUDE && !a.file) { toast("YouTube can't play on the Claude-hosted copy. Try it on your GitHub site."); break; } startCommercial(a, () => toast("That video won't play here. YouTube may not allow it on other sites.")); break; }
     case "cm-move": { const i = +el.dataset.i, j = i + +el.dataset.d; if (j < 0 || j >= ADS.items.length) break; [ADS.items[i], ADS.items[j]] = [ADS.items[j], ADS.items[i]]; run(saveAds); break; }
