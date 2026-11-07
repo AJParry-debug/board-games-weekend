@@ -897,6 +897,69 @@ main,.site-foot{position:relative;z-index:1}
 @keyframes unRoll2{0%,62%{transform:translateY(0);opacity:0}63%{opacity:1}80%{transform:translateY(2200%);opacity:1}81%,100%{transform:translateY(2200%);opacity:0}}
 @media (prefers-reduced-motion: reduce){.vhs-lines{display:none}.un-static::before{animation:none}}
 .check-solo{display:flex;gap:10px;align-items:center;font-size:.9rem;cursor:pointer}
+/* ---- Live scores ---- */
+.sb-card.done.fresh{opacity:1;border-color:#FFD84A;box-shadow:0 0 0 1px rgba(255,216,74,.35),0 0 32px rgba(255,216,74,.18)}
+.sb-card.done.fresh .sb-kicker{color:#FFD84A}
+.sb-card.done.fresh .sb-winner{animation:sbWin 1.8s ease-in-out infinite}
+@keyframes sbWin{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion: reduce){.sb-card.done.fresh .sb-winner{animation:none}}
+.sb-view{display:flex;flex-direction:column;gap:16px}
+.sb-intro{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+.sb-intro h2{font-family:var(--display);margin:4px 0 2px}.sb-intro .sub{margin:0}
+.sb-empty{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:16px;color:var(--muted)}
+.sb-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.sb-card.big{padding:18px 20px}
+.sb-card.t-flip7{background:linear-gradient(135deg,rgba(255,92,92,.14),rgba(255,206,74,.12) 40%,rgba(74,196,255,.12)),var(--surface);border-color:rgba(255,206,74,.5)}
+.sb-card.done{opacity:.92}
+.sb-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px}
+.sb-kicker{display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#FF6B6B}
+.sb-card.done .sb-kicker{color:var(--muted)}
+.sb-live-dot{width:8px;height:8px;border-radius:50%;background:#FF3B3B;box-shadow:0 0 0 0 rgba(255,59,59,.6);animation:sbPing 1.6s ease-out infinite}
+@keyframes sbPing{0%{box-shadow:0 0 0 0 rgba(255,59,59,.6)}100%{box-shadow:0 0 0 10px rgba(255,59,59,0)}}
+.sb-head h3{margin:2px 0 0;font-family:var(--display);font-size:1.25rem}
+.sb-card.big .sb-head h3{font-size:1.6rem}
+.sb-sub{font-size:.82rem;color:var(--muted)}
+.sb-winner{font-family:var(--display);font-weight:800;font-size:1.2rem;color:#FFD84A;text-shadow:0 0 10px rgba(255,216,74,.4)}
+.sb-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.sb-row{display:grid;grid-template-columns:28px minmax(110px,180px) minmax(60px,1fr) auto auto;align-items:center;gap:10px}
+.sb-row .vt{width:100%;min-height:26px;font-size:.8rem;padding:3px 10px}
+.sb-rank{font-weight:800;color:var(--muted);text-align:center}
+.sb-row.lead .sb-rank{color:#FFD84A}
+.sb-bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.sb-bar span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#4AC4FF,#FFCE4A 70%,#FF5C5C);transition:width .6s cubic-bezier(.2,.9,.3,1)}
+.sb-total{font-family:var(--display);font-weight:800;font-size:1.25rem;min-width:2.6em;text-align:right;font-variant-numeric:tabular-nums}
+.sb-card.big .sb-total{font-size:1.6rem}
+.sb-row.won .sb-total{color:#FFD84A}
+.sb-chip{font-size:.72rem;font-weight:800;border-radius:999px;padding:2px 8px;background:rgba(107,240,138,.14);color:#C8FFD4;white-space:nowrap}
+.sb-chip.bust{background:rgba(255,91,91,.16);color:#FFB3B3}
+.sb-chip.f7{background:linear-gradient(90deg,#FFD84A,#FF9F43);color:#2A1404}
+.sb-row:not(:has(.sb-chip)){grid-template-columns:28px minmax(110px,180px) minmax(60px,1fr) auto}
+.sb-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.sb-hist{overflow-x:auto}
+.sb-hist table{border-collapse:collapse;font-size:.84rem;min-width:100%}
+.sb-hist th,.sb-hist td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.sb-hist th:first-child,.sb-hist td:first-child{text-align:left;color:var(--muted)}
+.sb-hist td.bust{color:#FF8A8A}.sb-hist td.f7{color:#FFD84A;font-weight:800}
+.sb-past summary{cursor:pointer;font-weight:700;color:var(--muted);margin-bottom:10px}
+.sb-past .sb-card{margin-bottom:12px}
+.now-scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}
+.now-scores .sb-row{grid-template-columns:24px minmax(100px,160px) minmax(50px,1fr) auto}
+/* round entry */
+.sr-list{display:flex;flex-direction:column;gap:10px;max-height:min(58vh,520px);overflow:auto;padding-right:4px}
+.sr-row{border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--bg)}
+.sr-main{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.sr-name{flex:1 1 110px;font-weight:700}
+.sr-pts{width:80px;font-size:1.1rem;font-weight:800;text-align:center}
+.sr-tog,.sr-count{appearance:none;border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:6px 10px;font:700 .78rem/1 inherit;cursor:pointer}
+.sr-tog.bust.on{background:#C0392B;border-color:#FF8A8A;color:#fff}
+.sr-tog.f7.on{background:linear-gradient(90deg,#FFD84A,#FF9F43);border-color:#FFD84A;color:#2A1404}
+.sr-cards{margin-top:8px;display:flex;flex-direction:column;gap:6px}.sr-cards[hidden]{display:none}
+.sr-nums,.sr-mods{display:flex;flex-wrap:wrap;gap:5px}
+.sr-c{appearance:none;min-width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:800 .9rem/1 inherit;cursor:pointer}
+.sr-c.on{background:#4AC4FF;border-color:#BFEFFF;color:#06202E}
+.sr-c.mod.on{background:#6BF08A;color:#062A16}.sr-c.x2.on{background:#FF9F43;color:#2A1404}
+@media (max-width:620px){.sb-row{grid-template-columns:22px minmax(90px,1fr) auto}.sb-row .sb-bar,.sb-row .sb-chip{display:none}}
+@media (prefers-reduced-motion: reduce){.sb-live-dot{animation:none}.sb-bar span{transition:none}}
 /* Bigger, distance-readable facts */
 .pop-card .dyk-bubble{max-width:min(600px,42vw);padding:18px 22px;border-width:4px;border-radius:22px;box-shadow:7px 7px 0 #1D1A2E;margin-bottom:76px}
 .pop-card .dyk-bubble::after{left:-20px;bottom:20px;width:24px;height:24px;border-left-width:4px;border-bottom-width:4px}
@@ -1579,6 +1642,7 @@ button.cell:hover{outline:1px solid var(--accent)}
       <a class="tab" href="#games" data-view="games">Games</a>
       <a class="tab" href="#food" data-view="food">Food</a>
       <a class="tab" href="#orders" data-view="orders">Orders</a>
+      <a class="tab" href="#scores" data-view="scores">Scores</a>
       <a class="tab" href="#people" data-view="people">Who's around</a>
       <a class="tab" href="#ads" data-view="ads" hidden>Commercials</a>
     </nav>
@@ -3162,7 +3226,7 @@ function renderAds() {
     '<button class="icon-btn" data-act="cm-move" data-i="' + i + '" data-d="-1" aria-label="Move up"' + (i ? "" : " disabled") + '>↑</button>' +
     '<button class="icon-btn" data-act="cm-move" data-i="' + i + '" data-d="1" aria-label="Move down"' + (i < ADS.items.length - 1 ? "" : " disabled") + '>↓</button>' +
     '<button class="icon-btn" data-act="cm-del" data-i="' + i + '" aria-label="Remove">×</button></div></div>').join("");
-  return '<section class="cm-view"><h2>Commercial breaks <small class="site-ver">Site version 7 Nov, 9:45am</small></h2><p class="sub">Only organisers see this tab. YouTube clips you add here take over the big screen during screen breaks on the Now view, every 10 minutes when nobody\'s using it. They play in this order, then loop.</p>' +
+  return '<section class="cm-view"><h2>Commercial breaks <small class="site-ver">Site version 7 Nov, scores</small></h2><p class="sub">Only organisers see this tab. YouTube clips you add here take over the big screen during screen breaks on the Now view, every 10 minutes when nobody\'s using it. They play in this order, then loop.</p>' +
     '<form class="cm-form" id="cm-form"><div class="field grow"><label for="cm-url">YouTube link</label><input id="cm-url" placeholder="https://www.youtube.com/watch?v=…" required></div>' +
     '<div class="field"><label for="cm-title">Name (optional)</label><input id="cm-title" maxlength="60" placeholder="e.g. Fake cereal ad"></div>' +
     '<div class="field small"><label for="cm-start">Start at</label><input id="cm-start" placeholder="0:00" inputmode="numeric"></div>' +
@@ -3195,6 +3259,130 @@ function bindAdsForm() {
     });
   };
 }
+/* ---------- Live scoreboards (stored as config/score-* docs) ---------- */
+let SB = [];
+const SB_TYPES = { flip7: { name: "Flip 7", target: 200 }, points: { name: "Points game", target: 0 } };
+const sbTotals = b => { const t = {}; (b.players || []).forEach(p => t[p] = 0); (b.rounds || []).forEach(r => Object.entries(r).forEach(([pid, v]) => { if (pid in t) t[pid] += (+v.p || 0); })); return t; };
+const sbRanked = b => { const t = sbTotals(b); return (b.players || []).filter(pid => byId(S.players, pid)).map(pid => ({ pid, total: t[pid] || 0, last: (b.rounds || []).length ? (b.rounds[b.rounds.length - 1] || {})[pid] : null })).sort((a, c) => c.total - a.total); };
+const SB_FRESH = 20 * 60 * 1000;
+const sbRecent = b => b.status === "done" && Date.now() - (b.doneAt || 0) < SB_FRESH;
+const sbLive = () => SB.filter(b => b.status !== "done" || sbRecent(b)).sort((a, c) => (a.status === "done") - (c.status === "done") || (c.at || 0) - (a.at || 0));
+async function sbSave(b) { const { id, ...data } = b; await write(() => S.db.doc("config/" + id).set(data)); }
+function sbName(pid) { const p = byId(S.players, pid); return p ? p.name : "?"; }
+function sbTag(pid) { const p = byId(S.players, pid); return p ? voteTag(p) : ""; }
+function sbLastChip(v) {
+  if (!v) return "";
+  if (v.bust) return '<span class="sb-chip bust">BUST</span>';
+  return '<span class="sb-chip' + (v.f7 ? " f7" : "") + '">' + (v.f7 ? "FLIP 7! " : "") + "+" + (+v.p || 0) + "</span>";
+}
+function sbCard(b, big) {
+  const rows = sbRanked(b), target = +b.target || 0, done = b.status === "done", n = (b.rounds || []).length;
+  const top = rows.length ? rows[0].total : 0;
+  const winners = done ? (b.winners || []) : [];
+  let h = '<section class="sb-card' + (big ? " big" : "") + (done ? " done" : "") + (sbRecent(b) ? " fresh" : "") + (b.type === "flip7" ? " t-flip7" : "") + '">' +
+    '<header class="sb-head"><div class="sb-titles"><div class="sb-kicker">' + (done ? "Final scores" : '<span class="sb-live-dot"></span>Live') + "</div><h3>" + esc(b.title || SB_TYPES[b.type || "points"].name) + "</h3>" +
+    '<div class="sb-sub">' + (n ? "After round " + n : "No rounds yet") + (target ? " · first to " + target : "") + "</div></div>" +
+    (done && winners.length ? '<div class="sb-winner">🏆 ' + winners.map(sbName).map(esc).join(" & ") + (winners.length > 1 ? " tie!" : " wins!") + "</div>" : "") + "</header>" +
+    '<ol class="sb-rows">' + rows.map((r, i) => {
+      const pct = target ? Math.min(100, Math.round(r.total / target * 100)) : (top ? Math.round(r.total / top * 100) : 0);
+      return '<li class="sb-row' + (i === 0 && r.total > 0 ? " lead" : "") + (winners.includes(r.pid) ? " won" : "") + '"><span class="sb-rank">' + (i + 1) + "</span>" + sbTag(r.pid) +
+        '<span class="sb-bar"><span style="width:' + pct + '%"></span></span>' + (big ? sbLastChip(r.last) : "") + '<span class="sb-total">' + r.total + "</span></li>";
+    }).join("") + "</ol>";
+  if (big) {
+    h += '<div class="sb-acts">' + (!done ? '<button class="btn primary" data-act="sb-round" data-id="' + esc(b.id) + '">Score round ' + (n + 1) + "</button>" : '<button class="btn primary" data-act="sb-rematch" data-id="' + esc(b.id) + '">Rematch</button>') +
+      (n ? '<button class="btn small" data-act="sb-undo" data-id="' + esc(b.id) + '">Undo round ' + n + "</button>" : "") +
+      (!done && !target && n ? '<button class="btn small" data-act="sb-finish" data-id="' + esc(b.id) + '">Finish game</button>' : "") +
+      (n ? '<button class="btn small ghost" data-act="sb-history" data-id="' + esc(b.id) + '">' + (S.sbOpen && S.sbOpen.has(b.id) ? "Hide rounds" : "Show rounds") + "</button>" : "") +
+      (S.organiser ? '<button class="btn small danger" data-act="sb-del" data-id="' + esc(b.id) + '">Delete</button>' : "") + "</div>";
+    if (n && S.sbOpen && S.sbOpen.has(b.id)) {
+      const order = rows.map(r => r.pid);
+      h += '<div class="sb-hist"><table><thead><tr><th>Round</th>' + order.map(pid => "<th>" + esc(sbName(pid)) + "</th>").join("") + "</tr></thead><tbody>" +
+        b.rounds.map((r, i) => "<tr><td>" + (i + 1) + "</td>" + order.map(pid => { const v = r[pid]; return "<td" + (v && v.bust ? ' class="bust"' : v && v.f7 ? ' class="f7"' : "") + ">" + (v ? (v.bust ? "bust" : (+v.p || 0)) : "–") + "</td>"; }).join("") + "</tr>").join("") + "</tbody></table></div>";
+    }
+  }
+  return h + "</section>";
+}
+function renderScores() {
+  const live = sbLive(), done = SB.filter(b => b.status === "done" && !sbRecent(b)).sort((a, c) => (c.doneAt || c.at || 0) - (a.doneAt || a.at || 0));
+  let h = '<section class="sb-view"><div class="sb-intro"><div><h2>Live scores</h2><p class="sub">Keep score here and it updates for everyone, including the big screen.</p></div><button class="btn primary" data-act="sb-new">+ Start a scoreboard</button></div>';
+  if (!SB.length) h += '<div class="sb-empty">No scoreboards yet. Tap <b>Start a scoreboard</b>, pick Flip 7 and who\'s playing.</div>';
+  h += live.map(b => sbCard(b, true)).join("");
+  if (done.length) h += '<details class="sb-past"><summary>Finished games (' + done.length + ")</summary>" + done.map(b => sbCard(b, true)).join("") + "</details>";
+  return h + "</section>";
+}
+function nowScoresStrip() {
+  const live = sbLive().slice(0, 2); if (!live.length) return "";
+  return '<div class="now-scores">' + live.map(b => sbCard(b, false)).join("") + "</div>";
+}
+function sbNewModal(base) {
+  const sess = NOW ? byId(S.sessions, NOW.id) : null;
+  const flipTable = sess ? tablesIn(sess.id).find(t => /flip\s*7|flip\s*seven/i.test(gameName(byId(S.games, t.gameId)))) : null;
+  const pre = new Set(base ? base.players : flipTable ? claimsAt(flipTable.id).map(c => c.playerId) : []);
+  const type = base ? base.type : "flip7";
+  const html = '<h2>' + (base ? "Rematch" : "Start a scoreboard") + '</h2><form class="form" id="f">' +
+    '<div class="field"><label for="sb-type">Game</label><select id="sb-type"><option value="flip7"' + (type === "flip7" ? " selected" : "") + '>Flip 7 (first to 200, busts and +15 bonus)</option><option value="points"' + (type === "points" ? " selected" : "") + ">Any other game (simple points)</option></select></div>" +
+    '<div class="row2"><div class="field"><label for="sb-title">Name</label><input id="sb-title" maxlength="50" value="' + esc(base ? base.title : "Flip 7") + '"></div>' +
+    '<div class="field"><label for="sb-target">Winning score</label><input id="sb-target" type="number" min="0" max="10000" value="' + esc(base ? base.target || "" : 200) + '" placeholder="none"></div></div>' +
+    '<fieldset class="field check-field"><legend>Who\'s playing</legend><div class="check-list">' + playersSorted().map(p => '<label class="check"><input type="checkbox" name="sbp" value="' + esc(p.id) + '"' + (pre.has(p.id) ? " checked" : "") + "> " + esc(p.name) + "</label>").join("") + "</div>" +
+    (flipTable && !base ? '<span class="hint">Ticked: everyone seated at Flip 7 this session.</span>' : "") + "</fieldset>" +
+    '<div class="actions"><button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">Start</button></div></form>';
+  openModal(html, m => {
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    const ty = m.querySelector("#sb-type"), ti = m.querySelector("#sb-title"), tg = m.querySelector("#sb-target");
+    ty.onchange = () => { if (ty.value === "flip7") { if (!ti.value || ti.value === "Points game") ti.value = "Flip 7"; tg.value = 200; } else { if (ti.value === "Flip 7") ti.value = ""; tg.value = ""; } };
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      const players = [...m.querySelectorAll('input[name="sbp"]:checked')].map(x => x.value);
+      if (players.length < 1) { toast("Tick at least one player."); return; }
+      const b = { id: "score-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), type: ty.value, title: ti.value.trim() || SB_TYPES[ty.value].name, target: Math.max(0, parseInt(tg.value, 10) || 0), players, rounds: [], status: "live", winners: [], sessionId: sess ? sess.id : "", at: Date.now() };
+      run(async () => { await sbSave(b); closeModal(); setView("scores"); toast(b.title + " scoreboard started."); });
+    };
+  });
+}
+function sbRoundModal(id) {
+  const b = SB.find(x => x.id === id); if (!b) return;
+  const flip = b.type === "flip7", n = (b.rounds || []).length + 1;
+  const nums = [...Array(13).keys()], mods = [2, 4, 6, 8, 10];
+  const html = "<h2>" + esc(b.title) + " · round " + n + '</h2><p class="sub">' + (flip ? "Type each score, or tap <b>Count cards</b> to add them up. Bust scores 0. Flip 7 adds 15." : "Type each player's points for this round.") + '</p><form class="form" id="f"><div class="sr-list">' +
+    b.players.filter(pid => byId(S.players, pid)).map(pid => '<div class="sr-row" data-pid="' + esc(pid) + '"><div class="sr-main"><span class="sr-name">' + esc(sbName(pid)) + '</span><input class="sr-pts" type="number" inputmode="numeric" min="-999" max="999" placeholder="0" aria-label="Points for ' + esc(sbName(pid)) + '">' +
+      (flip ? '<button type="button" class="sr-tog bust" aria-pressed="false">Bust</button><button type="button" class="sr-tog f7" aria-pressed="false">Flip 7 +15</button><button type="button" class="sr-count">Count cards</button>' : "") + "</div>" +
+      (flip ? '<div class="sr-cards" hidden><div class="sr-nums">' + nums.map(v => '<button type="button" class="sr-c num" data-v="' + v + '">' + v + "</button>").join("") + '</div><div class="sr-mods">' + mods.map(v => '<button type="button" class="sr-c mod" data-v="' + v + '">+' + v + "</button>").join("") + '<button type="button" class="sr-c x2">×2</button></div></div>' : "") + "</div>").join("") +
+    '</div><div class="actions"><button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn primary">Save round ' + n + "</button></div></form>";
+  openModal(html, m => {
+    m.querySelector('[data-m="cancel"]').onclick = closeModal;
+    m.querySelectorAll(".sr-row").forEach(row => {
+      const pts = row.querySelector(".sr-pts"), bust = row.querySelector(".sr-tog.bust"), f7 = row.querySelector(".sr-tog.f7"), cards = row.querySelector(".sr-cards");
+      if (!flip) return;
+      const press = (btn, on) => { btn.setAttribute("aria-pressed", on); btn.classList.toggle("on", on); };
+      const recalc = () => {
+        if (cards.hidden) return;
+        const ns = [...cards.querySelectorAll(".num.on")].map(x => +x.dataset.v), ms = [...cards.querySelectorAll(".mod.on")].map(x => +x.dataset.v), x2 = cards.querySelector(".x2").classList.contains("on");
+        if (ns.length >= 7) press(f7, true);
+        const base = ns.reduce((a, c) => a + c, 0) * (x2 ? 2 : 1) + ms.reduce((a, c) => a + c, 0);
+        pts.value = bust.classList.contains("on") ? 0 : base;
+      };
+      bust.onclick = () => { const on = !bust.classList.contains("on"); press(bust, on); if (on) { press(f7, false); pts.value = 0; } else recalc(); };
+      f7.onclick = () => { const on = !f7.classList.contains("on"); press(f7, on); if (on) press(bust, false); };
+      row.querySelector(".sr-count").onclick = () => { cards.hidden = !cards.hidden; recalc(); };
+      cards.querySelectorAll(".sr-c").forEach(c => c.onclick = () => { c.classList.toggle("on"); if (bust.classList.contains("on")) press(bust, false); recalc(); });
+    });
+    setTimeout(() => { const f = m.querySelector(".sr-pts"); if (f) f.focus(); }, 60);
+    m.querySelector("#f").onsubmit = e => {
+      e.preventDefault();
+      const r = {};
+      m.querySelectorAll(".sr-row").forEach(row => {
+        const isBust = !!row.querySelector(".sr-tog.bust.on"), isF7 = !!row.querySelector(".sr-tog.f7.on");
+        let p = parseInt(row.querySelector(".sr-pts").value, 10) || 0;
+        if (isBust) p = 0; else if (isF7) p += 15;
+        r[row.dataset.pid] = { p, bust: isBust, f7: isF7 };
+      });
+      const nb = Object.assign({}, b, { rounds: [...(b.rounds || []), r] });
+      const t = sbTotals(nb), target = +nb.target || 0;
+      if (target && Object.values(t).some(v => v >= target)) { const best = Math.max(...Object.values(t)); nb.status = "done"; nb.doneAt = Date.now(); nb.winners = Object.keys(t).filter(pid => t[pid] === best); }
+      run(async () => { await sbSave(nb); closeModal(); toast(nb.status === "done" ? "🏆 " + nb.winners.map(sbName).join(" & ") + (nb.winners.length > 1 ? " tie!" : " wins!") : "Round " + n + " saved."); });
+    };
+  });
+}
 function renderNow() {
   const order = NOW ? NOW.order : sessionsSorted().map(s => s.id);
   let s = NOW ? byId(S.sessions, NOW.id) : null, over = false;
@@ -3212,6 +3400,7 @@ function renderNow() {
     blockBody(s) + "</section>";
   const idx = order.indexOf(s.id), rest = over ? [] : order.slice(idx + 1).map(id => byId(S.sessions, id)).filter(Boolean);
   if (rest.length) h += renderUpNext(rest[0]);
+  h += nowScoresStrip();
   if (rest.length > 1) {
     const later = rest.slice(1);
     h += '<div class="later"><button class="later-toggle" data-act="toggle-later" aria-expanded="' + !!S.laterOpen + '">Later: ' + plural(later.length, "more block") + ' <span aria-hidden="true">' + (S.laterOpen ? "▴" : "▾") + "</span></button>";
@@ -3292,7 +3481,7 @@ function render() {
   const y = window.scrollY;
   const oldBoard = document.getElementById("board");
   const bx = oldBoard ? oldBoard.scrollLeft : null;
-  app.innerHTML = banners() + (S.view === "games" ? renderGames() : S.view === "food" ? renderFood() : S.view === "orders" ? renderOrders() : S.view === "people" ? renderPeople() : S.view === "ads" ? renderAds() : renderSchedule());
+  app.innerHTML = banners() + (S.view === "games" ? renderGames() : S.view === "food" ? renderFood() : S.view === "orders" ? renderOrders() : S.view === "scores" ? renderScores() : S.view === "people" ? renderPeople() : S.view === "ads" ? renderAds() : renderSchedule());
   const nb = document.getElementById("board");
   if (nb && bx != null) nb.scrollLeft = bx;
   if (nb && !autoScrolled && COLS.every(c => S.got[c])) {
@@ -3367,6 +3556,13 @@ document.addEventListener("click", e => {
     case "order": onOrder(el.dataset.s, el.dataset.f); break;
     case "copy-orders": copyOrders(el.dataset.id); break;
     case "test-break": startBreak(); break;
+    case "sb-new": if (!canAct()) { toast("You can view the schedule but not change it."); break; } sbNewModal(); break;
+    case "sb-round": if (!canAct()) { toast("You can view the schedule but not change it."); break; } sbRoundModal(id); break;
+    case "sb-rematch": { const b = SB.find(x => x.id === id); if (b) sbNewModal(b); break; }
+    case "sb-undo": { const b = SB.find(x => x.id === id); if (!b || !(b.rounds || []).length) break; const nb = Object.assign({}, b, { rounds: b.rounds.slice(0, -1), status: "live", winners: [] }); run(async () => { await sbSave(nb); toast("Round " + b.rounds.length + " removed."); }); break; }
+    case "sb-finish": { const b = SB.find(x => x.id === id); if (!b) break; const t = sbTotals(b), best = Math.max(...Object.values(t)); run(async () => { await sbSave(Object.assign({}, b, { status: "done", doneAt: Date.now(), winners: Object.keys(t).filter(k => t[k] === best) })); }); break; }
+    case "sb-history": { S.sbOpen = S.sbOpen || new Set(); S.sbOpen.has(id) ? S.sbOpen.delete(id) : S.sbOpen.add(id); render(); break; }
+    case "sb-del": { const b = SB.find(x => x.id === id); if (!b || !S.organiser) break; confirmModal("Delete " + b.title + "?", "Its scores are removed for everyone.", "Delete", async () => { await write(() => S.db.doc("config/" + b.id).delete()); toast("Scoreboard deleted."); }); break; }
     case "test-mini": document.querySelectorAll(".pop-im,.pop-mini").forEach(popClose); if (!showMiniAd()) toast("No video-file commercial is switched on."); break;
     case "go-ads": setView("ads"); break;
     case "cm-play": { const a = ADS.items[+el.dataset.i]; if (!a) break; if (ON_CLAUDE && !a.file) { toast("YouTube can't play on the Claude-hosted copy. Try it on your GitHub site."); break; } startCommercial(a, () => toast("That video won't play here. YouTube may not allow it on other sites.")); break; }
@@ -3420,7 +3616,7 @@ document.addEventListener("click", e => {
   }
 });
 
-const VIEWS = ["schedule", "games", "food", "orders", "people", "ads"];
+const VIEWS = ["schedule", "games", "food", "orders", "scores", "people", "ads"];
 function setView(v, keepScroll) {
   S.view = VIEWS.includes(v) ? v : "schedule";
   if (location.hash !== "#" + S.view) { try { history.replaceState(null, "", "#" + S.view); } catch (e) {} }
@@ -3495,6 +3691,7 @@ async function boot() {
     }, onErr);
   }
   db.doc("config/event").onSnapshot(snap => { S.cfg = snap.exists ? snap.data() : null; schedule(); }, () => {});
+  db.collection("config").onSnapshot(snap => { SB = snap.docs.filter(d => d.id.startsWith("score-")).map(d => Object.assign({}, d.data(), { id: d.id })); schedule(); }, () => {});
   db.doc("config/commercials").onSnapshot(snap => { const d = snap.exists ? snap.data() : null; ADS.items = d && Array.isArray(d.items) ? d.items : []; mergeLocalAds(); ADS.builtins = !d || d.builtins !== false; schedule(); }, () => {});
   if (S.uid) {
     db.doc("data/users/" + S.uid + "/profile").onSnapshot(snap => {
